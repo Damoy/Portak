@@ -8,7 +8,6 @@ class Energy extends Entity{
 	}
 
 	update(){
-		// if(player.collidex(this)) interact(player)
 	}
 
 	interact(player){
@@ -17,7 +16,6 @@ class Energy extends Entity{
 
 	render(){
 		ctx.save();
-		//if(this.used) return;
 		ctx.beginPath();
     	ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
     	ctx.fillStyle = this.color;
@@ -31,5 +29,4 @@ class Energy extends Entity{
 	}
 
 	getValue(){return this.value;}
-	// getTile(){return this.tile;}
 }

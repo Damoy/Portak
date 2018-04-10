@@ -1,4 +1,6 @@
 var mousePos = {x:0, y:0};
+var keyState = [];
+var prevKeyState = [];
 
 // events singleton
 var EventContext = {
@@ -11,7 +13,21 @@ var EventContext = {
     }, false); 
   },
 
-  getMousePos : function(){return mousePos;}
+  getMousePos : function(){return mousePos;},
+
+  // javascript key codes
+  jsUpKey : function(){return 'ArrowUp';},
+  jsLeftKey : function(){return 'ArrowLeft';},
+  jsDownKey : function(){return 'ArrowDown';},
+  jsRightKey : function(){return 'ArrowRight';},
+
+  // own key code
+  upKey : function(){return 0;},
+  leftKey : function(){return 1;},
+  downKey : function(){return 2;},
+  rightKey : function(){return 3;},
+
+  getKeyCount : function(){return 4}
 }
 
 function initListeners(canvas){
@@ -22,44 +38,29 @@ function initListeners(canvas){
 
 // -- Keyboard
 
-function keyPressed(evt) {
-  let player = WorldContext.getMainPlayer();
-  switch(evt.code) {
-    case 'ArrowRight':
-      player.changeDirection(PlayerContext.getRightDirValue());
-      // player.setSpeedX(player.getMaxSpeed());
-      break;
-    case 'ArrowLeft':
-      player.changeDirection(PlayerContext.getLeftDirValue());
-      // player.setSpeedX(-player.getMaxSpeed());
-      break;
-    case 'ArrowUp':
-      player.changeDirection(PlayerContext.getUpDirValue());
-      // player.setSpeedY(-player.getMaxSpeed());
-      break;
-    case 'ArrowDown':
-      player.changeDirection(PlayerContext.getDownDirValue());
-      // player.setSpeedY(player.getMaxSpeed());
-      break;
-  }
+function keySet(key, pressed){
+    if(key == EventContext.jsUpKey()) keyState[EventContext.upKey()] = pressed;
+    else if(key == EventContext.jsLeftKey()) keyState[EventContext.leftKey()] = pressed;
+    else if(key == EventContext.jsDownKey()) keyState[EventContext.downKey()] = pressed;
+    else if(key == EventContext.jsRightKey()) keyState[EventContext.rightKey()] = pressed;
+}
+
+function keyPressed(evt){
+  keySet(evt.code, true);
 }
 
 function keyReleased(evt) {
-  let player = WorldContext.getMainPlayer();
-  switch(evt.code) {
-    case 'ArrowRight':
-    case 'ArrowLeft':
-      // player.changeDirection(PlayerContext.getNoneDirValue());
-      player.stop();
-      break;
-    case 'ArrowUp':
-    case 'ArrowDown':
-      // player.changeDirection(PlayerContext.getNoneDirValue());
-      player.stop();
-      break;
-  }
+  keySet(evt.code, false);
 }
 
+function updateKeyEvents(){
+  for(let i = 0; i < EventContext.getKeyCount(); ++i)
+    prevKeyState[i] = keyState[i];
+}
+
+function isPressed(ownKeyCode){
+  return keyState[ownKeyCode] & !prevKeyState[ownKeyCode];
+}
 
 // -- Mouse
 

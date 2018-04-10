@@ -36,8 +36,21 @@ class Player extends Entity{
 	}
 
 	update(){
+		this.handleInput();
 		this.move();
 		this.checkBoundCollisions();
+	}
+
+	handleInput(){
+		if(isPressed(EventContext.upKey())){
+			this.changeDirection(PlayerContext.getUpDirValue());
+		} else if(isPressed(EventContext.leftKey())){
+			this.changeDirection(PlayerContext.getLeftDirValue());
+		} else if(isPressed(EventContext.downKey())){
+			this.changeDirection(PlayerContext.getDownDirValue());
+		} else if(isPressed(EventContext.rightKey())){
+			this.changeDirection(PlayerContext.getRightDirValue());
+		}
 	}
 
 	move(){
