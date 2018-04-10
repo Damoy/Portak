@@ -1,2 +1,2 @@
-# Uminpok
+# Portak
 University Javascript mini-game
