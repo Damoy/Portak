@@ -3,7 +3,7 @@ class Energy extends Entity{
 		super(ctx, canvas, world, x, y, MapContext.getTileSize() >> 1, MapContext.getTileSize() >> 1, "LightGreen", 0, 0);
 		println("Energy generation...");
 		this.value = value;
-		this.radius = this.computeRadius(this.value);
+		this.radius = computeRadius(this.value, MapContext.getTileSize());
 		println("Energy: OK.");
 	}
 
@@ -22,10 +22,6 @@ class Energy extends Entity{
     	ctx.fill();
     	ctx.stroke();
     	ctx.restore();
-	}
-
-	computeRadius(value){
-		return((value % 5) << 1) + (MapContext.getTileSize() >> 2);
 	}
 
 	getValue(){return this.value;}

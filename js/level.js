@@ -40,7 +40,7 @@ class Level{
 			let tile = mt[i];
 
 			if(rand == 1){
-				let newWall = new Wall(this.ctx, this.canvas, this.world, tile.getX(), tile.getY(), "gray");
+				let newWall = new Wall(this.ctx, this.canvas, this.world, tile.getX(), tile.getY(), "DimGray");
 				this.walls.push(newWall);
 			}
 		}
