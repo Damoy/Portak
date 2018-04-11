@@ -20,14 +20,16 @@ var EventContext = {
   jsLeftKey : function(){return 'ArrowLeft';},
   jsDownKey : function(){return 'ArrowDown';},
   jsRightKey : function(){return 'ArrowRight';},
+  jsSpaceKey : function(){return 'Space';},
 
   // own key code
   upKey : function(){return 0;},
   leftKey : function(){return 1;},
   downKey : function(){return 2;},
   rightKey : function(){return 3;},
+  spaceKey : function(){return 4;},
 
-  getKeyCount : function(){return 4}
+  getKeyCount : function(){return 5;}
 }
 
 function initListeners(canvas){
@@ -43,6 +45,7 @@ function keySet(key, pressed){
     else if(key == EventContext.jsLeftKey()) keyState[EventContext.leftKey()] = pressed;
     else if(key == EventContext.jsDownKey()) keyState[EventContext.downKey()] = pressed;
     else if(key == EventContext.jsRightKey()) keyState[EventContext.rightKey()] = pressed;
+    else if(key == EventContext.jsSpaceKey()) keyState[EventContext.spaceKey()] = pressed;
 }
 
 function keyPressed(evt){

@@ -31,13 +31,19 @@ class Player extends Entity{
 		this.direction = PlayerContext.getNoneDirValue();
 		this.savedDirection = PlayerContext.getDownDirValue();
 
+		this.projectiles = [];
+		this.deadProjectiles = [];
+
 		println("Player: OK.");
 	}
 
 	update(){
-		this.handleInput();
-		this.move();
-		this.checkBoundCollisions();
+		if(!this.isDead()) {
+			this.handleInput();
+			this.move();
+			this.checkBoundCollisions();
+			this.updateProjectiles();
+		}
 	}
 
 	handleInput(){
@@ -49,14 +55,19 @@ class Player extends Entity{
 			this.changeDirection(PlayerContext.getDownDirValue());
 		} else if(isPressed(EventContext.rightKey())){
 			this.changeDirection(PlayerContext.getRightDirValue());
+		} else if(isPressed(EventContext.spaceKey())) {
+			println("Licorne");
+			let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w, this.y + this.h, this.savedDirection);
+			this.projectiles.push(projectile);
 		}
+
 	}
 
 	move(){
 		if(this.tileDestReached){
 			let dx = 0;
 			let dy = 0;
-			let offset = PlayerContext.getBaseMaxSpeed() >> 1; // 1 ; PlayerContext.getBaseMaxSpeed() >> 1 MapContext.getTileSize() >> 2
+			let offset = 2; // 1 ; PlayerContext.getBaseMaxSpeed() >> 1 MapContext.getTileSize() >> 2
 			this.xSave = this.x;
 			this.ySave = this.y;
 
@@ -123,6 +134,7 @@ class Player extends Entity{
 				this.y = yMinusTs;
 
 			this.tileDestReached = true;
+			this.subEnergy(1);
 			this.lastDx = 0;
 			this.lastDy = 0;
 			this.direction = PlayerContext.getNoneDirValue();
@@ -132,6 +144,7 @@ class Player extends Entity{
 			if(!this.blocked){
 				this.tileDestReached = false;
 			} else{
+				this.subEnergy(1);
 				this.tileDestReached = true;
 				this.lastDx = 0;
 				this.lastDy = 0;
@@ -248,9 +261,45 @@ class Player extends Entity{
 		}
 	}
 
+	updateProjectiles(){
+		this.projectiles.forEach((proj) => {
+			proj.update();
+		});
+		this.checkProjectilesState();
+	}
+
+	checkProjectilesState(){
+		for(let i = 0; i < this.projectiles.length; i++) {
+			let proj = this.projectiles[i];
+			if(proj.isDead()){
+				this.deadProjectiles.push(proj);
+			}
+		}
+
+		for(let i = 0; i < this.deadProjectiles.length; i++) {
+			this.removeProjectile(this.deadProjectiles[i]);
+		}
+	}
+
+	removeProjectile(projectile){
+		removeFromArray(this.projectiles, projectile);
+	}
+
+	addToDeadProjectiles(projectile) {
+		this.deadProjectiles.push(projectile);
+
+	}
+
 	render(){
 		this.renderEntity();
 		this.renderEnergy();
+		this.renderProjectiles();
+	}
+
+	renderProjectiles(){
+		this.projectiles.forEach((proj) => {
+			proj.render();
+		});
 	}
 
 	renderEntity(){
@@ -300,4 +349,5 @@ class Player extends Entity{
 	subEnergy(value){this.energy -= value;}
 	getEnergy(){return this.energy;}
 	getMaxSpeed(){return this.maxSpeed;}
+	isDead(){return (this.energy == 0);}
 }
