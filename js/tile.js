@@ -73,6 +73,16 @@ class Tile{
 		}
 	}
 
+	powerUp(){ 
+		if(this.isPoweredUp()) return;
+		let tsd2 = MapContext.getTileSize() >> 1; // Size tile / 2
+		this.power = new Energy(this.ctx, this.canvas, this.world, this.x + tsd2, this.y + tsd2, 1);
+	}
+
+	unpower() {
+		this.power = null; 
+	}
+
 	getOccupier(){return this.occupier;}
 	isOccupied(){return this.occupier != null;}
 
@@ -88,14 +98,4 @@ class Tile{
 	getY(){return this.y;}
 	isPoweredUp(){return this.power != null;}
 	getPower(){return this.power;}
-
-	powerUp(){ 
-		if(this.isPoweredUp()) return;
-		let tsd2 = MapContext.getTileSize() >> 1; // Size tile / 2
-		this.power = new Energy(this.ctx, this.canvas, this.world, this.x + tsd2, this.y + tsd2, 1);
-	}
-
-	unpower() {
-		this.power = null; 
-	}
 }

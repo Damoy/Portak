@@ -14,16 +14,32 @@ var RenderingContext = {
   },
 
   getFontSize : function(){return MapContext.getTileSize();},
-  getPxFontSized : function(){return RenderingContext.getFontSize() + "px tahoma";},
-  getPxFont : function(){return "px tahoma";},
-  getFont : function(){return "tahoma";},
+  getPxFontSized : function(){return RenderingContext.getFontSize() + RenderingContext.getPxFont();},
+  getPxFont : function(){return "px " + RenderingContext.getFont();},
+  getFont : function(){return "arial";},
 
   getClearBaseX : function(){return 0;},
   getClearBaseY : function(){return 0;},
   getClearWidth : function(canvas){return canvas.width;},
   getClearHeight : function(canvas){return canvas.height;},
 
-  noCursor : function(){return "none";}
+  noCursor : function(){return "none";},
+
+  getCanvasWidth : function(canvas){
+    return canvas.width;
+  },
+
+  getCanvasHeight : function(canvas){
+    return canvas.height - RenderingContext.getUIHeight();
+  },
+
+  getUIWidth : function(canvas){
+    return canvas.width;
+  },
+
+  getUIHeight : function(canvas){
+    return MapContext.getTileSize() << 1;
+  }
 };
 
 function initRendering(canvas){
@@ -35,8 +51,28 @@ function initRendering(canvas){
 // global rendering
 function render(canvas, world){
   clear(canvas);
+  renderUI(world.getContext(), canvas);
   world.render();
   requestAnimationFrame(run);
+}
+
+// render user interface
+function renderUI(ctx, canvas){
+  let startX = 0;
+  let startY = RenderingContext.getCanvasHeight(canvas);
+  let width = RenderingContext.getCanvasWidth(canvas);
+
+  // let height = MapContext.getTileSize() << 1;
+  // ctx.save();
+  // ctx.fillStyle = "plum";
+  // ctx.fillRect(startX, startY, width, height);
+  // ctx.restore();
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(startX, startY);
+  ctx.lineTo(startX + width, startY);
+  ctx.stroke();
+  ctx.restore();
 }
 
 // some info' rendering

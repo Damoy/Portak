@@ -19,8 +19,7 @@ class Player extends Entity{
 		this.level = this.world.getCurrentLevel();
 		this.map = this.level.getMap();
 
-		// for move purpose
-		this.stopped = false;
+		// for move purposes
 		this.blocked = false;
 		this.tileDestReached = true;
 
@@ -54,13 +53,10 @@ class Player extends Entity{
 	}
 
 	move(){
-		if(this.stopped)
-			return;
-
 		if(this.tileDestReached){
 			let dx = 0;
 			let dy = 0;
-			let offset = PlayerContext.getBaseMaxSpeed() >> 1; // PlayerContext.getBaseMaxSpeed() >> 1 MapContext.getTileSize() >> 2
+			let offset = PlayerContext.getBaseMaxSpeed() >> 1; // 1 ; PlayerContext.getBaseMaxSpeed() >> 1 MapContext.getTileSize() >> 2
 			this.xSave = this.x;
 			this.ySave = this.y;
 
@@ -85,13 +81,27 @@ class Player extends Entity{
 					return;
 			}
 
-			this.move2(dx, 0);
+			//this.blocked = !this.move2(dx, 0) && !this.move2(0, dy);
+			// if(dx != 0 && this.move2(dx, 0)) this.blocked = false;
+			// if(dy != 0 && this.move2(0, dy)) this.blocked = false;
+			let xBlocked = this.move2(dx, 0);
 			this.move2(0, dy);
+			// if(xBlocked)
+			// 	this.blocked = true;
+
 			this.requireBoxSync();
 			this.updateBox();
 		} else {
 			this.move2(this.lastDx, 0);
 			this.move2(0, this.lastDy);
+
+			//this.blocked = !this.move2(this.lastDx, 0) && !this.move2(0, this.lastDy);
+			// let xBlocked = this.move2(this.lastDx, 0);
+			// this.move2(0, this.lastDy);
+			// if(xBlocked)
+			// 	this.blocked = true;
+			// if(dx != 0 && this.move2(this.lastDx, 0)) this.blocked = false;
+			// if(dy != 0 && this.move2(0, this.lastDy)) this.blocked = false;
 			this.requireBoxSync();
 			this.updateBox();
 		}
@@ -155,6 +165,10 @@ class Player extends Entity{
 				let tile = this.map.getTileAt(row, col);
 				if(tile != null) {
 					if(tile.isOccupied()){
+						this.tileDestReached = true;
+						this.lastDx = 0;
+						this.lastDy = 0;
+						this.direction = PlayerContext.getNoneDirValue();
 						this.blocked = true;
 						return false;
 					} else if(tile.isPoweredUp()){
@@ -165,6 +179,7 @@ class Player extends Entity{
 			}
 		}
 
+		this.blocked = false;
 		this.addX(dx);
 		this.addY(dy);
 
@@ -194,18 +209,42 @@ class Player extends Entity{
 	checkBoundCollisions(){
 		if(this.x < 0){
 			this.x = 0;
+
+			this.tileDestReached = true;
+			this.lastDx = 0;
+			this.lastDy = 0;
+			this.direction = PlayerContext.getNoneDirValue();
+			this.blocked = true;
 		}
 
-		if(this.x + this.w > this.canvas.width){
-			this.x = this.canvas.width - this.w;
+		if(this.x + this.w > RenderingContext.getCanvasWidth(this.canvas)){
+			this.x = RenderingContext.getCanvasWidth(this.canvas) - this.w;
+
+			this.tileDestReached = true;
+			this.lastDx = 0;
+			this.lastDy = 0;
+			this.direction = PlayerContext.getNoneDirValue();
+			this.blocked = true;
 		}
 
 		if(this.y < 0){
 			this.y = 0;
+
+			this.tileDestReached = true;
+			this.lastDx = 0;
+			this.lastDy = 0;
+			this.direction = PlayerContext.getNoneDirValue();
+			this.blocked = true;
 		}
 
-		if(this.y + this.h > this.canvas.height){
-			this.y = this.canvas.height - this.h;
+		if(this.y + this.h > RenderingContext.getCanvasHeight(this.canvas)){
+			this.y = RenderingContext.getCanvasHeight(this.canvas) - this.h;
+
+			this.tileDestReached = true;
+			this.lastDx = 0;
+			this.lastDy = 0;
+			this.direction = PlayerContext.getNoneDirValue();
+			this.blocked = true;
 		}
 	}
 
@@ -228,7 +267,8 @@ class Player extends Entity{
 	}
 
 	renderEnergy(){
-		renderComposedText(this.ctx, "Power: ", this.energy, this.canvas.width * 10 / 100, MapContext.getTileSize() * 3.25, this.canvas.height * 10 / 100, 0, "MediumSeaGreen");
+		// renderComposedText(this.ctx, "Power: ", this.energy, this.canvas.width * 10 / 100, MapContext.getTileSize() * 3.25, this.canvas.height * 10 / 100, 0, "MediumSeaGreen");
+		renderComposedText(this.ctx, this.energy, " power", RenderingContext.getCanvasWidth(this.canvas) * (40 / 100), MapContext.getTileSize() * 1.2, RenderingContext.getCanvasHeight(this.canvas) + (RenderingContext.getUIHeight() >> 1), 0, "DarkGreen");
 	}
 
 	renderAccordingToDirection(dir){

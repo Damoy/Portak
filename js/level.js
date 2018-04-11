@@ -2,8 +2,8 @@ var LevelContext = {
 	getBaseLayer : function(){return 1;},
 
 	getMap : function(ctx, canvas, world){
-		let rows = canvas.height / MapContext.getTileSize();
-		let cols = canvas.width / MapContext.getTileSize();
+		let rows = (RenderingContext.getCanvasHeight(canvas) - (MapContext.getTileSize() << 1)) / MapContext.getTileSize();
+		let cols = (RenderingContext.getCanvasWidth(canvas) - (MapContext.getTileSize() << 1)) / MapContext.getTileSize();
 		return new Map(ctx, canvas, world, rows, cols);
 	}
 };
@@ -40,7 +40,7 @@ class Level{
 			let tile = mt[i];
 
 			if(rand == 1){
-				let newWall = new Wall(this.ctx, this.canvas, this.world, tile.getX(), tile.getY(), "gray");
+				let newWall = new Wall(this.ctx, this.canvas, this.world, tile.getX(), tile.getY(), "DimGray");
 				this.walls.push(newWall);
 			}
 		}
