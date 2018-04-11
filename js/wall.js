@@ -11,12 +11,10 @@ class Wall extends Entity{
 	render(){
 		ctx.save();
 		ctx.fillStyle = this.color;
-		ctx.fillRect(this.x, this.y, this.w - 1, this.h - 1);
+		ctx.fillRect(this.x, this.y, this.w, this.h);
 
 		ctx.fillStyle = "gray";
 		ctx.fillRect(this.x + 3, this.y - 1 , this.w - 2 , this.h - 2);
-		// ctx.fillStyle = "gray";
-		// ctx.fillRect(this.x + 1, this.y + 1, this.w - 1, this.h - 1);
 		ctx.restore();
 	}
 

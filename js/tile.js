@@ -1,6 +1,3 @@
-var TileContext = {
-};
-
 class Tile{
 	constructor(ctx, canvas, world, map, row, col){
 		this.ctx = ctx;
@@ -17,7 +14,6 @@ class Tile{
 	}
 
 	update(){
-	//	this.checkMouseHovering();
 		this.updatePower();
 	}
 
@@ -27,26 +23,7 @@ class Tile{
 		}
 	}
 
-	checkMouseHovering(){
-		let mp = EventContext.getMousePos();
-		if(mp == null){
-			println("Mouse pos null.");
-			return;
-		}
-
-		let mrow = MapContext.getTileRow(mp.y); // | 0 -- to int
-		let mcol = MapContext.getTileCol(mp.x);
-
-		if(mrow == this.row && mcol == this.col){
-			this.colorize("blue");
-		} else {
-			this.hide();
-		}
-
-	}
-
 	render(){
-		this.renderMouseHovering();
 		this.renderPower();
 	}
 
@@ -56,27 +33,19 @@ class Tile{
 		}
 	}
 
-	renderMouseHovering(){
-		if(this.color != null){
-			ctx.save();
-			ctx.fillStyle = this.color;
-			ctx.fillRect(MapContext.getNormX(this.col), MapContext.getNormY(this.row), MapContext.getTileSize(), MapContext.getTileSize());
-			ctx.restore();
-		}
-	}
-
 	occupyWith(occupier){
 		if(this.occupier == null){
 			this.occupier = occupier;
-		} else {
-			throw "Tile was already occupied !";
 		}
+		// else {
+		// 	throw "Tile was already occupied !";
+		// }
 	}
 
-	powerUp(){ 
+	powerUp(powerLevel){ 
 		if(this.isPoweredUp()) return;
 		let tsd2 = MapContext.getTileSize() >> 1; // Size tile / 2
-		this.power = new Energy(this.ctx, this.canvas, this.world, this.x + tsd2, this.y + tsd2, 1);
+		this.power = new Energy(this.ctx, this.canvas, this.world, this.x + tsd2, this.y + tsd2, powerLevel);
 	}
 
 	unpower() {

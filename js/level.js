@@ -2,22 +2,24 @@ var LevelContext = {
 	getBaseLayer : function(){return 1;},
 
 	getMap : function(ctx, canvas, world){
-		let rows = (RenderingContext.getCanvasHeight(canvas) - (MapContext.getTileSize() << 1)) / MapContext.getTileSize();
-		let cols = (RenderingContext.getCanvasWidth(canvas) - (MapContext.getTileSize() << 1)) / MapContext.getTileSize();
+		let rows = (RenderingContext.getCanvasHeight(canvas)) / MapContext.getTileSize();
+		let cols = (RenderingContext.getCanvasWidth(canvas)) / MapContext.getTileSize();
 		return new Map(ctx, canvas, world, rows, cols);
 	}
 };
 
 /* -- Leveling -- */
 class Level{
-	constructor(ctx, canvas, world){
+	constructor(id, ctx, canvas, world){
 		println("Level generation...");
+		this.id = id;
 		this.ctx = ctx;
 		this.canvas = canvas;
 		this.world = world;
 		this.layer = LevelContext.getBaseLayer();
 		this.map = null;
 		this.walls = [];
+		this.portal = null;
 		println("Level: OK.");
 	}
 
@@ -26,6 +28,7 @@ class Level{
 		this.generateWalls();
 		this.generateEnemies();
 		this.generateEnergies();
+		//this.generatePortal();
 	}
 
 	generateMap(){
@@ -57,7 +60,21 @@ class Level{
 			let tile = mt[i];
 			if(!tile.isOccupied()) {
 				if(rand == 1){				
-					tile.powerUp();
+					tile.powerUp(irand(1, 2));
+				}
+			}
+		}
+	}
+
+	generatePortal(){
+		let mt = this.map.getTiles();
+		for(let i = 0; i < mt.length; ++i){
+			let rand = irand(1, 20);
+			let tile = mt[i];
+			if(!tile.isOccupied() && !tile.isPoweredUp()) {
+				if(rand == 1){				
+					this.portal = new Portal(this.ctx, this.canvas, this.world, this, tile.getX(), tile.getY());
+					break;
 				}
 			}
 		}
@@ -81,6 +98,7 @@ class Level{
 	render(){
 		this.renderMap();
 		this.renderPopulation();
+		this.renderPortal();
 	}
 
 	renderMap(){
@@ -92,6 +110,15 @@ class Level{
 			wall.render();
 		})
 	};
+
+	renderPortal(){
+		if(this.portal != null)
+			this.portal.render();
+	}
+
+	setPortal(portal){
+		this.portal = portal;
+	}
 
 	evolve(){
 	}
@@ -111,4 +138,6 @@ class Level{
 	getContext(){return this.ctx;}
 	getCanvas(){return this.canvas;}
 	getLayer(){return this.layer;}
+	getPortal(){return this.portal;}
+	getId(){return this.id;}
 }

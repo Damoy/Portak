@@ -1,4 +1,131 @@
-var PlayerContext = {
+	renderMouseHovering(){
+		if(this.color != null){
+			ctx.save();
+			ctx.fillStyle = this.color;
+			ctx.fillRect(MapContext.getNormX(this.col), MapContext.getNormY(this.row), MapContext.getTileSize(), MapContext.getTileSize());
+			ctx.restore();
+		}
+	}
+
+		checkMouseHovering(){
+		let mp = EventContext.getMousePos();
+		if(mp == null){
+			println("Mouse pos null.");
+			return;
+		}
+
+		let mrow = MapContext.getTileRow(mp.y); // | 0 -- to int
+		let mcol = MapContext.getTileCol(mp.x);
+
+		if(mrow == this.row && mcol == this.col){
+			this.colorize("blue");
+		} else {
+			this.hide();
+		}
+
+	}
+
+	    	/*ctx.beginPath();
+    	ctx.ellipse(this.x, this.y, this.radius >> 1, (this.radius + (this.radius >> 1)) >> 1, 45 * Math.PI/180, 0, 2 * Math.PI);
+    	ctx.fillStyle = "LightSlateGray" ;
+    	ctx.fill();
+    	ctx.stroke(); */
+
+
+    		teleport(player){
+		//this.world.teleportPlayer(this.configuration);
+		//this.world.removePortal(this.configuration, this);
+	}
+
+		teleportPlayer(portalConfig){
+		this.level = portalConfig.getLevelDest();
+		this.player.moveTo(portalConfig.getDestX(), portalConfig.getDestY());
+	}
+
+	// removePortal(portalConfig, portal){
+	// 	portalConfig.get
+	// }
+
+
+				if(wallHere == null){
+					available = true;
+				} else {
+					available = false;
+				}
+
+
+				// this.currentLevel = WorldContext.getBaseLevel(ctx, canvas, this).generate();
+
+
+
+						let rows = (RenderingContext.getCanvasHeight(canvas) - (MapContext.getTileSize() << 1)) / MapContext.getTileSize();
+		let cols = (RenderingContext.getCanvasWidth(canvas) - (MapContext.getTileSize() << 1)) / MapContext.getTileSize();
+
+
+			getWall(row, col){
+		for(let i = 0; i < this.walls.length; ++i){
+			let wall = this.walls[i];
+			if(wall.getRow() == row && wall.getCol() == col)
+				return wall;
+		}
+
+		return null;
+	}
+
+
+	generatePortal(){
+		let availablePos = this.generateAvailablePos(this.canvas, PortalContext.getPortalBaseWidth(), PortalContext.getPortalBaseHeight());
+		if(availablePos.row != -1 && availablePos.col != -1){
+			println("available row: " + availablePos.row + ", col: " + availablePos.col);
+			this.portal = new Portal(this.ctx, this.canvas, this.world, this,
+				availablePos.row * MapContext.getTileSize(), availablePos.col * MapContext.getTileSize());	
+		}
+		else {
+			throw "Could not generate level portal.";
+		}
+	}
+
+	generateAvailablePos(canvas, objectWidth, objectHeight){
+		let available = false;
+		let _row = 0;
+		let _col = 0;
+		let maxIterations = 1000;
+		let count = 0;
+
+		do{
+			++count;
+			if(count >= maxIterations){
+				_row = -1;
+				_col = -1;
+				break;
+			}
+
+			_row = (irand(0, RenderingContext.getCanvasWidth(canvas) - objectWidth)) / MapContext.getTileSize();
+			_col = (irand(0, RenderingContext.getCanvasHeight(canvas) - objectHeight)) / MapContext.getTileSize();
+			let tile = this.map.getTileAt(_row, _col);
+
+			if(tile != null){
+				if(tile.isOccupied() || tile.isPoweredUp()){
+					continue;
+				}
+
+				// let wallHere = this.getWall(tile.getRow(), tile.getCol());
+				// if(wallHere == null)
+				available = true;
+			}
+
+		} while(!available);
+
+		return {row:_row, col:_col};
+	}
+
+			// let rows = (RenderingContext.getCanvasHeight(canvas) - (MapContext.getTileSize() << 1)) / MapContext.getTileSize();
+		// let cols = (RenderingContext.getCanvasWidth(canvas) - (MapContext.getTileSize() << 1)) / MapContext.getTileSize();
+
+
+
+
+		var PlayerContext = {
 	getBaseEnergy : function(){return 10;},
 	getBaseMaxSpeed : function(){return MapContext.getTileSize() >> 1;}, // >> 1
 	getLeftDirValue : function(){return 0;},
@@ -29,19 +156,13 @@ class Player extends Entity{
 		this.direction = PlayerContext.getNoneDirValue();
 		this.savedDirection = PlayerContext.getDownDirValue();
 
-		this.projectiles = [];
-		this.deadProjectiles = [];
-
 		println("Player: OK.");
 	}
 
 	update(){
-		if(!this.isDead()) {
-			this.handleInput();
-			this.move();
-			this.checkBoundCollisions();
-			this.updateProjectiles();
-		}
+		this.handleInput();
+		this.move();
+		this.checkBoundCollisions();
 	}
 
 	handleInput(){
@@ -53,19 +174,14 @@ class Player extends Entity{
 			this.changeDirection(PlayerContext.getDownDirValue());
 		} else if(isPressed(EventContext.rightKey())){
 			this.changeDirection(PlayerContext.getRightDirValue());
-		} else if(isPressed(EventContext.spaceKey())) {
-			println("Licorne");
-			let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w, this.y + this.h, this.savedDirection);
-			this.projectiles.push(projectile);
 		}
-
 	}
 
 	move(){
 		if(this.tileDestReached){
 			let dx = 0;
 			let dy = 0;
-			let offset = 2; // 1 ; PlayerContext.getBaseMaxSpeed() >> 1 MapContext.getTileSize() >> 2
+			let offset = PlayerContext.getBaseMaxSpeed() >> 1; // 1 ; PlayerContext.getBaseMaxSpeed() >> 1 MapContext.getTileSize() >> 2
 			this.xSave = this.x;
 			this.ySave = this.y;
 
@@ -90,17 +206,27 @@ class Player extends Entity{
 					return;
 			}
 
-			let canMove = this.move2(dx, 0);
-			canMove = canMove && this.move2(0, dy);
-			this.blocked = !canMove;
+			//this.blocked = !this.move2(dx, 0) && !this.move2(0, dy);
+			// if(dx != 0 && this.move2(dx, 0)) this.blocked = false;
+			// if(dy != 0 && this.move2(0, dy)) this.blocked = false;
+			let xBlocked = this.move2(dx, 0);
+			this.move2(0, dy);
+			// if(xBlocked)
+			// 	this.blocked = true;
 
 			this.requireBoxSync();
 			this.updateBox();
 		} else {
-			let canMove = this.move2(this.lastDx, 0);
-			canMove = canMove && this.move2(0, this.lastDy);
-			this.blocked = !canMove;
+			this.move2(this.lastDx, 0);
+			this.move2(0, this.lastDy);
 
+			//this.blocked = !this.move2(this.lastDx, 0) && !this.move2(0, this.lastDy);
+			// let xBlocked = this.move2(this.lastDx, 0);
+			// this.move2(0, this.lastDy);
+			// if(xBlocked)
+			// 	this.blocked = true;
+			// if(dx != 0 && this.move2(this.lastDx, 0)) this.blocked = false;
+			// if(dy != 0 && this.move2(0, this.lastDy)) this.blocked = false;
 			this.requireBoxSync();
 			this.updateBox();
 		}
@@ -122,7 +248,6 @@ class Player extends Entity{
 				this.y = yMinusTs;
 
 			this.tileDestReached = true;
-			this.subEnergy(1);
 			this.lastDx = 0;
 			this.lastDy = 0;
 			this.direction = PlayerContext.getNoneDirValue();
@@ -132,7 +257,6 @@ class Player extends Entity{
 			if(!this.blocked){
 				this.tileDestReached = false;
 			} else{
-				this.subEnergy(1);
 				this.tileDestReached = true;
 				this.lastDx = 0;
 				this.lastDy = 0;
@@ -170,6 +294,7 @@ class Player extends Entity{
 						this.lastDx = 0;
 						this.lastDy = 0;
 						this.direction = PlayerContext.getNoneDirValue();
+						this.blocked = true;
 						return false;
 					} else if(tile.isPoweredUp()){
 						this.addEnergy(tile.getPower().getValue());
@@ -179,6 +304,7 @@ class Player extends Entity{
 			}
 		}
 
+		this.blocked = false;
 		this.addX(dx);
 		this.addY(dy);
 
@@ -247,45 +373,9 @@ class Player extends Entity{
 		}
 	}
 
-	updateProjectiles(){
-		this.projectiles.forEach((proj) => {
-			proj.update();
-		});
-		this.checkProjectilesState();
-	}
-
-	checkProjectilesState(){
-		for(let i = 0; i < this.projectiles.length; i++) {
-			let proj = this.projectiles[i];
-			if(proj.isDead()){
-				this.deadProjectiles.push(proj);
-			}
-		}
-
-		for(let i = 0; i < this.deadProjectiles.length; i++) {
-			this.removeProjectile(this.deadProjectiles[i]);
-		}
-	}
-
-	removeProjectile(projectile){
-		removeFromArray(this.projectiles, projectile);
-	}
-
-	addToDeadProjectiles(projectile) {
-		this.deadProjectiles.push(projectile);
-
-	}
-
 	render(){
 		this.renderEntity();
 		this.renderEnergy();
-		this.renderProjectiles();
-	}
-
-	renderProjectiles(){
-		this.projectiles.forEach((proj) => {
-			proj.render();
-		});
 	}
 
 	renderEntity(){
@@ -302,6 +392,7 @@ class Player extends Entity{
 	}
 
 	renderEnergy(){
+		// renderComposedText(this.ctx, "Power: ", this.energy, this.canvas.width * 10 / 100, MapContext.getTileSize() * 3.25, this.canvas.height * 10 / 100, 0, "MediumSeaGreen");
 		renderComposedText(this.ctx, this.energy, " power", RenderingContext.getCanvasWidth(this.canvas) * (40 / 100), MapContext.getTileSize() * 1.2, RenderingContext.getCanvasHeight(this.canvas) + (RenderingContext.getUIHeight() >> 1), 0, "DarkGreen");
 	}
 
@@ -334,5 +425,31 @@ class Player extends Entity{
 	subEnergy(value){this.energy -= value;}
 	getEnergy(){return this.energy;}
 	getMaxSpeed(){return this.maxSpeed;}
-	isDead(){return (this.energy == 0);}
 }
+
+
+
+		// if(dx != 0 && this.move2(dx, 0)) this.blocked = false;
+			// if(dy != 0 && this.move2(0, dy)) this.blocked = false;
+			let xBlocked = this.move2(dx, 0);
+			xBlocked = xBlocked && this.move2(0, dy);
+			this.blocked = xBlocked;
+			// if(xBlocked)
+			// 	this.blocked = true;
+
+			this.requireBoxSync();
+			this.updateBox();
+		} else {
+			let xBlocked = this.move2(this.lastDx, 0);
+			xBlocked = xBlocked && this.move2(0, this.lastDy);
+			this.blocked = xBlocked;
+
+			//this.blocked = !this.move2(this.lastDx, 0) && !this.move2(0, this.lastDy);
+			// let xBlocked = this.move2(this.lastDx, 0);
+			// this.move2(0, this.lastDy);
+			// if(xBlocked)
+			// 	this.blocked = true;
+			// if(dx != 0 && this.move2(this.lastDx, 0)) this.blocked = false;
+			// if(dy != 0 && this.move2(0, this.lastDy)) this.blocked = false;
+			this.requireBoxSync();
+			this.updateBox();
