@@ -88,6 +88,12 @@ class Entity {
 
  	//---- SET
 
+ 	moveTo(x, y){
+ 		this.x = x;
+ 		this.y = y;
+ 		this.requireBoxSync();
+ 	}
+
  	setX(x) {
  		this.x = x;
  		this.requireBoxSync();
