@@ -49,6 +49,7 @@ class Player extends Entity{
 			this.checkBoundCollisions();
 			this.checkPortalsCollisions();
 			this.updateProjectiles();
+			this.updateBox();
 		}
 	}
 
@@ -252,7 +253,8 @@ class Player extends Entity{
 	}
 
 	checkPortalsCollisions(){
-		let portalCollision = this.world.portalCollision(this.x, this.y, this.w, this.h);
+		let currentTile = this.map.getNormTileAt(this.x, this.y);
+		let portalCollision = this.world.portalCollision(currentTile);
 		if(portalCollision != null){
 			portalCollision.interact(this);
 			this.resetMovementAndBlock();
@@ -285,7 +287,6 @@ class Player extends Entity{
 
 	addToDeadProjectiles(projectile) {
 		this.deadProjectiles.push(projectile);
-
 	}
 
 	render(){
@@ -340,7 +341,7 @@ class Player extends Entity{
 				ctx.fillStyle = dirStyle;
 				ctx.fillRect(this.x, this.y + (this.h - (this.h >> 3)), this.w, this.h >> 3);
 				break;
-			}
+		}
 	}
 
 	changeLevel(level){

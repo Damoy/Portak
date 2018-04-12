@@ -14,10 +14,13 @@ class Portal extends Entity{
 		println("Portal generation...");
 		this.radius = this.computeRadius(this.value);
 
-		// concerning level
-		this.addX(MapContext.getTileSize() >> 1);
-		this.addY(MapContext.getTileSize() >> 1);
+		// update portal only if ellipse
+		this.rawRenderingXOffset = MapContext.getTileSize() >> 1;
+		this.rawRenderingYOffset = MapContext.getTileSize() >> 1;
+		this.addX(this.rawRenderingXOffset);
+		this.addY(this.rawRenderingYOffset);
 		this.updateBox();
+		//this.texture = TextureContext.getPortalTexture();
 
 		this.destX = destX;
 		this.destY = destY;
@@ -36,6 +39,12 @@ class Portal extends Entity{
 	}
 
 	render(){
+		this.rawRender();
+		// println(this.texture);
+		// this.texture.render(this.x, this.y);
+	}
+
+	rawRender(){
 		ctx.save();
 		ctx.beginPath();
     	ctx.ellipse(this.x, this.y, this.radius, this.radius + (this.radius >> 1), 45 * Math.PI / 180, 0, 2 * Math.PI);
@@ -53,4 +62,6 @@ class Portal extends Entity{
 	getDestY(){return this.destY;}
 	getSrcLevelId(){return this.sourceLevelId;}
 	getDestLevelId(){return this.destLevelId;}
+	getRawRenderingXOffset(){return this.rawRenderingXOffset;}
+	getRawRenderingYOffset(){return this.rawRenderingYOffset;}
 }
