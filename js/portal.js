@@ -9,17 +9,21 @@ var PortalContext = {
 };
 
 class Portal extends Entity{
-	constructor(ctx, canvas, world, level, x, y){
-		super(ctx, canvas, world, x, y, PortalContext.getPortalBaseWidth(), PortalContext.getPortalBaseHeight(), "PaleTurquoise", 0, 0);
+	constructor(ctx, canvas, world, sourceLevelId, destLevelId, srcX, srcY, destX, destY){
+		super(ctx, canvas, world, srcX, srcY, PortalContext.getPortalBaseWidth(), PortalContext.getPortalBaseHeight(), "PaleTurquoise", 0, 0);
 		println("Portal generation...");
 		this.radius = this.computeRadius(this.value);
-		this.sourceLevel = level; // overriding the level
-		this.destLevel = null;
-		this.destLevelX = 0;
-		this.destLevelY = 0;
-		this.x += (MapContext.getTileSize() >> 1);
-		this.y += (MapContext.getTileSize() >> 1);
-		println("portal x: " + this.x + ", y: " + this.y);
+
+		// concerning level
+		this.addX(MapContext.getTileSize() >> 1);
+		this.addY(MapContext.getTileSize() >> 1);
+		this.updateBox();
+
+		this.destX = destX;
+		this.destY = destY;
+		this.sourceLevelId = sourceLevelId;
+		this.destLevelId = destLevelId;
+
 		println("Portal: OK.");
 	}
 
@@ -27,20 +31,8 @@ class Portal extends Entity{
 
 	}
 
-	linkTo(destLevel, destX, destY){
-		if(this.destLevel != null)
-			throw "Could not link portal.";
-
-		this.destLevel = destLevel;
-		this.destLevelX = destX;
-		this.destLevelY = destY;
-	}
-
 	interact(player){
-		if(this.destLevel == null)
-			throw "Could not interact with portal.";
-
-		this.world.teleportPlayer(this.destLevel, this.destLevelX, this.destLevelY);
+		this.world.teleportPlayerWith(this, this.destLevelId, this.destX, this.destY);
 	}
 
 	render(){
@@ -57,4 +49,8 @@ class Portal extends Entity{
 		return((value % 5) << 1) + (MapContext.getTileSize() >> 2);
 	}
 
+	getDestX(){return this.destX;}
+	getDestY(){return this.destY;}
+	getSrcLevelId(){return this.sourceLevelId;}
+	getDestLevelId(){return this.destLevelId;}
 }

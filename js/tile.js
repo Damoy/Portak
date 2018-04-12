@@ -11,6 +11,7 @@ class Tile{
 		this.color = null;
 		this.occupier = null;
 		this.power = null;
+		this.texture = TextureContext.getGrayTileTexture();
 	}
 
 	update(){
@@ -24,7 +25,10 @@ class Tile{
 	}
 
 	render(){
+		this.ctx.save();
+		this.texture.render(this.x, this.y);
 		this.renderPower();
+		this.ctx.restore();
 	}
 
 	renderPower(){
@@ -37,15 +41,20 @@ class Tile{
 		if(this.occupier == null){
 			this.occupier = occupier;
 		}
-		// else {
-		// 	throw "Tile was already occupied !";
-		// }
+		else {
+			throw "Tile was already occupied !";
+		}
 	}
 
 	powerUp(powerLevel){ 
 		if(this.isPoweredUp()) return;
-		let tsd2 = MapContext.getTileSize() >> 1; // Size tile / 2
-		this.power = new Energy(this.ctx, this.canvas, this.world, this.x + tsd2, this.y + tsd2, powerLevel);
+
+		// for circle shape rendering
+		// let tsd2 = MapContext.getTileSize() >> 1; // Size tile / 2
+		// this.power = new Power(this.ctx, this.canvas, this.world, this.x + tsd2, this.y + tsd2, powerLevel);
+
+		// for texture rendering
+		this.power = new Power(this.ctx, this.canvas, this.world, this.x, this.y, powerLevel);
 	}
 
 	unpower() {

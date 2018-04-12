@@ -42,9 +42,10 @@ var RenderingContext = {
   }
 };
 
-function initRendering(canvas){
+function initRendering(ctx, canvas){
   println("Initializing rendering...");
   RenderingContext.init(canvas);
+  TextureContext.init(getMainContext(), getMainCanvas());
   println("Rendering: OK.");
 }
 

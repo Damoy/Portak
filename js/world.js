@@ -6,10 +6,6 @@ var WorldContext = {
 			MapContext.getTileSize(), MapContext.getTileSize(), "Cornflowerblue", 0, 0);
 	},
 
-	getBaseLevel : function(ctx, canvas, world){
-		return new Level(1, ctx, canvas, world);
-	},
-
 	getMainPlayer : function(){return mainPlayer;}
 };
 
@@ -23,48 +19,93 @@ class World{
 
 		// leveling
 		this.levels = [];
-		// level 1
-		this.currentLevel = WorldContext.getBaseLevel(ctx, canvas, this);
-		this.currentLevel.generate();
-		this.levels.push(this.currentLevel);
-		// level 2
-		// var level2 = new Level(2, ctx, canvas, this);
-		// level2.generate();
-		// this.levels.push(level2);
+		this.portals = [];
 
-		// // var portal1to2 = new Portal(this.ctx, this.canvas, this, this.currentLevel, 20, 20);
-		// let nextId = this.currentLevel.getId() + 1;
-		// this.currentLevel.getPortal().linkTo(this.levels[nextId], 40, 40);
-		// this.currentLevel.setPortal(this.currentLevel.getPortal());
+		// level 0
+		this.currentLevel = this.generateRandomLevel();
+		// level 1
+		this.generateRandomLevel();
+		// create portal
+		println("Portal connection between level 0 et level 1: " + this.connectLevels(0, 1, 4, 4, 8, 8));
 
 		// player
 		this.player = WorldContext.getBasePlayer(ctx, canvas, this);
+		this.player.changeLevel(this.currentLevel);
 		mainPlayer = this.player;
 
 		println("World: OK.");
 	}
 
-	// link(){
-	// 	var portal1to2 = new Portal(this.ctx, this.canvas, this, this.currentLevel, 20, 20);
-	// 	let nextId = portal1to2.getId() + 1;
-	// 	portal1to2.linkTo(this.levels[nextId], 40, 40);
-	// 	this.currentLevel.setPortal(portal1to2);
-	// 	return this;
-	// }
+	generateRandomLevel(){
+		let lvlId = this.levels.length;
+		var level = new Level(lvlId, this.ctx, this.canvas, this, castToInt((lvlId + 1) * 10));
+		level.generate();
+		this.levels[lvlId] = level;
+		println("Generated level " + lvlId + ".");
+		return level;
+	}
+
+	getLevel(lvlId){
+		return this.levels[lvlId];
+	}
+
+	connectLevels(sourceLevelId, destLevelId, srcRow, srcCol, destRow, destCol){
+		for(let i = 0; i < this.portals.length; ++i){
+			let portal = this.portals[i];
+			// if portal from src level to dest level already exists, cancel connection
+			if(portal.getSrcLevelId() == sourceLevelId && portal.getDestLevelId() == destLevelId)
+				return false;
+		}
+
+		var newPortal = new Portal(this.ctx, this.canvas, this, sourceLevelId, destLevelId,
+									MapContext.getNormX(srcCol), MapContext.getNormY(srcRow), MapContext.getNormX(destCol), MapContext.getNormY(destRow));
+		this.portals.push(newPortal);
+		return true;
+	}
 
 	update(){
 		this.currentLevel.update();
 		this.player.update();
+		this.updatePortals();
+	}
+
+	updatePortals(){
+		this.portals.forEach((portal) => {
+			portal.update();
+		});
 	}
 
 	render(){
 		this.currentLevel.render();
 		this.player.render();
+		this.renderPortals();
 	}
 
-	teleportPlayer(destLevel, x, y){
-		this.currentLevel = destLevel;
+	renderPortals(){
+		this.portals.forEach((portal) => {
+			portal.render();
+		});
+	}
+
+	portalCollision(x, y, w, h){
+		for(let i = 0; i < this.portals.length; ++i){
+			if(this.portals[i].collides(x, y, w, h)){
+				return this.portals[i];
+			}
+		}
+		return null;
+	}
+
+	teleportPlayerWith(portalTook, destLevelId, x, y){
+		this.currentLevel = this.getLevel(destLevelId);
+		println("New current level: " + this.currentLevel.getId());
 		this.player.moveTo(x, y);
+		removeFromArray(this.portals, portalTook);
+		this.player.changeLevel(this.currentLevel);
+
+		// chaining
+		//var generation = this.generateRandomLevel();
+		//this.connectLevels(this.currentLevel.getId(), generation.getId(), 4, 4, 8, 8);
 	}
 
 	getPlayer(){return this.player;}

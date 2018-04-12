@@ -17,7 +17,7 @@ function setMainWorld(wld){
 }
 
 function getMainCanvas(){return canvas;}
-function getMainContext(){return context;}
+function getMainContext(){return ctx;}
 function getMainWorld(){return world;}
 
 /*
@@ -29,7 +29,7 @@ function getMainWorld(){return world;}
 function main() {
   println("Game generation...");
   // renderEngine
-  initRendering(canvas);
+  initRendering(ctx, canvas);
   // eventEngine
   initListeners(canvas);
   // init the world

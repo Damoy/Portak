@@ -1,5 +1,5 @@
 var PlayerContext = {
-	getBaseEnergy : function(){return 10;},
+	getBasePower : function(){return 0;},
 	getBaseMaxSpeed : function(){return MapContext.getTileSize() >> 1;}, // >> 1
 	getLeftDirValue : function(){return 0;},
 	getUpDirValue : function(){return 1;},
@@ -14,7 +14,7 @@ class Player extends Entity{
 
 		println("Player generation...");
 
-		this.energy = PlayerContext.getBaseEnergy();
+		this.power = PlayerContext.getBasePower();
 		this.maxSpeed = PlayerContext.getBaseMaxSpeed();
 
 		// for move purposes
@@ -32,16 +32,29 @@ class Player extends Entity{
 		this.projectiles = [];
 		this.deadProjectiles = [];
 
+		// TODO remove
+		this.power = 90;
+		this.texture = new Texture(this.ctx, this.canvas, "res/textures/pinkSquare.png", 64, 64);
+
+		this.shootCounter = null;
+
 		println("Player: OK.");
 	}
 
 	update(){
 		if(!this.isDead()) {
+			this.tick();
 			this.handleInput();
 			this.move();
 			this.checkBoundCollisions();
+			this.checkPortalsCollisions();
 			this.updateProjectiles();
 		}
+	}
+
+	tick(){
+		if(this.shootCounter != null)
+			this.shootCounter.tick();
 	}
 
 	handleInput(){
@@ -54,18 +67,29 @@ class Player extends Entity{
 		} else if(isPressed(EventContext.rightKey())){
 			this.changeDirection(PlayerContext.getRightDirValue());
 		} else if(isPressed(EventContext.spaceKey())) {
-			println("Licorne");
-			let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w, this.y + this.h, this.savedDirection);
-			this.projectiles.push(projectile);
-		}
+			if(this.shootCounter == null){
+				this.shoot();
+				this.shootCounter = new TickCounter(10);
+				return;
+			}
 
+			if(this.shootCounter.isStopped()){
+				this.shootCounter.reset();
+				this.shoot();
+			}
+		}
+	}
+
+	shoot(){
+		let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w, this.y + this.h, this.savedDirection);
+		this.projectiles.push(projectile);
 	}
 
 	move(){
 		if(this.tileDestReached){
 			let dx = 0;
 			let dy = 0;
-			let offset = 2; // 1 ; PlayerContext.getBaseMaxSpeed() >> 1 MapContext.getTileSize() >> 2
+			let offset = PlayerContext.getBaseMaxSpeed() >> 1; // 2 ; 1 ; PlayerContext.getBaseMaxSpeed() >> 1 MapContext.getTileSize() >> 2
 			this.xSave = this.x;
 			this.ySave = this.y;
 
@@ -121,22 +145,13 @@ class Player extends Entity{
 			else if(this.y <= yMinusTs)
 				this.y = yMinusTs;
 
-			this.tileDestReached = true;
-			this.subEnergy(1);
-			this.lastDx = 0;
-			this.lastDy = 0;
-			this.direction = PlayerContext.getNoneDirValue();
-			//println("End movement reached");
+			this.subPower(1);
+			this.resetMovement();
 		} else {
-			//println("Not movement end");
 			if(!this.blocked){
 				this.tileDestReached = false;
 			} else{
-				this.subEnergy(1);
-				this.tileDestReached = true;
-				this.lastDx = 0;
-				this.lastDy = 0;
-				this.direction = PlayerContext.getNoneDirValue();
+				this.resetMovement();
 			}
 		}
 	}
@@ -166,13 +181,10 @@ class Player extends Entity{
 				let tile = this.map.getTileAt(row, col);
 				if(tile != null) {
 					if(tile.isOccupied()){
-						this.tileDestReached = true;
-						this.lastDx = 0;
-						this.lastDy = 0;
-						this.direction = PlayerContext.getNoneDirValue();
+						this.resetMovement();
 						return false;
 					} else if(tile.isPoweredUp()){
-						this.addEnergy(tile.getPower().getValue());
+						this.addPower(tile.getPower().getValue());
 						tile.unpower();
 					}
 				}
@@ -200,6 +212,18 @@ class Player extends Entity{
 		}
 	}
 
+	resetMovement(){
+		this.tileDestReached = true;
+		this.lastDx = 0;
+		this.lastDy = 0;
+		this.direction = PlayerContext.getNoneDirValue();
+	}
+
+	resetMovementAndBlock(){
+		this.resetMovement();
+		this.blocked = true;
+	}
+
 	stop(){
 		if(this.tileDestReached)
 			this.stopped = true;
@@ -208,42 +232,30 @@ class Player extends Entity{
 	checkBoundCollisions(){
 		if(this.x < 0){
 			this.x = 0;
-
-			this.tileDestReached = true;
-			this.lastDx = 0;
-			this.lastDy = 0;
-			this.direction = PlayerContext.getNoneDirValue();
-			this.blocked = true;
+			this.resetMovementAndBlock();
 		}
 
 		if(this.x + this.w > RenderingContext.getCanvasWidth(this.canvas)){
 			this.x = RenderingContext.getCanvasWidth(this.canvas) - this.w;
-
-			this.tileDestReached = true;
-			this.lastDx = 0;
-			this.lastDy = 0;
-			this.direction = PlayerContext.getNoneDirValue();
-			this.blocked = true;
+			this.resetMovementAndBlock();
 		}
 
 		if(this.y < 0){
 			this.y = 0;
-
-			this.tileDestReached = true;
-			this.lastDx = 0;
-			this.lastDy = 0;
-			this.direction = PlayerContext.getNoneDirValue();
-			this.blocked = true;
+			this.resetMovementAndBlock();
 		}
 
 		if(this.y + this.h > RenderingContext.getCanvasHeight(this.canvas)){
 			this.y = RenderingContext.getCanvasHeight(this.canvas) - this.h;
+			this.resetMovementAndBlock();
+		}
+	}
 
-			this.tileDestReached = true;
-			this.lastDx = 0;
-			this.lastDy = 0;
-			this.direction = PlayerContext.getNoneDirValue();
-			this.blocked = true;
+	checkPortalsCollisions(){
+		let portalCollision = this.world.portalCollision(this.x, this.y, this.w, this.h);
+		if(portalCollision != null){
+			portalCollision.interact(this);
+			this.resetMovementAndBlock();
 		}
 	}
 
@@ -278,7 +290,7 @@ class Player extends Entity{
 
 	render(){
 		this.renderEntity();
-		this.renderEnergy();
+		this.renderPower();
 		this.renderProjectiles();
 	}
 
@@ -289,8 +301,8 @@ class Player extends Entity{
 	}
 
 	renderEntity(){
-		ctx.save();
-		ctx.fillStyle = this.color;
+		this.ctx.save();
+		this.ctx.fillStyle = this.color;
 
 		this.renderAccordingToDirection(this.direction);
 
@@ -298,41 +310,50 @@ class Player extends Entity{
 			this.renderAccordingToDirection(this.savedDirection);
 		}
 
-		ctx.restore();
+		this.ctx.restore();
 	}
 
-	renderEnergy(){
-		renderComposedText(this.ctx, this.energy, " power", RenderingContext.getCanvasWidth(this.canvas) * (40 / 100), MapContext.getTileSize() * 1.2, RenderingContext.getCanvasHeight(this.canvas) + (RenderingContext.getUIHeight() >> 1), 0, "DarkGreen");
+	renderPower(){
+		renderComposedText(this.ctx, this.power, " power", RenderingContext.getCanvasWidth(this.canvas) * (40 / 100), MapContext.getTileSize() * 1.2, RenderingContext.getCanvasHeight(this.canvas) + (RenderingContext.getUIHeight() >> 1), 0, "DarkGreen");
 	}
 
 	renderAccordingToDirection(dir){
+		let dirStyle = "DarkOrchid"; // RoyalBlue, DodgerBlue
 		switch(dir){
 			case PlayerContext.getLeftDirValue():
-				ctx.fillRect(this.x + (this.w >> 3), this.y, this.w - (this.w >> 3), this.h);
-				ctx.fillStyle = "RoyalBlue";
+				this.texture.render(this.x, this.y);
+				ctx.fillStyle = dirStyle;
 				ctx.fillRect(this.x, this.y, this.w >> 3, this.h);
 				break;
 			case PlayerContext.getUpDirValue():
-				ctx.fillRect(this.x, this.y + (this.h >> 3), this.w, this.h - (this.h >> 3));
-				ctx.fillStyle = "RoyalBlue";
+				this.texture.render(this.x, this.y);
+				ctx.fillStyle = dirStyle;
 				ctx.fillRect(this.x, this.y, this.w, this.h >> 3);
 				break;
 			case PlayerContext.getRightDirValue():
-				ctx.fillRect(this.x, this.y, this.w - (this.w >> 3), this.h);
-				ctx.fillStyle = "RoyalBlue";
+				this.texture.render(this.x, this.y);
+				ctx.fillStyle = dirStyle;
 				ctx.fillRect(this.x + (this.w - (this.w >> 3)), this.y, this.w >> 3, this.h);
 				break;
 			case PlayerContext.getDownDirValue():
-				ctx.fillRect(this.x, this.y, this.w, this.h - (this.h >> 3));
-				ctx.fillStyle = "RoyalBlue"; // RoyalBlue DodgerBlue
+				this.texture.render(this.x, this.y);
+				ctx.fillStyle = dirStyle;
 				ctx.fillRect(this.x, this.y + (this.h - (this.h >> 3)), this.w, this.h >> 3);
 				break;
 			}
 	}
 
-	addEnergy(value){this.energy += value;}
-	subEnergy(value){this.energy -= value;}
-	getEnergy(){return this.energy;}
+	changeLevel(level){
+		if(level != null){
+			this.level = level;	
+			this.map = this.level.getMap();
+			this.addPower(level.getPowerAmount());
+		}
+	}
+
+	addPower(value){this.power += value;}
+	subPower(value){this.power -= value;}
+	getPower(){return this.power;}
 	getMaxSpeed(){return this.maxSpeed;}
-	isDead(){return (this.energy == 0);}
+	isDead(){return (this.power <= 0);}
 }

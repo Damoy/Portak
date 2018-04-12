@@ -19,7 +19,7 @@ class Entity {
 		this.canvas = canvas;
 		this.world = world;
 		this.level = this.world.getCurrentLevel();
-		this.map = this.level.getMap();
+		// this.map = this.level.getMap();
 
 		this.x = x;
 		this.y = y;
@@ -84,7 +84,7 @@ class Entity {
 	getCanvas(){return this.canvas;}
 	getWorld(){return this.world;}
 	getLevel(){return this.level;}
-	getMap(){return this.map;}
+	// getMap(){return this.map;}
 
  	//---- SET
 

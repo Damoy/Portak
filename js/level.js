@@ -1,6 +1,4 @@
 var LevelContext = {
-	getBaseLayer : function(){return 1;},
-
 	getMap : function(ctx, canvas, world){
 		let rows = (RenderingContext.getCanvasHeight(canvas)) / MapContext.getTileSize();
 		let cols = (RenderingContext.getCanvasWidth(canvas)) / MapContext.getTileSize();
@@ -10,16 +8,15 @@ var LevelContext = {
 
 /* -- Leveling -- */
 class Level{
-	constructor(id, ctx, canvas, world){
+	constructor(id, ctx, canvas, world, powerAmount){
 		println("Level generation...");
 		this.id = id;
 		this.ctx = ctx;
 		this.canvas = canvas;
 		this.world = world;
-		this.layer = LevelContext.getBaseLayer();
 		this.map = null;
 		this.walls = [];
-		this.portal = null;
+		this.powerAmount = powerAmount;
 		println("Level: OK.");
 	}
 
@@ -27,8 +24,7 @@ class Level{
 		this.generateMap();
 		this.generateWalls();
 		this.generateEnemies();
-		this.generateEnergies();
-		//this.generatePortal();
+		this.generatePowers();
 	}
 
 	generateMap(){
@@ -44,6 +40,7 @@ class Level{
 
 			if(rand == 1){
 				let newWall = new Wall(this.ctx, this.canvas, this.world, tile.getX(), tile.getY(), "DimGray");
+				this.map.occupyTileWith(newWall);
 				this.walls.push(newWall);
 			}
 		}
@@ -53,7 +50,7 @@ class Level{
 
 	}
 
-	generateEnergies(){
+	generatePowers(){
 		let mt = this.map.getTiles();
 		for(let i = 0; i < mt.length; ++i){
 			let rand = irand(1, 20);
@@ -61,20 +58,6 @@ class Level{
 			if(!tile.isOccupied()) {
 				if(rand == 1){				
 					tile.powerUp(irand(1, 2));
-				}
-			}
-		}
-	}
-
-	generatePortal(){
-		let mt = this.map.getTiles();
-		for(let i = 0; i < mt.length; ++i){
-			let rand = irand(1, 20);
-			let tile = mt[i];
-			if(!tile.isOccupied() && !tile.isPoweredUp()) {
-				if(rand == 1){				
-					this.portal = new Portal(this.ctx, this.canvas, this.world, this, tile.getX(), tile.getY());
-					break;
 				}
 			}
 		}
@@ -98,7 +81,6 @@ class Level{
 	render(){
 		this.renderMap();
 		this.renderPopulation();
-		this.renderPortal();
 	}
 
 	renderMap(){
@@ -110,18 +92,6 @@ class Level{
 			wall.render();
 		})
 	};
-
-	renderPortal(){
-		if(this.portal != null)
-			this.portal.render();
-	}
-
-	setPortal(portal){
-		this.portal = portal;
-	}
-
-	evolve(){
-	}
 
 	collision(x, y, w, h){
 		for(let i = 0; i < this.walls.length; ++i){
@@ -137,7 +107,6 @@ class Level{
 	getWorld(){return this.world;}
 	getContext(){return this.ctx;}
 	getCanvas(){return this.canvas;}
-	getLayer(){return this.layer;}
-	getPortal(){return this.portal;}
 	getId(){return this.id;}
+	getPowerAmount(){return this.powerAmount;}
 }

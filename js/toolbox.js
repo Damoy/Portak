@@ -25,7 +25,10 @@ function gen2DArray(rows) {
 	return arr;
 }
 
-
 function computeRadius(value, size){
 		return((value % 5) << 1) + (size >> 2);
-	}
+}
+
+function castToInt(value){
+	return value | 0;
+}
