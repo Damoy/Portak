@@ -32,6 +32,8 @@ var TextureContext = {
 
 	getPlayerTexture : function(){
 		return playerTexture;
+	},
+	
 	getPortalTexture : function(){
 		return portalTexture;
 	}
