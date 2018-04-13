@@ -65,8 +65,8 @@ class World{
 
 	update(){
 		this.currentLevel.update();
-		this.player.update();
 		this.updatePortals();
+		this.player.update();
 	}
 
 	updatePortals(){
@@ -77,8 +77,8 @@ class World{
 
 	render(){
 		this.currentLevel.render();
-		this.player.render();
 		this.renderPortals();
+		this.player.render();
 	}
 
 	renderPortals(){
@@ -87,12 +87,17 @@ class World{
 		});
 	}
 
-	portalCollision(x, y, w, h){
+	portalCollision(tile){
 		for(let i = 0; i < this.portals.length; ++i){
-			if(this.portals[i].collides(x, y, w, h)){
-				return this.portals[i];
-			}
+			let portal = this.portals[i];
+			let ptile = this.currentLevel
+						.getMap()
+						.getNormTileAt(portal.getX() - portal.getRawRenderingXOffset(),
+										portal.getY() - portal.getRawRenderingYOffset());
+			if(ptile == tile)
+				return portal;
 		}
+
 		return null;
 	}
 
