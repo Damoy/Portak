@@ -23,8 +23,8 @@ class Level{
 	generate(){
 		this.generateMap();
 		this.generateWalls();
-		this.generateEnemies();
 		this.generatePowers();
+		this.generateEnemies();
 	}
 
 	generateMap(){
@@ -47,7 +47,16 @@ class Level{
 	}
 
 	generateEnemies(){
-
+		let mt = this.map.getTiles();
+		for(let i = 0; i < mt.length; ++i){
+			let rand = irand(1, 30);
+			let tile = mt[i];
+			if(!tile.isOccupied() && !tile.isPoweredUp()) {
+			if(rand == 1){
+				tile.antogonised();
+				}
+			}
+		}
 	}
 
 	generatePowers(){

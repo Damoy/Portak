@@ -11,6 +11,7 @@ class Tile{
 		this.color = null;
 		this.occupier = null;
 		this.power = null;
+		this.enemy = null;
 		this.texture = TextureContext.getGrayTileTexture();
 	}
 
@@ -28,12 +29,19 @@ class Tile{
 		this.ctx.save();
 		this.texture.render(this.x, this.y);
 		this.renderPower();
+		this.renderEnemy();
 		this.ctx.restore();
 	}
 
 	renderPower(){
 		if(this.isPoweredUp()){
 			this.power.render();
+		}
+	}
+
+	renderEnemy(){
+		if(this.isAntagonised()){
+			this.enemy.render();
 		}
 	}
 
@@ -57,6 +65,11 @@ class Tile{
 		this.power = new Power(this.ctx, this.canvas, this.world, this.x, this.y, powerLevel);
 	}
 
+	antogonised(){
+		if(this.isAntagonised()) return;
+		this.enemy = new Enemy(this.ctx, this.canvas, this.world, this.x, this.y, 1);
+	}
+
 	unpower() {
 		this.power = null; 
 	}
@@ -75,5 +88,7 @@ class Tile{
 	getX(){return this.x;}
 	getY(){return this.y;}
 	isPoweredUp(){return this.power != null;}
+	isAntagonised(){return this.enemy != null;}
+
 	getPower(){return this.power;}
 }
