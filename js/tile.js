@@ -12,11 +12,13 @@ class Tile{
 		this.color = null;
 		this.occupier = null;
 		this.power = null;
+		this.enemy = null;
 		this.texture = TextureContext.getGrayTileTexture();
 	}
 
 	update(){
 		this.updatePower();
+		this.updateEnemy();
 	}
 
 	updatePower(){
@@ -25,16 +27,29 @@ class Tile{
 		}
 	}
 
+	updateEnemy(){
+		if(this.isAntagonised()){
+			this.enemy.update();
+		}
+	}
+
 	render(){
 		this.ctx.save();
 		this.texture.render(this.x, this.y);
 		this.renderPower();
+		this.renderEnemy();
 		this.ctx.restore();
 	}
 
 	renderPower(){
 		if(this.isPoweredUp()){
 			this.power.render();
+		}
+	}
+
+	renderEnemy(){
+		if(this.isAntagonised()){
+			this.enemy.render();
 		}
 	}
 
@@ -45,6 +60,11 @@ class Tile{
 		else {
 			throw "Tile was already occupied !";
 		}
+	}
+
+	antogonised(){
+		if(this.isAntagonised()) return;
+		this.enemy = new Enemy(this.ctx, this.canvas, this.world, this.x, this.y);
 	}
 
 	powerUp(powerLevel){ 
@@ -76,6 +96,7 @@ class Tile{
 	getX(){return this.x;}
 	getY(){return this.y;}
 	isPoweredUp(){return this.power != null;}
+	isAntagonised(){return this.enemy != null;}
 	getPower(){return this.power;}
 	getId(){return this.id;}
 }
