@@ -34,11 +34,14 @@ class Map{
 	build(){
 		// too many objects, could create some objects then create an int array
 		// and use / render according to the mapping int data <-> Tile object
+		let id = 0;
 		for(let row = 0; row < this.rows; ++row){
 			for(let col = 0; col < this.cols; ++col){
-				this.tiles[this.nget(row, col)] = new Tile(this.ctx, this.canvas, this.world, this, row, col);
+				this.tiles[this.nget(row, col)] = new Tile(id++, this.ctx, this.canvas, this.world, this, row, col);
 			}
 		}
+
+		println(AStar(this, this.tiles[0], this.tiles[this.tiles.length - 1]));
 	}
 
 	occupyTileWith(occupier){

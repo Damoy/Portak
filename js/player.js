@@ -34,8 +34,7 @@ class Player extends Entity{
 
 		// TODO remove
 		this.power = 90;
-		this.texture = TextureContext.getPlayerTexture();
-
+		this.texture = new Texture(this.ctx, this.canvas, "res/textures/pinkSquare.png", 64, 64);
 
 		this.shootCounter = null;
 
@@ -182,7 +181,7 @@ class Player extends Entity{
 
 				let tile = this.map.getTileAt(row, col);
 				if(tile != null) {
-					if(tile.isOccupied() || tile.isAntagonised()){
+					if(tile.isOccupied()){
 						this.resetMovement();
 						return false;
 					} else if(tile.isPoweredUp()){

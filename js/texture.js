@@ -9,8 +9,6 @@ var TextureContext = {
 		grayTileTexture = new Texture(ctx, canvas, "res/textures/grayTile.png", s, s);
 		powerTexture = new Texture(ctx, canvas, "res/textures/power.png", s, s).scale(0.5, 0.5);
 		grayWallTexture = new Texture(ctx, canvas, "res/textures/wall.png", s, s);
-		enemyTexture =  new Texture(ctx, canvas, "res/textures/redCube2.png", s, s);
-		playerTexture = new Texture(ctx, canvas, "res/textures/pinkSquare.png", 64, 64);
 		portalTexture = new Texture(ctx, canvas, "res/textures/power2.png", s, s); // .scale(0.5, 0.5);
 	},
 
@@ -26,14 +24,6 @@ var TextureContext = {
 		return grayWallTexture;
 	},
 
-	getEnemyTexture : function(){
-		return enemyTexture;
-	},
-
-	getPlayerTexture : function(){
-		return playerTexture;
-	},
-	
 	getPortalTexture : function(){
 		return portalTexture;
 	}

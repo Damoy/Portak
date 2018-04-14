@@ -12,7 +12,7 @@ class Portal extends Entity{
 	constructor(ctx, canvas, world, sourceLevelId, destLevelId, srcX, srcY, destX, destY){
 		super(ctx, canvas, world, srcX, srcY, PortalContext.getPortalBaseWidth(), PortalContext.getPortalBaseHeight(), "PaleTurquoise", 0, 0);
 		println("Portal generation...");
-		this.radius = computeRadius(this.value,MapContext.getTileSize());
+		this.radius = this.computeRadius(this.value);
 
 		// update portal only if ellipse
 		this.rawRenderingXOffset = MapContext.getTileSize() >> 1;
@@ -52,6 +52,10 @@ class Portal extends Entity{
     	ctx.fill();
     	ctx.stroke();
     	ctx.restore();
+	}
+
+	computeRadius(value){
+		return((value % 5) << 1) + (MapContext.getTileSize() >> 2);
 	}
 
 	getDestX(){return this.destX;}
