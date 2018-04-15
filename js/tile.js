@@ -17,40 +17,12 @@ class Tile{
 	}
 
 	update(){
-		this.updatePower();
-		this.updateEnemy();
-	}
-
-	updatePower(){
-		if(this.isPoweredUp()){
-			this.power.update();
-		}
-	}
-
-	updateEnemy(){
-		if(this.isAntagonised()){
-			this.enemy.update();
-		}
 	}
 
 	render(){
 		this.ctx.save();
 		this.texture.render(this.x, this.y);
-		this.renderPower();
-		this.renderEnemy();
 		this.ctx.restore();
-	}
-
-	renderPower(){
-		if(this.isPoweredUp()){
-			this.power.render();
-		}
-	}
-
-	renderEnemy(){
-		if(this.isAntagonised()){
-			this.enemy.render();
-		}
 	}
 
 	occupyWith(occupier){
@@ -62,25 +34,28 @@ class Tile{
 		}
 	}
 
-	antogonised(){
-		if(this.isAntagonised()) return;
-		this.enemy = new Enemy(this.ctx, this.canvas, this.world, this.x, this.y);
+	antagoniseWith(enemy){
+		if(this.enemy == null){
+			this.enemy = enemy;
+		}
+		else {
+			throw "Tile was already antogonised !";
+		}
 	}
 
-	powerUp(powerLevel){ 
-		if(this.isPoweredUp()) return;
-
-		// for circle shape rendering
-		// let tsd2 = MapContext.getTileSize() >> 1; // Size tile / 2
-		// this.power = new Power(this.ctx, this.canvas, this.world, this.x + tsd2, this.y + tsd2, powerLevel);
-
-		// for texture rendering
-		this.power = new Power(this.ctx, this.canvas, this.world, this.x, this.y, powerLevel);
+	powerUpWith(power){
+		if(this.power == null){
+			this.power = power;
+		}
+		else {
+			throw "Tile was already powered up !";
+		}
 	}
 
-	unpower() {
-		this.power = null; 
-	}
+    unpower() {
+        this.map.removePower(this.power);
+        this.power = null;
+    }
 
 	getOccupier(){return this.occupier;}
 	isOccupied(){return this.occupier != null;}

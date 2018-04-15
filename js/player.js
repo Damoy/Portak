@@ -82,7 +82,7 @@ class Player extends Entity{
 	}
 
 	shoot(){
-		let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w, this.y + this.h, this.savedDirection);
+		let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w/2, this.y + this.h/2, this.savedDirection);
 		this.projectiles.push(projectile);
 	}
 
@@ -181,10 +181,11 @@ class Player extends Entity{
 
 				let tile = this.map.getTileAt(row, col);
 				if(tile != null) {
-					if(tile.isOccupied()){
+					if(tile.isOccupied() || tile.isAntagonised()){
 						this.resetMovement();
 						return false;
 					} else if(tile.isPoweredUp()){
+						println("COUCOU C'EST MOI !");
 						this.addPower(tile.getPower().getValue());
 						tile.unpower();
 					}

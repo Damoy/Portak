@@ -16,6 +16,8 @@ class Level{
 		this.world = world;
 		this.map = null;
 		this.walls = [];
+		this.enemies = [];
+		this.powers = [];
 		this.powerAmount = powerAmount;
 		println("Level: OK.");
 	}
@@ -23,8 +25,8 @@ class Level{
 	generate(){
 		this.generateMap();
 		this.generateWalls();
-		this.generateEnemies();
 		this.generatePowers();
+		this.generateEnemies();
 	}
 
 	generateMap(){
@@ -53,20 +55,26 @@ class Level{
 			let tile = mt[i];
 			if(!tile.isOccupied() && !tile.isPoweredUp()) {
 			if(rand == 1){
-				tile.antogonised();
+				let enemy = new Enemy(this.ctx, this.canvas, this.world, tile.getX(), tile.getY());
+				//this.map.occupyTileWith(enemy);
+				this.map.antogoniseTileWith(enemy);
+				this.enemies.push(enemy);
 				}
 			}
 		}
 	}
-	
+
 	generatePowers(){
 		let mt = this.map.getTiles();
 		for(let i = 0; i < mt.length; ++i){
 			let rand = irand(1, 20);
 			let tile = mt[i];
 			if(!tile.isOccupied()) {
-				if(rand == 1){				
-					tile.powerUp(irand(1, 2));
+				if(rand == 1){	
+					let power = new Power(this.ctx, this.canvas, this.world, tile.getX(), tile.getY(), irand(1, 2));
+					//this.map.occupyTileWith(power);
+					this.map.powerUpTileWith(power);
+					this.powers.push(power);			
 				}
 			}
 		}
@@ -85,6 +93,14 @@ class Level{
 		this.walls.forEach((wall) => {
 			wall.update();
 		});
+
+		this.enemies.forEach((enemy) => {
+			enemy.update();
+		});
+
+		this.powers.forEach((power) => {
+			power.update();
+		});
 	}
 
 	render(){
@@ -100,6 +116,14 @@ class Level{
 		this.walls.forEach((wall) => {
 			wall.render();
 		})
+
+		this.enemies.forEach((enemy) => {
+			enemy.render();
+		});
+
+		this.powers.forEach((power) => {
+			power.render();
+		});
 	};
 
 	collision(x, y, w, h){
