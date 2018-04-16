@@ -25,7 +25,7 @@ class Player extends Entity{
 		this.lastDy = 0;
 		this.xSave = this.x;
 		this.ySave = this.y;
-
+		
 		this.direction = PlayerContext.getNoneDirValue();
 		this.savedDirection = PlayerContext.getDownDirValue();
 
@@ -40,7 +40,32 @@ class Player extends Entity{
 
 		this.shootCounter = null;
 
+		this.xInit = this.x;
+		this.yInit = this.y;
+		this.powerInit = this.power;
+
+
 		println("Player: OK.");
+	}
+
+	reset(){
+		this.x = this.xInit;
+		this.y = this.yInit;
+		this.xSave = this.xInit;
+		this.ySave = this.yInit;
+		this.power = this.powerInit;
+		this.blocked = false;
+		this.stopped = false;
+		this.tileDestReached = true;
+		this.lastDx = 0;
+		this.lastDy = 0;
+		this.shootCounter = null;
+		this.direction = PlayerContext.getNoneDirValue();
+		this.savedDirection = PlayerContext.getDownDirValue();
+		this.projectiles = [];
+		this.deadProjectiles = [];
+		this.animation.reset();
+		this.animation.start();
 	}
 
 	update(){
@@ -84,7 +109,7 @@ class Player extends Entity{
 	}
 
 	shoot(){
-		let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w/2, this.y + this.h/2, this.savedDirection);
+		let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w/2, this.y + this.h/2, this.savedDirection, this.level.getEnemies());
 		this.projectiles.push(projectile);
 	}
 

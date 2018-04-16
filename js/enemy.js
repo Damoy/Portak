@@ -23,6 +23,7 @@ class Enemy extends Entity{
 		if(!this.isDead()) {
 			this.tick();
 			this.updateProjectiles();
+			this.updateBox();
 		}
 	}
 

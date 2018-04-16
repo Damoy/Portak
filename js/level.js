@@ -80,6 +80,11 @@ class Level{
 		}
 	}
 
+
+	removeEnemy(enemy) {
+		removeFromArray(this.enemies, enemy);
+	}
+
 	update(){
 		this.updateMap();
 		this.updatePopulation();
@@ -112,6 +117,16 @@ class Level{
 		this.map.render();
 	}
 
+	reset(){
+		this.walls = [];
+		this.enemies = [];
+		this.powers = [];
+		this.map.reset();
+		this.generateWalls();
+		this.generatePowers();
+		this.generateEnemies();
+	}
+
 	renderPopulation(){
 		this.walls.forEach((wall) => {
 			wall.render();
@@ -132,7 +147,6 @@ class Level{
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -142,4 +156,6 @@ class Level{
 	getCanvas(){return this.canvas;}
 	getId(){return this.id;}
 	getPowerAmount(){return this.powerAmount;}
+	getEnemies(){return this.enemies;}
+	getWalls(){return this.walls;}
 }

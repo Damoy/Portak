@@ -39,6 +39,14 @@ class Animation{
         this.direction = direction;
         this.savedStartX = this.startX;
         this.yOffset = yOffset;
+
+        this.initDirection = this.direction;
+        this.initDelay = this.delay;
+        this.initLeftDelay = this.leftDelay;
+        this.initRightDelay = this.rightDelay;
+        this.initUpDelay = this.upDelay;
+        this.initDownDelay = this.downDelay;
+        this.initFrames = this.frames;
     }
 
     start(){
@@ -197,4 +205,30 @@ class Animation{
     }
 
     getSheet(){return this.sheet;}
+
+    reset(){
+        this.downDirStartX = this.downDirStartX;
+        this.upDirStartX = this.upDirStartX;
+        this.rightDirStartX = this.rightDirStartX;
+        this.leftDirStartX = this.leftDirStartX;
+
+        this.frames = this.initFrames;
+        this.countFrames = 1;
+
+        this.downDelay = this.initDownDelay;
+        this.upDelay = this.initUpDelay;
+        this.rightDelay = this.initRightDelay;
+        this.leftDelay = this.initLeftDelay;
+        this.delay = this.initDelay;
+
+        this.frameCounter = null;
+        this.downFrameCounter = null;
+        this.upFrameCounter = null;
+        this.rightFrameCounter = null;
+        this.leftFrameCounter = null;
+
+        this.startX = 0;
+        this.direction = this.initDirection;
+        this.savedStartX = this.startX;
+    }
 }

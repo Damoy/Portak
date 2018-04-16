@@ -25,10 +25,11 @@ var ProjectileContext = {
 };
 
 class Projectile extends Entity{
-	constructor(ctx, canvas, world, x, y, w, h, direction){
-		super(ctx, canvas, world, x, y, w, h, "Pink", ProjectileContext.computeSpeedX(direction), ProjectileContext.computeSpeedY(direction));
+	constructor(ctx, canvas, world, x, y, w, h, direction, color){
+		super(ctx, canvas, world, x, y, w, h, color, ProjectileContext.computeSpeedX(direction), ProjectileContext.computeSpeedY(direction));
 		this.radius = computeRadius(1, 20);
 		this.dead = false;
+		this.walls = this.level.getWalls();
 	}
 
 	update(){
@@ -36,6 +37,8 @@ class Projectile extends Entity{
 			this.addX(this.speedX);
 			this.addY(this.speedY);
 			this.checkPosition();
+			this.updateBox();
+			this.checkWallsCollision();
 		}
 	}
 
@@ -55,6 +58,22 @@ class Projectile extends Entity{
 	checkPosition(){
 		if(this.x < 0 || this.x > RenderingContext.getCanvasWidth(this.canvas) || this.y < 0 || this.y > RenderingContext.getCanvasHeight(this.canvas)) {
 			this.die();
+		}
+	}
+
+	checkWallsCollision(){
+		for(let i = 0; i < this.walls.length; i++){
+			let wall = this.walls[i];
+			let x = wall.getX();
+			let y = wall.getY();
+			let h = wall.getH();
+			let w = wall.getW();
+			if(this.collides(x,y,w,h)){
+				this.dead = true;
+				this.level.removeEnemy(wall);
+				this.level.getMap().getNormTileAt(x,y).forgetEnemy();
+				return;
+			}
 		}
 	}
 

@@ -36,6 +36,11 @@ class World{
 		println("World: OK.");
 	}
 
+	resetCurrentLevel(){
+		this.currentLevel.reset();
+		this.player.reset();
+	}
+
 	generateRandomLevel(){
 		let lvlId = this.levels.length;
 		var level = new Level(lvlId, this.ctx, this.canvas, this, castToInt((lvlId + 1) * 10));

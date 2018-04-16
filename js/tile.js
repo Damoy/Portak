@@ -16,6 +16,13 @@ class Tile{
 		this.texture = TextureContext.getGrayTileTexture();
 	}
 
+	reset(){
+		this.color = null;
+		this.occupier = null;
+		this.power = null;
+		this.enemy = null;
+	}
+
 	update(){
 	}
 
@@ -74,4 +81,5 @@ class Tile{
 	isAntagonised(){return this.enemy != null;}
 	getPower(){return this.power;}
 	getId(){return this.id;}
+	forgetEnemy(){this.enemy = null;}
 }

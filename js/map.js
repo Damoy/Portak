@@ -19,6 +19,11 @@ class Map{
 		println("Map: OK.");
 	}
 
+	reset(){
+		for(let i = 0; i < this.tiles.length; ++i)
+			this.tiles[i].reset();
+		}
+
 	update(){
 		this.tiles.forEach((tile) => {
 			tile.update();
