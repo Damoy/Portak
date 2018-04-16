@@ -34,7 +34,9 @@ class Player extends Entity{
 
 		// TODO remove
 		this.power = 90;
-		this.texture = new Texture(this.ctx, this.canvas, "res/textures/pinkSquare.png", 64, 64);
+		this.animation = new Animation(this.ctx, this.canvas, "res/textures/playerScaled.png",
+			644, 64, 0, 64, 64, this.savedDirection, 2, 2, 3, 3, 0, 128, 256, 448);
+		this.animation.start();
 
 		this.shootCounter = null;
 
@@ -90,7 +92,7 @@ class Player extends Entity{
 		if(this.tileDestReached){
 			let dx = 0;
 			let dy = 0;
-			let offset = PlayerContext.getBaseMaxSpeed() >> 1; // 2 ; 1 ; PlayerContext.getBaseMaxSpeed() >> 1 MapContext.getTileSize() >> 2
+			let offset = PlayerContext.getBaseMaxSpeed() >> 2; // 2 ; 1 ; PlayerContext.getBaseMaxSpeed() >> 1 MapContext.getTileSize() >> 2
 			this.xSave = this.x;
 			this.ySave = this.y;
 
@@ -185,7 +187,6 @@ class Player extends Entity{
 						this.resetMovement();
 						return false;
 					} else if(tile.isPoweredUp()){
-						println("COUCOU C'EST MOI !");
 						this.addPower(tile.getPower().getValue());
 						tile.unpower();
 					}
@@ -195,6 +196,7 @@ class Player extends Entity{
 
 		this.addX(dx);
 		this.addY(dy);
+		this.animation.tick();
 
 		// can move
 		return true;
@@ -204,6 +206,7 @@ class Player extends Entity{
 		if(this.tileDestReached){
 			this.stopped = false;
 			this.direction = dir;
+			this.animation.setDirection(dir);
 			this.saveDirection();
 		}
 	}
@@ -305,44 +308,12 @@ class Player extends Entity{
 	renderEntity(){
 		this.ctx.save();
 		this.ctx.fillStyle = this.color;
-
-		this.renderAccordingToDirection(this.direction);
-
-		if(this.direction == PlayerContext.getNoneDirValue()){
-			this.renderAccordingToDirection(this.savedDirection);
-		}
-
+		this.animation.render(this.x, this.y);
 		this.ctx.restore();
 	}
 
 	renderPower(){
 		renderComposedText(this.ctx, this.power, " power", RenderingContext.getCanvasWidth(this.canvas) * (40 / 100), MapContext.getTileSize() * 1.2, RenderingContext.getCanvasHeight(this.canvas) + (RenderingContext.getUIHeight() >> 1), 0, "DarkGreen");
-	}
-
-	renderAccordingToDirection(dir){
-		let dirStyle = "DarkOrchid"; // RoyalBlue, DodgerBlue
-		switch(dir){
-			case PlayerContext.getLeftDirValue():
-				this.texture.render(this.x, this.y);
-				ctx.fillStyle = dirStyle;
-				ctx.fillRect(this.x, this.y, this.w >> 3, this.h);
-				break;
-			case PlayerContext.getUpDirValue():
-				this.texture.render(this.x, this.y);
-				ctx.fillStyle = dirStyle;
-				ctx.fillRect(this.x, this.y, this.w, this.h >> 3);
-				break;
-			case PlayerContext.getRightDirValue():
-				this.texture.render(this.x, this.y);
-				ctx.fillStyle = dirStyle;
-				ctx.fillRect(this.x + (this.w - (this.w >> 3)), this.y, this.w >> 3, this.h);
-				break;
-			case PlayerContext.getDownDirValue():
-				this.texture.render(this.x, this.y);
-				ctx.fillStyle = dirStyle;
-				ctx.fillRect(this.x, this.y + (this.h - (this.h >> 3)), this.w, this.h >> 3);
-				break;
-		}
 	}
 
 	changeLevel(level){

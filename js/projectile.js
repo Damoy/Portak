@@ -27,10 +27,8 @@ var ProjectileContext = {
 class Projectile extends Entity{
 	constructor(ctx, canvas, world, x, y, w, h, direction){
 		super(ctx, canvas, world, x, y, w, h, "Pink", ProjectileContext.computeSpeedX(direction), ProjectileContext.computeSpeedY(direction));
-		println("Projectile generation...");
 		this.radius = computeRadius(1, 20);
 		this.dead = false;
-		println("Projectile: OK.");
 	}
 
 	update(){
@@ -41,11 +39,10 @@ class Projectile extends Entity{
 		}
 	}
 
-	interact(entity){
-	}
-
 	render(){
-		if(this.dead){return};
+		if(this.dead)
+			return;
+
 		ctx.save();
 		ctx.beginPath();
     	ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
@@ -55,19 +52,16 @@ class Projectile extends Entity{
     	ctx.restore();
 	}
 
-	checkCollision(){
-	}
-
-
 	checkPosition(){
 		if(this.x < 0 || this.x > RenderingContext.getCanvasWidth(this.canvas) || this.y < 0 || this.y > RenderingContext.getCanvasHeight(this.canvas)) {
-			this.dead = true;
+			this.die();
 		}
 	}
 
-	updatePos(direction){
+	die(){
+		this.dead = true;
+		// println("Projectile died: " + this.x + ", " + this.y + ", r: " + this.getRow() + ", c: " + this.getCol());
 	}
 
 	isDead(){return this.dead;}
-
 }

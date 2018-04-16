@@ -12,19 +12,11 @@ class Enemy extends Entity{
 		this.projectiles = [];
 		this.deadProjectiles = [];
 
-		this.shootCounter = new TickCounter(30);
-
+		this.shootCounter = null;
 		this.direction = PlayerContext.getRightDirValue();
-
 		this.texture = TextureContext.getEnemyTexture();
 
 		println("Enemy: OK.");
-	}
-
-	render(){
-		this.textureRender();
-		//this.renderRect();
-		this.renderProjectiles();
 	}
 
 	update(){
@@ -35,6 +27,12 @@ class Enemy extends Entity{
 	}
 
 	tick(){
+		if(this.shootCounter == null){
+			this.shoot();
+			this.shootCounter = new TickCounter(60);
+			return;
+		}
+
 		if(this.shootCounter != null)
 			this.shootCounter.tick();
 
@@ -42,6 +40,11 @@ class Enemy extends Entity{
 			this.shootCounter.reset();
 			this.shoot();
 		}
+	}
+
+	render(){
+		this.textureRender();
+		this.renderProjectiles();
 	}
 
 	textureRender(){
@@ -56,7 +59,7 @@ class Enemy extends Entity{
 	}
 
 	shoot(){
-		let projectile = new EnemyProjectile(this.ctx, this.canvas, this.world, this.x + this.w/2, this.y + this.h/2, this.direction);
+		let projectile = new EnemyProjectile(this.ctx, this.canvas, this.world, this.x + (this.w >> 1), this.y + (this.h >> 1), this.direction);
 		this.projectiles.push(projectile);
 	}
 
@@ -86,7 +89,6 @@ class Enemy extends Entity{
 
 	addToDeadProjectiles(projectile) {
 		this.deadProjectiles.push(projectile);
-
 	}
 
 	renderProjectiles(){

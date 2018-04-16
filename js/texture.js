@@ -3,6 +3,7 @@ var powerTexture = null;
 var grayWallTexture = null;
 var portalTexture = null;
 var enemyTexture = null;
+var textureLoadingCanvas = null;
 
 var TextureContext = {
 	init(ctx, canvas){
@@ -12,6 +13,7 @@ var TextureContext = {
 		grayWallTexture = new Texture(ctx, canvas, "res/textures/wall.png", s, s);
 		enemyTexture =  new Texture(ctx, canvas, "res/textures/redCube2.png", s, s);
 		portalTexture = new Texture(ctx, canvas, "res/textures/power2.png", s, s); // .scale(0.5, 0.5);
+		textureLoadingCanvas = document.createElement("canvas");
 	},
 
 	getGrayTileTexture : function(){
@@ -33,6 +35,10 @@ var TextureContext = {
 	getEnemyTexture : function(){
 		return enemyTexture;
 	},
+
+	getTextureLoadingCanvas(){
+		return textureLoadingCanvas;
+	},
 };
 
 class Texture{
@@ -46,6 +52,7 @@ class Texture{
 		this.data.src = this.path;
 		this.xOffset = 0;
 		this.yOffset = 0;
+		this.dataPixels = null;
 	}
 
 	render(x, y){
@@ -84,9 +91,23 @@ class Texture{
 		return this;
 	}
 
+	loadDataPixels(){
+		var _canvas = TextureContext.getTextureLoadingCanvas();
+		_canvas.width = this.width;
+		_canvas.height = this.height;
+		var _ctx = _canvas.getContext("2d");
+		println("data: " + this.data);
+		println("w: " + this.width);
+		println("h: " + this.height);
+		_ctx.drawImage(this.data, 0, 0, this.width, this.height);
+		this.dataPixels = _ctx.getImageData(0, 0, this.width, this.height).data;
+		return this;
+	}
+
 	getContext(){return this.ctx;}
 	getCanvas(){return this.canvas;}
 	getPath(){return this.path;}
 	getWidth(){return this.width;}
 	getHeight(){return this.height;}
+	getDataPixels(){return this.dataPixels;}
 }
