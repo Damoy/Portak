@@ -33,7 +33,13 @@ class World{
 		this.player.changeLevel(this.currentLevel);
 		mainPlayer = this.player;
 
+		// LevelLoadingContext.loadLevelFromFile("res/levelPatterns/classical.txt");
+
 		println("World: OK.");
+	}
+
+	loadLevel(playerPos, playerPower, tiles, walls, enemies, powers, portalPos){
+		// TODO
 	}
 
 	resetCurrentLevel(){

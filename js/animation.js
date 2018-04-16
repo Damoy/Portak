@@ -2,7 +2,7 @@
 // horizontal spritesheets only ?
 class Animation{
     constructor(ctx, canvas, spritesheetTexturePath, sheetWidth, sheetHeight, yOffset, frameWidth, frameHeight,
-        direction, downFrames, upFrames, rightFrames, leftFrames, downDirStartX, upDirStartX, rightDirStartX, leftDirStartX){
+        direction, frames, downFrames, upFrames, rightFrames, leftFrames, downDirStartX, upDirStartX, rightDirStartX, leftDirStartX){
         this.ctx = ctx;
         this.canvas = canvas;
 
@@ -20,7 +20,13 @@ class Animation{
         this.upFrames = upFrames;
         this.rightFrames = rightFrames;
         this.leftFrames = leftFrames;
-        this.frames = this.getFrames(direction);
+
+        if(frames != 0){
+            this.frames = this.getFrames(direction);
+        } else {
+            this.frames = frames;
+        }
+
         this.countFrames = 1;
 
         this.downDelay = this.getDelayFromFrames(downFrames);

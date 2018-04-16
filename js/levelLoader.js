@@ -6,5 +6,13 @@ var LevelLoadingContext = {
         let levelTexturePixels = levelTexture.getDataPixels();
         println(levelTexturePixels);
         println("Level loaded.");
-    }
+    },
+
+    loadLevelFromFile(filePath){
+        let fr = new FileReader();
+        fr.readAsText(filePath);
+        // fetch(filePath)
+        // .then(text => console.log(text));
+    },
+
 };

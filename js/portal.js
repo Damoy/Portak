@@ -22,6 +22,11 @@ class Portal extends Entity{
 		this.updateBox();
 		//this.texture = TextureContext.getPortalTexture();
 
+		let NULL = 0;
+		this.animation = new Animation(this.ctx, this.canvas, "res/textures/portal.png",
+		64, 16, 0, 16, 16, NULL, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+		this.animation.start();
+
 		this.destX = destX;
 		this.destY = destY;
 		this.sourceLevelId = sourceLevelId;
@@ -31,7 +36,7 @@ class Portal extends Entity{
 	}
 
 	update(){
-
+		this.animation.tick();
 	}
 
 	interact(player){
@@ -39,7 +44,8 @@ class Portal extends Entity{
 	}
 
 	render(){
-		this.rawRender();
+// 		this.rawRender();
+		this.animation.render(this.x, this.y);
 		// println(this.texture);
 		// this.texture.render(this.x, this.y);
 	}

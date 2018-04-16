@@ -34,8 +34,8 @@ class Player extends Entity{
 
 		// TODO remove
 		this.power = 90;
-		this.animation = new Animation(this.ctx, this.canvas, "res/textures/playerScaled.png",
-			644, 64, 0, 64, 64, this.savedDirection, 2, 2, 3, 3, 0, 128, 256, 448);
+		this.animation = new Animation(this.ctx, this.canvas, "res/textures/player.png",
+			644, 64, 0, 64, 64, this.savedDirection, 0, 2, 2, 3, 3, 0, 128, 256, 448);
 		this.animation.start();
 
 		this.shootCounter = null;
