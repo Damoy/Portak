@@ -103,8 +103,7 @@ class World{
 			let portal = this.portals[i];
 			let ptile = this.currentLevel
 						.getMap()
-						.getNormTileAt(portal.getX() - portal.getRawRenderingXOffset(),
-										portal.getY() - portal.getRawRenderingYOffset());
+						.getNormTileAt(portal.getX(), portal.getY());
 			if(ptile == tile)
 				return portal;
 		}

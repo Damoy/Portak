@@ -27,7 +27,7 @@ var ProjectileContext = {
 class Projectile extends Entity{
 	constructor(ctx, canvas, world, x, y, w, h, direction, color){
 		super(ctx, canvas, world, x, y, w, h, color, ProjectileContext.computeSpeedX(direction), ProjectileContext.computeSpeedY(direction));
-		this.radius = computeRadius(1, 20);
+		this.radius = computeRadius(1, 10);
 		this.dead = false;
 		this.walls = this.level.getWalls();
 	}

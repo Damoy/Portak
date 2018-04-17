@@ -8,11 +8,11 @@ var textureLoadingCanvas = null;
 var TextureContext = {
 	init(ctx, canvas){
 		let s = MapContext.getTileSize();
-		grayTileTexture = new Texture(ctx, canvas, "res/textures/grayTile.png", s, s);
-		powerTexture = new Texture(ctx, canvas, "res/textures/power.png", s, s).scale(0.5, 0.5);
-		grayWallTexture = new Texture(ctx, canvas, "res/textures/wall.png", s, s);
-		enemyTexture =  new Texture(ctx, canvas, "res/textures/redCube2.png", s, s);
-		portalTexture = new Texture(ctx, canvas, "res/textures/portal.png", s, s); // .scale(0.5, 0.5);
+		grayTileTexture = new Texture(ctx, canvas, "res/textures/tiles/grayTile.png", s, s);
+		powerTexture = new Texture(ctx, canvas, "res/textures/power/power32.png", s, s).scale(0.5, 0.5);
+		grayWallTexture = new Texture(ctx, canvas, "res/textures/walls/wall4.png", s, s);
+		enemyTexture =  new Texture(ctx, canvas, "res/textures/enemies/redCube.png", s, s);
+		// portalTexture = new Texture(ctx, canvas, "res/textures/portal/portal64.png", s, s); // .scale(0.5, 0.5);
 		textureLoadingCanvas = document.createElement("canvas");
 	},
 

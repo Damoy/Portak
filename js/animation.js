@@ -21,7 +21,7 @@ class Animation{
         this.rightFrames = rightFrames;
         this.leftFrames = leftFrames;
 
-        if(frames != 0){
+        if(frames == 0){
             this.frames = this.getFrames(direction);
         } else {
             this.frames = frames;
@@ -56,7 +56,6 @@ class Animation{
     }
 
     start(){
-        // this.frameCounter = new TickCounter(this.delay);
         this.direction = this.setDirection(this.direction);
         this.downFrameCounter = new TickCounter(this.downDelay);
         this.upFrameCounter = new TickCounter(this.upDelay);
@@ -75,13 +74,9 @@ class Animation{
             this.startX += this.frameWidth;
             this.countFrames++;
             
-            // this.countFrames >= this.getFrames(this.direction)
-            // this.startX >= this.savedStartX + (this.frames * this.frameWidth) || 
             if(this.startX >= this.savedStartX + (this.frames * this.frameWidth) || this.startX >= this.savedStartX + (this.frames * this.frameWidth)){
-            //|| this.startX >= this.sheet.getWidth() - this.frameWidth){ // - this.frameWidth
                 this.startX = this.savedStartX;
                 this.countFrames = 1;
-                println("Set startX to saved one: " + this.startX);
             }
 
             this.frameCounter.reset();
