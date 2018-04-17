@@ -339,7 +339,16 @@ class Player extends Entity{
 	}
 
 	renderPower(){
-		renderComposedText(this.ctx, this.power, " power", RenderingContext.getCanvasWidth(this.canvas) * (40 / 100), MapContext.getTileSize() * 1.2, RenderingContext.getCanvasHeight(this.canvas) + (RenderingContext.getUIHeight() >> 1), 0, "DarkGreen");
+		//renderComposedText(this.ctx, this.power, " power", RenderingContext.getCanvasWidth(this.canvas) * (40 / 100), MapContext.getTileSize() * 1.2, RenderingContext.getCanvasHeight(this.canvas) + (RenderingContext.getUIHeight() >> 1), 0, "DarkGreen");
+		let w = RenderingContext.getCanvasWidth(this.canvas);
+		let h = RenderingContext.getCanvasHeight(this.canvas);
+		let tm = MapContext.getTileSize();
+		let startX = w * 0.10;
+		let startY = h + 4; // + (tm >> 1);
+
+		// TODO
+		for(let i = 0; i < this.power; i += 10)
+			TextureContext.getPowerTexture().render(startX + 8 * i, startY);
 	}
 
 	changeLevel(level){

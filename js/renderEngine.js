@@ -38,7 +38,7 @@ var RenderingContext = {
   },
 
   getUIHeight : function(canvas){
-    return MapContext.getTileSize() << 1;
+    return MapContext.getTileSize(); // << 1
   }
 };
 
@@ -52,7 +52,7 @@ function initRendering(ctx, canvas){
 // global rendering
 function render(canvas, world){
   clear(canvas);
-  renderUI(world.getContext(), canvas);
+  //renderUI(world.getContext(), canvas);
   world.render();
   requestAnimationFrame(run);
 }
@@ -63,11 +63,6 @@ function renderUI(ctx, canvas){
   let startY = RenderingContext.getCanvasHeight(canvas);
   let width = RenderingContext.getCanvasWidth(canvas);
 
-  // let height = MapContext.getTileSize() << 1;
-  // ctx.save();
-  // ctx.fillStyle = "plum";
-  // ctx.fillRect(startX, startY, width, height);
-  // ctx.restore();
   ctx.save();
   ctx.beginPath();
   ctx.moveTo(startX, startY);
