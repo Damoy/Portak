@@ -36,3 +36,11 @@ function castToInt(value){
 function filterTextBy(text, regexp){
 	return text.replace(regexp, "");
 }
+
+  function renderText(ctx, text, x, y, color) {
+	ctx.save();
+	ctx.font = '25px serif';
+	ctx.fillStyle = color;
+	ctx.fillText(text, x , y);
+	ctx.restore();
+  }

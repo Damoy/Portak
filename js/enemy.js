@@ -1,22 +1,35 @@
-//TODO : 
-//--- Tirs dans une direction tant que enemy !isDead()
-//--- Tirs qui blessent joueur
-//--- Tirs joueur qui tuent ennemi 
+var EnemyContext = {
+	getchoiceDirection : function(value){
+		switch(value){
+			case 1: 
+			return AnimationContext.getRightDirValue();
+			case 2: 
+			return AnimationContext.getLeftDirValue();
+			case 3: 
+			return AnimationContext.getUpDirValue();
+			case 4: 
+			return AnimationContext.getDownDirValue();
+			default: 
+			return AnimationContext.getDownDirValue();
+		}		
+	}
+};
 
 class Enemy extends Entity{
-	constructor(ctx, canvas, world, x, y){
+	constructor(ctx, canvas, world, x, y, valueDirection){
 		super(ctx, canvas, world, x, y, MapContext.getTileSize(), MapContext.getTileSize(), 0, 0);
-		//println("Enemy generation...");
+		println("Enemy generation...");
 
 		this.life = 1;
 		this.projectiles = [];
 		this.deadProjectiles = [];
 
 		this.shootCounter = null;
-		this.direction = AnimationContext.getRightDirValue();
+		this.valueDirection = valueDirection;
+		this.direction = EnemyContext.getchoiceDirection(valueDirection); 
 		this.texture = TextureContext.getEnemyTexture();
 
-		//println("Enemy: OK.");
+		println("Enemy: OK.");
 	}
 
 	update(){
@@ -26,6 +39,8 @@ class Enemy extends Entity{
 			this.updateBox();
 		}
 	}
+
+	//TODO => Modify tickCounter() depending on the level 
 
 	tick(){
 		if(this.shootCounter == null){

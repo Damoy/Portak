@@ -82,8 +82,8 @@ class Level{
 	update(){
 		this.updateMap();
 		this.updatePopulation();
-		if(isPressed(EventContext.rightKey()))
-			this.reset();
+	//	if(isPressed(EventContext.rightKey()))
+	//		this.reset();
 	}
 
 	updateMap(){

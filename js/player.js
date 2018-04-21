@@ -26,9 +26,6 @@ class Player extends Entity{
 
 		this.projectiles = [];
 		this.deadProjectiles = [];
-
-		// TODO remove
-		this.power = 90;
 		
 		this.animation = new Animation(this.ctx, this.canvas, "res/textures/player/player.png",
 			644, 64, 0, 64, 64, this.savedDirection, AnimationContext.getNullValue(), 2, 2, 3, 3, 0, 128, 256, 448);
@@ -104,7 +101,8 @@ class Player extends Entity{
 		}
 	}
 
-	shoot(){
+	shoot(){			
+	//	println("Power :" + this.power);
 		let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w/2, this.y + this.h/2, this.savedDirection, this.level.getEnemies());
 		this.projectiles.push(projectile);
 	}
@@ -336,15 +334,17 @@ class Player extends Entity{
 
 	renderPower(){
 		//renderComposedText(this.ctx, this.power, " power", RenderingContext.getCanvasWidth(this.canvas) * (40 / 100), MapContext.getTileSize() * 1.2, RenderingContext.getCanvasHeight(this.canvas) + (RenderingContext.getUIHeight() >> 1), 0, "DarkGreen");
-		let w = RenderingContext.getCanvasWidth(this.canvas);
+		let w = RenderingContext.getCanvasWidth(this.canvas) / 2;
 		let h = RenderingContext.getCanvasHeight(this.canvas);
-		let tm = MapContext.getTileSize();
+		TextureContext.getPowerTexture().render(w, h);
+		renderText(this.ctx, this.power , w + 50 , h + 40 , "Lightgreen");
+	/*	let tm = MapContext.getTileSize();
 		let startX = w * 0.10;
 		let startY = h + 4; // + (tm >> 1);
 
 		// TODO
 		for(let i = 0; i < this.power; i += 10)
-			TextureContext.getPowerTexture().render(startX + 8 * i, startY);
+			TextureContext.getPowerTexture().render(startX + 8 * i, startY); */
 	}
 
 	changeLevel(level){
@@ -352,13 +352,14 @@ class Player extends Entity{
 			println("Player changed of level !");
 			this.level = level;	
 			this.map = this.level.getMap();
-			this.addPower(level.getPowerAmount());
+		//	this.addPower(level.getPowerAmount());
 		}
 	}
 
 	addPower(value){this.power += value;}
 	subPower(value){this.power -= value;}
 	getPower(){return this.power;}
+	setPower(value){this.power = value;}
 	getMaxSpeed(){return this.maxSpeed;}
 	isDead(){return (this.power <= 0);}
 }

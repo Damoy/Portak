@@ -59,7 +59,7 @@ class World{
 		mainPlayer = this.player;
 
 		// level 0
-		var loadedTestLevel = LevelLoadingContext.loadRawTextLevelFromFileV1(ctx, canvas, world, "res/levels/testLevel2.txt");
+		var loadedTestLevel = LevelLoadingContext.loadRawTextLevelFromFileV1(ctx, canvas, world, "res/levels/testLevelBrother.txt");
 		this.currentLevel = loadedTestLevel;
 
 		this.player.changeLevel(this.currentLevel);
@@ -77,6 +77,7 @@ class World{
 	generateRandomLevel(){
 		let lvlId = this.levels.length;
 		var level = new Level(lvlId, this.ctx, this.canvas, this, castToInt((lvlId + 1) * 10));
+		//this.player.getPower());
 		level.generate();
 		this.levels[lvlId] = level;
 		println("Generated level " + lvlId + ".");

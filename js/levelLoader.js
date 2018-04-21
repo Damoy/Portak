@@ -17,6 +17,10 @@ var LevelLoadingContext = {
         
         //document.write("0");
 
+        // retrieve the number of the player energies
+        let pEnergy = xml.responseText.split("##numberOfEnergies")[1].split(/\n/)[1];
+        println("Number of player energies: " + pEnergy);
+
         // retrieve the map size
         let numTiles = xml.responseText.split("##numberOfTiles")[1].split(/\n/);
         let mapRows = numTiles[1];
@@ -42,7 +46,7 @@ var LevelLoadingContext = {
         var walls = [];
         var enemies = [];
         var powers = [];
-        let basePowerValue = 1;
+        let basePowerValue = 10;
         var texture = TextureContext.getGrayTileTexture();
 
         for(let i = 0; i < levelData.length; ++i){
@@ -71,23 +75,37 @@ var LevelLoadingContext = {
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
                 case 3:
-                    var enemy = new Enemy(ctx, canvas, world, x, y);
+                    var enemy = new Enemy(ctx, canvas, world, x, y, 1);
                     enemies.push(enemy);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
                 case 4:
+                    var enemy = new Enemy(ctx, canvas, world, x, y, 2);
+                    enemies.push(enemy);
+                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
+                    break;
+                case 5:
+                    var enemy = new Enemy(ctx, canvas, world, x, y, 3);
+                    enemies.push(enemy);
+                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
+                    break;
+                case 6:
+                    var enemy = new Enemy(ctx, canvas, world, x, y, 4);
+                    enemies.push(enemy);
+                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
+                    break; 
+                case 7:
                     var power = new Power(ctx, canvas, world, x, y, basePowerValue);
                     powers.push(power);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
-                case 5:
+                case 8:
                     // portal loading TODO
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
+                    break;   
                 default:
                     throw "Unknown token found while loading level.\n";
             }
-
             ++col;
             if(col >= mapCols){
                 col = 0;
@@ -103,6 +121,7 @@ var LevelLoadingContext = {
 
         world.getPlayer().setX(px);
         world.getPlayer().setY(py);
+        world.getPlayer().setPower(pEnergy);
 
         return loadedLevel;
     },
