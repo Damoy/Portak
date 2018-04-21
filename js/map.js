@@ -9,13 +9,28 @@ var MapContext = {
 class Map{
 	constructor(ctx, canvas, world, rows, cols){
 		println("Map generation...");
+		
 		this.ctx = ctx;
 		this.canvas = canvas;
 		this.world = world;
+		
+		// simulating multiple constructors...
+		if(arguments.length == 3){
+			println("Empty map detected.");
+			return;
+		}
+
+		if(arguments.length == 4){
+			println("Loaded map detected.");
+			this.tiles = rows;
+			return;	
+		}
+		
 		this.rows = rows;
 		this.cols = cols;
 		this.tiles = [];
 		this.build();
+		
 		println("Map: OK.");
 	}
 
@@ -121,6 +136,9 @@ class Map{
 		return this.getTileAt(y / MapContext.getTileSize(), x / MapContext.getTileSize());
 	}
 
+	getContext(){return this.ctx};
+	getCanvas(){return this.canvas;}
+	getWorld(){return this.world;}
 	getTiles(){return this.tiles;}
 	getNumRows(){return this.rows;}
 	getNumCols(){return this.cols;}

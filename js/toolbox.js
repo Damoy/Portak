@@ -32,3 +32,7 @@ function computeRadius(value, size){
 function castToInt(value){
 	return value | 0;
 }
+
+function filterTextBy(text, regexp){
+	return text.replace(regexp, "");
+}

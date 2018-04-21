@@ -2,8 +2,8 @@
 var AABBContext = {
 	getBaseX : function(){return 0;},
 	getBaseY : function(){return 0;},
-	getBaseW : function(){return 20;},
-	getBaseH : function(){return 20;}
+	getBaseW : function(){return 0;},
+	getBaseH : function(){return 0;}
 };
 
 class AABB{

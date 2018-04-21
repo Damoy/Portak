@@ -5,18 +5,18 @@
 
 class Enemy extends Entity{
 	constructor(ctx, canvas, world, x, y){
-		super(ctx, canvas, world, x, y, MapContext.getTileSize(), MapContext.getTileSize(), "FireBrick", 0, 0);
-		println("Enemy generation...");
+		super(ctx, canvas, world, x, y, MapContext.getTileSize(), MapContext.getTileSize(), 0, 0);
+		//println("Enemy generation...");
 
 		this.life = 1;
 		this.projectiles = [];
 		this.deadProjectiles = [];
 
 		this.shootCounter = null;
-		this.direction = PlayerContext.getRightDirValue();
+		this.direction = AnimationContext.getRightDirValue();
 		this.texture = TextureContext.getEnemyTexture();
 
-		println("Enemy: OK.");
+		//println("Enemy: OK.");
 	}
 
 	update(){

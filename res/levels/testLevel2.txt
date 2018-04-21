@@ -1,0 +1,32 @@
+# 0 = player
+# 1 = classic tiles
+# 2 = wall
+# 3 = enemy
+# 4 = power
+# 5 = portal
+# 15 tiles width (960)
+# 10 tiles height (704) (with UI 9)
+# level data is map organisation
+# config is additional level configuration information
+
+##levelData
+1 1 1 1 1 1 0 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 2 1 1 1 2 3 3 3 1 1 1 2 1
+1 1 1 1 1 2 1 1 1 1 2 1 1 1 1
+1 1 2 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 2 1 1 1 4 4 1 2 1 1 1
+1 2 1 1 1 2 1 1 1 1 1 1 2 1 1
+1 1 1 1 1 1 1 2 1 1 1 1 1 1 1
+4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+##levelData
+
+##numberOfTiles
+10
+15
+##numberOfTiles
+
+##levelName
+Unicorn-uniformed
+##levelName

@@ -1,11 +1,11 @@
 class Power extends Entity{
 	constructor(ctx, canvas, world, x, y, value){
 		super(ctx, canvas, world, x, y, MapContext.getTileSize() >> 1, MapContext.getTileSize() >> 1, "LightGreen", 0, 0);
-		println("Power generation...");
+		//println("Power generation...");
 		this.value = value;
 		this.radius = computeRadius(this.value, MapContext.getTileSize());
 		this.texture = TextureContext.getPowerTexture();
-		println("Power: OK.");
+		//println("Power: OK.");
 	}
 
 	update(){

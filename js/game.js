@@ -40,7 +40,7 @@ function main() {
 
 function initWorld(){
   world = new World(ctx, canvas);
-  // LevelLoadingContext.loadLevel(ctx, canvas, "res/textures/redCube.png", 64, 64);
+  world.start();
 }
 
 function start(){

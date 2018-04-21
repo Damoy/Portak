@@ -1,9 +1,9 @@
 var ProjectileContext = {
 	computeSpeedX : function(direction){
 		switch(direction){
-			case PlayerContext.getLeftDirValue():
+			case AnimationContext.getLeftDirValue():
 				return -4;
-			case PlayerContext.getRightDirValue():
+			case AnimationContext.getRightDirValue():
 				return 4;
 			default:
 				return 0;
@@ -13,9 +13,9 @@ var ProjectileContext = {
 
 	computeSpeedY : function(direction) {
 		switch(direction){
-			case PlayerContext.getUpDirValue():
+			case AnimationContext.getUpDirValue():
 				return -4;
-			case PlayerContext.getDownDirValue():
+			case AnimationContext.getDownDirValue():
 				return 4;
 			default:
 				return 0;
@@ -26,10 +26,10 @@ var ProjectileContext = {
 
 class Projectile extends Entity{
 	constructor(ctx, canvas, world, x, y, w, h, direction, color){
-		super(ctx, canvas, world, x, y, w, h, color, ProjectileContext.computeSpeedX(direction), ProjectileContext.computeSpeedY(direction));
+		super(ctx, canvas, world, x, y, w, h, ProjectileContext.computeSpeedX(direction), ProjectileContext.computeSpeedY(direction));
 		this.radius = computeRadius(1, 10);
 		this.dead = false;
-		this.walls = this.level.getWalls();
+		this.color = color;
 	}
 
 	update(){
@@ -62,13 +62,16 @@ class Projectile extends Entity{
 	}
 
 	checkWallsCollision(){
-		for(let i = 0; i < this.walls.length; i++){
-			let wall = this.walls[i];
+		let walls = this.level.getWalls();
+
+		for(let i = 0; i < walls.length; i++){
+			let wall = walls[i];
 			let x = wall.getX();
 			let y = wall.getY();
 			let h = wall.getH();
 			let w = wall.getW();
-			if(this.collides(x,y,w,h)){
+
+			if(this.collides(x, y, w, h)){
 				this.dead = true;
 				this.level.removeEnemy(wall);
 				this.level.getMap().getNormTileAt(x,y).forgetEnemy();
@@ -79,8 +82,9 @@ class Projectile extends Entity{
 
 	die(){
 		this.dead = true;
-		// println("Projectile died: " + this.x + ", " + this.y + ", r: " + this.getRow() + ", c: " + this.getCol());
 	}
 
 	isDead(){return this.dead;}
+	getColor(){return this.color;}
+	setColor(color){this.color = color;}
 }

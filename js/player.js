@@ -1,16 +1,11 @@
 var PlayerContext = {
 	getBasePower : function(){return 0;},
 	getBaseMaxSpeed : function(){return MapContext.getTileSize() >> 1;}, // >> 1
-	getLeftDirValue : function(){return 0;},
-	getUpDirValue : function(){return 1;},
-	getRightDirValue : function(){return 2;},
-	getDownDirValue : function(){return 3;},
-	getNoneDirValue : function(){return -1;}
 };
 
 class Player extends Entity{
-	constructor(ctx, canvas, world, x, y, w, h, color, speedX, speedY){
-		super(ctx, canvas, world, x, y, w, h, color, speedX, speedY);
+	constructor(ctx, canvas, world, x, y, w, h, speedX, speedY){
+		super(ctx, canvas, world, x, y, w, h, speedX, speedY);
 
 		println("Player generation...");
 
@@ -26,8 +21,8 @@ class Player extends Entity{
 		this.xSave = this.x;
 		this.ySave = this.y;
 		
-		this.direction = PlayerContext.getNoneDirValue();
-		this.savedDirection = PlayerContext.getDownDirValue();
+		this.direction = AnimationContext.getNoneDirValue();
+		this.savedDirection = AnimationContext.getDownDirValue();
 
 		this.projectiles = [];
 		this.deadProjectiles = [];
@@ -36,7 +31,7 @@ class Player extends Entity{
 		this.power = 90;
 		
 		this.animation = new Animation(this.ctx, this.canvas, "res/textures/player/player.png",
-			644, 64, 0, 64, 64, this.savedDirection, 0, 2, 2, 3, 3, 0, 128, 256, 448);
+			644, 64, 0, 64, 64, this.savedDirection, AnimationContext.getNullValue(), 2, 2, 3, 3, 0, 128, 256, 448);
 		this.animation.start();
 
 		this.shootCounter = null;
@@ -61,8 +56,8 @@ class Player extends Entity{
 		this.lastDx = 0;
 		this.lastDy = 0;
 		this.shootCounter = null;
-		this.direction = PlayerContext.getNoneDirValue();
-		this.savedDirection = PlayerContext.getDownDirValue();
+		this.direction = AnimationContext.getNoneDirValue();
+		this.savedDirection = AnimationContext.getDownDirValue();
 		this.projectiles = [];
 		this.deadProjectiles = [];
 		this.animation.reset();
@@ -88,13 +83,13 @@ class Player extends Entity{
 
 	handleInput(){
 		if(isPressed(EventContext.upKey())){
-			this.changeDirection(PlayerContext.getUpDirValue());
+			this.changeDirection(AnimationContext.getUpDirValue());
 		} else if(isPressed(EventContext.leftKey())){
-			this.changeDirection(PlayerContext.getLeftDirValue());
+			this.changeDirection(AnimationContext.getLeftDirValue());
 		} else if(isPressed(EventContext.downKey())){
-			this.changeDirection(PlayerContext.getDownDirValue());
+			this.changeDirection(AnimationContext.getDownDirValue());
 		} else if(isPressed(EventContext.rightKey())){
-			this.changeDirection(PlayerContext.getRightDirValue());
+			this.changeDirection(AnimationContext.getRightDirValue());
 		} else if(isPressed(EventContext.spaceKey())) {
 			if(this.shootCounter == null){
 				this.shoot();
@@ -123,19 +118,19 @@ class Player extends Entity{
 			this.ySave = this.y;
 
 			switch(this.direction){
-				case PlayerContext.getLeftDirValue(): // left
+				case AnimationContext.getLeftDirValue(): // left
 					dx = -offset;
 					this.lastDx = dx;
 					break;
-				case PlayerContext.getUpDirValue(): // up
+				case AnimationContext.getUpDirValue(): // up
 					dy = -offset;
 					this.lastDy = dy;
 					break;
-				case PlayerContext.getRightDirValue(): // right
+				case AnimationContext.getRightDirValue(): // right
 					dx = offset;
 					this.lastDx = dx;
 					break;
-				case PlayerContext.getDownDirValue(): // down
+				case AnimationContext.getDownDirValue(): // down
 					dy = offset;
 					this.lastDy = dy;
 					break;
@@ -238,7 +233,7 @@ class Player extends Entity{
 	}
 
 	saveDirection(){
-		if(this.direction != PlayerContext.getNoneDirValue()){
+		if(this.direction != AnimationContext.getNoneDirValue()){
 			this.savedDirection = this.direction;
 		}
 	}
@@ -247,7 +242,7 @@ class Player extends Entity{
 		this.tileDestReached = true;
 		this.lastDx = 0;
 		this.lastDy = 0;
-		this.direction = PlayerContext.getNoneDirValue();
+		this.direction = AnimationContext.getNoneDirValue();
 	}
 
 	resetMovementAndBlock(){
@@ -286,6 +281,7 @@ class Player extends Entity{
 		let currentTile = this.map.getNormTileAt(this.x, this.y);
 		let portalCollision = this.world.portalCollision(currentTile);
 		if(portalCollision != null){
+			println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\n");
 			portalCollision.interact(this);
 			this.resetMovementAndBlock();
 		}
@@ -353,6 +349,7 @@ class Player extends Entity{
 
 	changeLevel(level){
 		if(level != null){
+			println("Player changed of level !");
 			this.level = level;	
 			this.map = this.level.getMap();
 			this.addPower(level.getPowerAmount());

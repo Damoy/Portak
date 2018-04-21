@@ -1,5 +1,5 @@
 var LevelContext = {
-	getMap : function(ctx, canvas, world){
+	generateMap : function(ctx, canvas, world){
 		let rows = (RenderingContext.getCanvasHeight(canvas)) / MapContext.getTileSize();
 		let cols = (RenderingContext.getCanvasWidth(canvas)) / MapContext.getTileSize();
 		return new Map(ctx, canvas, world, rows, cols);
@@ -8,78 +8,72 @@ var LevelContext = {
 
 /* -- Leveling -- */
 class Level{
-	constructor(id, ctx, canvas, world, powerAmount){
+	constructor(id, ctx, canvas, world, map, walls, enemies, powers, powerAmount){
 		println("Level generation...");
 		this.id = id;
 		this.ctx = ctx;
 		this.canvas = canvas;
 		this.world = world;
-		this.map = null;
-		this.walls = [];
-		this.enemies = [];
-		this.powers = [];
-		this.powerAmount = powerAmount;
+
+		// assumes that one null parameter is using the empty constructor
+		if(map != null && walls != null && enemies != null && powers != null){
+			this.map = map;
+			this.setWalls(walls);
+			this.setEnemies(enemies);
+			this.setPowers(powers);
+			this.savedWalls = this.walls;
+			this.savedEnemies = this.enemies;
+			this.savedPowers = this.powers;
+		} else {
+			this.map = null;
+			this.walls = [];
+			this.enemies = [];
+			this.powers = [];
+			this.savedWalls = [];
+			this.savedEnemies = [];
+			this.savedPowers = [];
+		}
+		
+		this.powerAmount = powerAmount || 0;
 		println("Level: OK.");
 	}
 
-	generate(){
-		this.generateMap();
-		this.generateWalls();
-		this.generatePowers();
-		this.generateEnemies();
+	setWalls(walls){
+		if(this.map == null)
+			throw "Map should be set before walls.";
+
+		this.walls = walls;
+
+		this.walls.forEach((wall) => {
+			this.map.occupyTileWith(wall);
+		});
+
+		this.savedWalls = walls;
 	}
 
-	generateMap(){
-		this.map = LevelContext.getMap(this.ctx, this.canvas, this.world);
+	setEnemies(enemies){
+		if(this.map == null)
+			throw "Map should be set before enemies.";
+
+		this.enemies = enemies;
+		this.enemies.forEach((enemy) => {
+			this.map.antogoniseTileWith(enemy);
+		});
+
+		this.savedEnemies = enemies;
 	}
 
-	generateWalls(){
-		let mt = this.map.getTiles();
+	setPowers(powers){
+		if(this.map == null)
+			throw "Map should be set before powers.";
 
-		for(let i = 0; i < mt.length; ++i){
-			let rand = irand(1, 5);
-			let tile = mt[i];
+		this.powers = powers;
+		this.powers.forEach((power) => {
+			this.map.powerUpTileWith(power);
+		});
 
-			if(rand == 1){
-				let newWall = new Wall(this.ctx, this.canvas, this.world, tile.getX(), tile.getY(), "DimGray");
-				this.map.occupyTileWith(newWall);
-				this.walls.push(newWall);
-			}
-		}
+		this.savedPowers = powers;
 	}
-
-	generateEnemies(){
-		let mt = this.map.getTiles();
-		for(let i = 0; i < mt.length; ++i){
-			let rand = irand(1, 30);
-			let tile = mt[i];
-			if(!tile.isOccupied() && !tile.isPoweredUp()) {
-			if(rand == 1){
-				let enemy = new Enemy(this.ctx, this.canvas, this.world, tile.getX(), tile.getY());
-				//this.map.occupyTileWith(enemy);
-				this.map.antogoniseTileWith(enemy);
-				this.enemies.push(enemy);
-				}
-			}
-		}
-	}
-
-	generatePowers(){
-		let mt = this.map.getTiles();
-		for(let i = 0; i < mt.length; ++i){
-			let rand = irand(1, 20);
-			let tile = mt[i];
-			if(!tile.isOccupied()) {
-				if(rand == 1){	
-					let power = new Power(this.ctx, this.canvas, this.world, tile.getX(), tile.getY(), irand(1, 2));
-					//this.map.occupyTileWith(power);
-					this.map.powerUpTileWith(power);
-					this.powers.push(power);			
-				}
-			}
-		}
-	}
-
 
 	removeEnemy(enemy) {
 		removeFromArray(this.enemies, enemy);
@@ -88,6 +82,8 @@ class Level{
 	update(){
 		this.updateMap();
 		this.updatePopulation();
+		if(isPressed(EventContext.rightKey()))
+			this.reset();
 	}
 
 	updateMap(){
@@ -118,13 +114,12 @@ class Level{
 	}
 
 	reset(){
-		this.walls = [];
-		this.enemies = [];
-		this.powers = [];
+		println("Resetting level...");
+		this.setWalls(this.savedWalls);
+		this.setEnemies(this.savedEnemies);
+		this.setPowers(this.savedPowers);
 		this.map.reset();
-		this.generateWalls();
-		this.generatePowers();
-		this.generateEnemies();
+		// this = LevelLoadingContext.loadRawTextLevelFromFileV1(this.source);
 	}
 
 	renderPopulation(){

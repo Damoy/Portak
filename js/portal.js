@@ -14,7 +14,7 @@ class Portal extends Entity{
 		println("Portal generation...");
 		this.updateBox();
 
-		let NULL = 0;
+		let NULL = AnimationContext.getNullValue();
 		this.animation = new Animation(this.ctx, this.canvas, "res/textures/portal/portal64.png",
 		256, 64, 0, 64, 64, NULL, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 		this.animation.start();

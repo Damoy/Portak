@@ -1,51 +1,80 @@
+var AnimationContext = {
+    // null value in constructor parameter
+    getNullValue : function(){return -1;},
 
-// horizontal spritesheets only ?
+    // direction values
+    getLeftDirValue : function(){return 0;},
+	getUpDirValue : function(){return 1;},
+	getRightDirValue : function(){return 2;},
+	getDownDirValue : function(){return 3;},
+	getNoneDirValue : function(){return AnimationContext.getNullValue();}
+};
+
+// For now, horizontal spritesheets only.
 class Animation{
     constructor(ctx, canvas, spritesheetTexturePath, sheetWidth, sheetHeight, yOffset, frameWidth, frameHeight,
         direction, frames, downFrames, upFrames, rightFrames, leftFrames, downDirStartX, upDirStartX, rightDirStartX, leftDirStartX){
+        
+        // rendering context
         this.ctx = ctx;
         this.canvas = canvas;
 
+        // spritesheet start x by direction
         this.downDirStartX = downDirStartX;
         this.upDirStartX = upDirStartX;
         this.rightDirStartX = rightDirStartX;
         this.leftDirStartX = leftDirStartX;
 
+        // actual spritesheet, one big texture
         this.sheet = new Texture(ctx, canvas, spritesheetTexturePath, sheetWidth, sheetHeight);
 
+        // width and heights of one amimated frame
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
 
+        // the total number of frames by direction
         this.downFrames = downFrames;
         this.upFrames = upFrames;
         this.rightFrames = rightFrames;
         this.leftFrames = leftFrames;
 
-        if(frames == 0){
+        // if the total number of frames is not provided ( == nullValue)
+        // the animation does not handle directions
+        if(frames <= 0 || frames == AnimationContext.getNullValue()){
             this.frames = this.getFrames(direction);
         } else {
             this.frames = frames;
         }
 
-        this.countFrames = 1;
-
+        // get the delays by frames lengths
         this.downDelay = this.getDelayFromFrames(downFrames);
         this.upDelay = this.getDelayFromFrames(upFrames);
         this.rightDelay = this.getDelayFromFrames(rightFrames);
         this.leftDelay = this.getDelayFromFrames(leftFrames);
+
+        // the current delay is get from the direction
+        // TODO handle when no direction
         this.delay = this.getDelay(direction);
 
+        // one frame counter object by direction
         this.frameCounter = null;
         this.downFrameCounter = null;
         this.upFrameCounter = null;
         this.rightFrameCounter = null;
         this.leftFrameCounter = null;
 
+        // start x position of clip rendering
+        // according to direction
         this.startX = 0;
-        this.direction = direction;
+        // initial x save
         this.savedStartX = this.startX;
+        // y-axis spritesheet offset
         this.yOffset = yOffset;
 
+        // same direction as used by the entities of the ga;e
+        this.direction = direction;
+
+        // saves of initial values
         this.initDirection = this.direction;
         this.initDelay = this.delay;
         this.initLeftDelay = this.leftDelay;
@@ -55,28 +84,33 @@ class Animation{
         this.initFrames = this.frames;
     }
 
+    // start for "directed" spritesheet
     start(){
+        // direction
         this.direction = this.setDirection(this.direction);
+        // frame counters according to direction
         this.downFrameCounter = new TickCounter(this.downDelay);
         this.upFrameCounter = new TickCounter(this.upDelay);
         this.rightFrameCounter = new TickCounter(this.rightDelay);
         this.leftFrameCounter = new TickCounter(this.leftDelay);
+        // initial frame counter
         this.frameCounter = this.getCounter(this.direction);
     }
 
+    // animation updating
     tick(){
         if(this.frameCounter == null)
             return;
         
         this.frameCounter.tick();
 
+        // time of frame update
         if(this.frameCounter.isStopped()){
+            // increment the start x-axis value clip rendering
             this.startX += this.frameWidth;
-            this.countFrames++;
             
             if(this.startX >= this.savedStartX + (this.frames * this.frameWidth) || this.startX >= this.savedStartX + (this.frames * this.frameWidth)){
                 this.startX = this.savedStartX;
-                this.countFrames = 1;
             }
 
             this.frameCounter.reset();
@@ -89,13 +123,13 @@ class Animation{
 
     getFrames(direction){
         switch(direction){
-			case PlayerContext.getDownDirValue():
+			case AnimationContext.getDownDirValue():
 				return this.downFrames;
-			case PlayerContext.getUpDirValue():
+			case AnimationContext.getUpDirValue():
 				return this.upFrames;
-			case PlayerContext.getRightDirValue():
+			case AnimationContext.getRightDirValue():
 				return this.rightFrames;
-			case PlayerContext.getLeftDirValue():
+			case AnimationContext.getLeftDirValue():
 				return this.leftFrames;
 			default:
 				return this.downFrames;			
@@ -104,13 +138,13 @@ class Animation{
 
     getCounter(direction){
         switch(direction){
-			case PlayerContext.getDownDirValue():
+			case AnimationContext.getDownDirValue():
 				return this.downFrameCounter;
-			case PlayerContext.getUpDirValue():
+			case AnimationContext.getUpDirValue():
 				return this.upFrameCounter;
-			case PlayerContext.getRightDirValue():
+			case AnimationContext.getRightDirValue():
 				return this.rightFrameCounter;
-			case PlayerContext.getLeftDirValue():
+			case AnimationContext.getLeftDirValue():
 				return this.leftFrameCounter;
 			default:
 				return this.downFrameCounter;			
@@ -119,13 +153,13 @@ class Animation{
 
     getDelay(direction){
         switch(direction){
-			case PlayerContext.getDownDirValue():
+			case AnimationContext.getDownDirValue():
 				return this.downDelay;
-			case PlayerContext.getUpDirValue():
+			case AnimationContext.getUpDirValue():
 				return this.upDelay;
-			case PlayerContext.getRightDirValue():
+			case AnimationContext.getRightDirValue():
 				return this.rightDelay;
-			case PlayerContext.getLeftDirValue():
+			case AnimationContext.getLeftDirValue():
 				return this.leftDelay;
 			default:
 				return this.downDelay;			
@@ -134,27 +168,18 @@ class Animation{
 
     getStartX(direction){
 		switch(direction){
-			case PlayerContext.getDownDirValue():
+			case AnimationContext.getDownDirValue():
 				return this.downDirStartX;
-			case PlayerContext.getUpDirValue():
+			case AnimationContext.getUpDirValue():
 				return this.upDirStartX;
-			case PlayerContext.getRightDirValue():
+			case AnimationContext.getRightDirValue():
 				return this.rightDirStartX;
-			case PlayerContext.getLeftDirValue():
+			case AnimationContext.getLeftDirValue():
 				return this.leftDirStartX;
 			default:
 				return this.downDirStartX;			
 		}
     }
-
-    // setStartX(startX){
-    //     this.startX = startX;
-    //     this.savedStartX = this.startX;
-    // }
-
-    // getTickCounter(direction){
-
-    // }
     
     setDirection(direction){
         if(direction != this.direction){
@@ -166,47 +191,17 @@ class Animation{
             this.frameCounter = this.getCounter(direction);
             this.frameCounter.reset();
         }
-
-        // this.frames = this.getFrames(direction);
-        // this.delay = this.getDelay(direction);
-
-        // if(direction != this.direction){
-        //     this.startX = this.getStartX(direction);
-        //     this.savedStartX = this.start;
-        // }
-
-
-        // if(direction == this.direction){
-        //     this.direction = direction;
-        //     this.startX = this.getStartX(direction);
-        //     this.savedStartX = this.startX;
-        //     this.delay = this.getDelay(direction);
-        //     return;
-        // }
-
-        // this.direction = direction;
-        // this.startX = this.getStartX(direction);
-        // this.savedStartX = this.startX;
-        // this.delay = this.getDelay(direction);
-        // this.frameCounter.resetWith(this.delay);
     }
-
-    // organise(startX, delay){
-    //     this.startX = startX;
-    //     this.Delay = delay;
-    //     this.frameCounter.resetWith(delay);
-    // }
 
     render(x, y){
         if(this.frameCounter == null)
             return;
 
-        // 	clippedRender(startX, startY, startWidth, startHeight, x, y, w, h){
+        // clip rendering of the sprite sheet
         this.sheet.clippedRender(this.startX, this.yOffset, this.frameWidth, this.frameHeight, x, y, this.frameWidth, this.frameHeight);
     }
 
-    getSheet(){return this.sheet;}
-
+    // reset the initial values
     reset(){
         this.downDirStartX = this.downDirStartX;
         this.upDirStartX = this.upDirStartX;
@@ -214,7 +209,6 @@ class Animation{
         this.leftDirStartX = this.leftDirStartX;
 
         this.frames = this.initFrames;
-        this.countFrames = 1;
 
         this.downDelay = this.initDownDelay;
         this.upDelay = this.initUpDelay;
@@ -232,4 +226,6 @@ class Animation{
         this.direction = this.initDirection;
         this.savedStartX = this.startX;
     }
+
+    getSpriteSheet(){return this.sheet;}
 }

@@ -1,5 +1,5 @@
 class Tile{
-	constructor(id, ctx, canvas, world, map, row, col){
+	constructor(id, ctx, canvas, world, map, row, col, texture){
 		this.id = id;
 		this.ctx = ctx;
 		this.canvas = canvas;
@@ -13,7 +13,11 @@ class Tile{
 		this.occupier = null;
 		this.power = null;
 		this.enemy = null;
-		this.texture = TextureContext.getGrayTileTexture();
+
+		if(texture != null)
+			this.texture = texture;
+		else
+			this.texture = TextureContext.getGrayTileTexture();
 	}
 
 	reset(){

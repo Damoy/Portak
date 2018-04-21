@@ -7,26 +7,23 @@
 var EntityContext = {
 	getBaseX : function(){return 0;},
 	getBaseY : function(){return 0;},
-	getBaseColor : function(){return "pink";},
 	getBaseW : function(){return 20;},
 	getBaseH : function(){return 20;},
 	getBaseBox : function(){return new AABB(0, 0, 0, 0);}
 }
 
 class Entity {
-	constructor(ctx, canvas, world, x, y, w, h, color, speedX, speedY){
+	constructor(ctx, canvas, world, x, y, w, h, speedX, speedY){
 		this.ctx = ctx;
 		this.canvas = canvas;
 		this.world = world;
 		this.level = this.world.getCurrentLevel();
-		// this.map = this.level.getMap();
 
 		this.x = x;
 		this.y = y;
 		this.w = w;
 		this.h = h;
 
-		this.color = color || EntityContext.getBaseColor();
 		this.savedColor = this.color;
 		this.speedX = speedX;
 		this.speedY = speedY;
@@ -45,11 +42,6 @@ class Entity {
 	render(){
 
 	}
-
-	// reset the entity color
- 	resetColor(){
- 		this.color = this.savedColor;
- 	}
 
  	 updateBox(){
 		if(this.syncBoxRequired){
@@ -78,13 +70,11 @@ class Entity {
 	getSpeedX(){return this.speedX;}
 	getSpeedY(){return this.speedY;}
 
-	getColor(){return this.color;}
 	getSavedColor(){return this.savedColor;}
 	getContext(){return this.ctx;}
 	getCanvas(){return this.canvas;}
 	getWorld(){return this.world;}
 	getLevel(){return this.level;}
-	// getMap(){return this.map;}
 
  	//---- SET
 
@@ -114,7 +104,6 @@ class Entity {
  		this.requireBoxSync();
  	}
 
- 	setColor(color) {this.color = color;}
  	setSpeedX(sx){this.speedX = sx;}
  	setSpeedY(sy){this.speedY = sy;}
 
