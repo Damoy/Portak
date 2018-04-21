@@ -82,8 +82,6 @@ class Level{
 	update(){
 		this.updateMap();
 		this.updatePopulation();
-	//	if(isPressed(EventContext.rightKey()))
-	//		this.reset();
 	}
 
 	updateMap(){
@@ -115,14 +113,17 @@ class Level{
 
 	reset(){
 		println("Resetting level...");
+		this.map.reset();
 		this.setWalls(this.savedWalls);
 		this.setEnemies(this.savedEnemies);
 		this.setPowers(this.savedPowers);
-		this.map.reset();
-		// this = LevelLoadingContext.loadRawTextLevelFromFileV1(this.source);
 	}
 
 	renderPopulation(){
+		this.powers.forEach((power) => {
+			power.render();
+		});
+
 		this.walls.forEach((wall) => {
 			wall.render();
 		})
@@ -131,9 +132,6 @@ class Level{
 			enemy.render();
 		});
 
-		this.powers.forEach((power) => {
-			power.render();
-		});
 	};
 
 	collision(x, y, w, h){

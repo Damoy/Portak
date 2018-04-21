@@ -15,8 +15,6 @@ var LevelLoadingContext = {
         xml.open("GET", filePath, false);
         xml.send();
         
-        //document.write("0");
-
         // retrieve the number of the player energies
         let pEnergy = xml.responseText.split("##numberOfEnergies")[1].split(/\n/)[1];
         println("Number of player energies: " + pEnergy);
@@ -75,22 +73,22 @@ var LevelLoadingContext = {
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
                 case 3:
-                    var enemy = new Enemy(ctx, canvas, world, x, y, 1);
+                    var enemy = new Zombie(ctx, canvas, world, x, y, AnimationContext.getRightDirValue());
                     enemies.push(enemy);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
                 case 4:
-                    var enemy = new Enemy(ctx, canvas, world, x, y, 2);
+                    var enemy = new Zombie(ctx, canvas, world, x, y, AnimationContext.getLeftDirValue());
                     enemies.push(enemy);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
                 case 5:
-                    var enemy = new Enemy(ctx, canvas, world, x, y, 3);
+                    var enemy = new Zombie(ctx, canvas, world, x, y, AnimationContext.getUpDirValue());
                     enemies.push(enemy);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
                 case 6:
-                    var enemy = new Enemy(ctx, canvas, world, x, y, 4);
+                    var enemy = new Zombie(ctx, canvas, world, x, y, AnimationContext.getDownDirValue());
                     enemies.push(enemy);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break; 

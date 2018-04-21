@@ -334,10 +334,11 @@ class Player extends Entity{
 
 	renderPower(){
 		//renderComposedText(this.ctx, this.power, " power", RenderingContext.getCanvasWidth(this.canvas) * (40 / 100), MapContext.getTileSize() * 1.2, RenderingContext.getCanvasHeight(this.canvas) + (RenderingContext.getUIHeight() >> 1), 0, "DarkGreen");
-		let w = RenderingContext.getCanvasWidth(this.canvas) / 2;
+		//let w = RenderingContext.getCanvasWidth(this.canvas) / 2;
+		let w = -(MapContext.getTileSize() >> 2);
 		let h = RenderingContext.getCanvasHeight(this.canvas);
 		TextureContext.getPowerTexture().render(w, h);
-		renderText(this.ctx, this.power , w + 50 , h + 40 , "Lightgreen");
+		renderText(this.ctx, this.power, w + 50, h + 40, "Black"); // LightGreen, DarkGreen
 	/*	let tm = MapContext.getTileSize();
 		let startX = w * 0.10;
 		let startY = h + 4; // + (tm >> 1);

@@ -1,22 +1,8 @@
 var EnemyContext = {
-	getchoiceDirection : function(value){
-		switch(value){
-			case 1: 
-			return AnimationContext.getRightDirValue();
-			case 2: 
-			return AnimationContext.getLeftDirValue();
-			case 3: 
-			return AnimationContext.getUpDirValue();
-			case 4: 
-			return AnimationContext.getDownDirValue();
-			default: 
-			return AnimationContext.getDownDirValue();
-		}		
-	}
 };
 
 class Enemy extends Entity{
-	constructor(ctx, canvas, world, x, y, valueDirection){
+	constructor(ctx, canvas, world, x, y, direction, texture){
 		super(ctx, canvas, world, x, y, MapContext.getTileSize(), MapContext.getTileSize(), 0, 0);
 		println("Enemy generation...");
 
@@ -25,9 +11,8 @@ class Enemy extends Entity{
 		this.deadProjectiles = [];
 
 		this.shootCounter = null;
-		this.valueDirection = valueDirection;
-		this.direction = EnemyContext.getchoiceDirection(valueDirection); 
-		this.texture = TextureContext.getEnemyTexture();
+		this.direction = direction;
+		this.texture = texture;
 
 		println("Enemy: OK.");
 	}
@@ -75,7 +60,7 @@ class Enemy extends Entity{
 	}
 
 	shoot(){
-		let projectile = new EnemyProjectile(this.ctx, this.canvas, this.world, this.x + (this.w >> 1), this.y + (this.h >> 1), this.direction);
+		let projectile = new EnemyProjectile(this.ctx, this.canvas, this.world, this.x + (this.w >> 1), this.y + (this.h >> 1), this.direction, this);
 		this.projectiles.push(projectile);
 	}
 

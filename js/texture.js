@@ -2,7 +2,8 @@ var grayTileTexture = null;
 var powerTexture = null;
 var grayWallTexture = null;
 var portalTexture = null;
-var enemyTexture = null;
+//var enemyTexture = null;
+var zombieTexture = null;
 var textureLoadingCanvas = null;
 
 var TextureContext = {
@@ -11,7 +12,8 @@ var TextureContext = {
 		grayTileTexture = new Texture(ctx, canvas, "res/textures/tiles/grayTile.png", s, s);
 		powerTexture = new Texture(ctx, canvas, "res/textures/power/power32.png", s, s).scale(0.5, 0.5);
 		grayWallTexture = new Texture(ctx, canvas, "res/textures/walls/wall4.png", s, s);
-		enemyTexture =  new Texture(ctx, canvas, "res/textures/enemies/redCube.png", s, s);
+		//enemyTexture =  new Texture(ctx, canvas, "res/textures/enemies/redCube.png", s, s);
+		zombieTexture = new Texture(ctx, canvas, "res/textures/enemies/zombie.png", s << 2, s);
 		textureLoadingCanvas = document.createElement("canvas");
 	},
 
@@ -31,8 +33,8 @@ var TextureContext = {
 		return portalTexture;
 	},
 
-	getEnemyTexture : function(){
-		return enemyTexture;
+	getZombieTexture : function(){
+		return zombieTexture;
 	},
 
 	getTextureLoadingCanvas(){
@@ -52,6 +54,13 @@ class Texture{
 		this.xOffset = 0;
 		this.yOffset = 0;
 		this.dataPixels = null;
+	}
+
+	split(xStart, width, yStart, height){
+		var splitTex = new Texture(this.ctx, this.canvas, this.path, width, height);
+		splitTex.xOffset = xStart;
+		splitTex.yOffset = yStart;
+		return splitTex;
 	}
 
 	render(x, y){
@@ -95,9 +104,6 @@ class Texture{
 		_canvas.width = this.width;
 		_canvas.height = this.height;
 		var _ctx = _canvas.getContext("2d");
-		println("data: " + this.data);
-		println("w: " + this.width);
-		println("h: " + this.height);
 		_ctx.drawImage(this.data, 0, 0, this.width, this.height);
 		this.dataPixels = _ctx.getImageData(0, 0, this.width, this.height).data;
 		return this;

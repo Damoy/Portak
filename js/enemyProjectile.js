@@ -1,6 +1,6 @@
 class EnemyProjectile extends Projectile{
-	constructor(ctx, canvas, world, x, y, direction){
-		super(ctx, canvas, world, x, y, 20, 10, direction, "FireBrick");
+	constructor(ctx, canvas, world, x, y, direction, source){
+		super(ctx, canvas, world, x, y, 20, 10, direction, "FireBrick", source);
 		this.player = this.world.getPlayer();
 	}
 
