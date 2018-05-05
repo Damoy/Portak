@@ -6,39 +6,19 @@ var WorldContext = {
 			MapContext.getTileSize(), MapContext.getTileSize(), 0, 0);
 	},
 
-	getMainPlayer : function(){return mainPlayer;}
+	getMainPlayer : function(){return mainPlayer;},
+
+	loadLevels : function(ctx, canvas, world){
+		var levels = [];
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/0.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/1.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/2.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/3.lvl"));
+		return levels;
+	}
 };
 
 class World{
-	// Version 1 -- Random generation
-	// constructor(ctx, canvas){
-	// 	println("World generation...");
-		
-	// 	// context references
-	// 	this.ctx = ctx;
-	// 	this.canvas = canvas;
-
-	// 	// leveling
-	// 	this.levels = [];
-	// 	this.portals = [];
-
-	// 	// level 0
-	// 	this.currentLevel = this.generateRandomLevel();
-	// 	// level 1
-	// 	this.generateRandomLevel();
-	// 	// create portal
-	// 	println("Portal connection between level 0 et level 1: " + this.connectLevels(0, 1, 4, 4, 8, 8));
-
-	// 	// player
-	// 	this.player = WorldContext.getBasePlayer(ctx, canvas, this);
-	// 	this.player.changeLevel(this.currentLevel);
-	// 	mainPlayer = this.player;
-
-	// 	// LevelLoadingContext.loadLevelFromFile("res/levelPatterns/classical.txt");
-
-	// 	println("World: OK.");
-	// }
-
 	constructor(ctx, canvas){
 		println("World generation...");
 		
@@ -48,6 +28,8 @@ class World{
 
 		// leveling
 		this.levels = [];
+		this.currentLevel = null;
+		this.currentLevelId = 0;
 		this.portals = [];
 
 		println("World: OK.");
@@ -59,41 +41,29 @@ class World{
 		mainPlayer = this.player;
 
 		// level 0
-		var loadedTestLevel = LevelLoadingContext.loadRawTextLevelFromFileV1(ctx, canvas, world, "res/levels/testLevelBrother.txt");
-		this.currentLevel = loadedTestLevel;
-
+		this.levels = WorldContext.loadLevels(ctx, canvas, this);
+		this.currentLevelId = 3;
+		this.updateCurrentLevel();
 		this.player.changeLevel(this.currentLevel);
+		this.incrementLevel();
 	}
 
-	loadLevel(playerPos, playerPower, tiles, walls, enemies, powers, portalPos){
-		// TODO
+	incrementLevel(){
+		++this.currentLevelId;
+		if(this.currentLevelId >= this.levels.length)
+			this.endGame();
+	}
+
+	endGame(){
+		println("ENDDDDDDDDDDDDD GAMEEEEEEEEEEEEEEEE");
 	}
 
 	resetCurrentLevel(){
-		this.currentLevel = LevelLoadingContext.loadRawTextLevelFromFileV1(ctx, canvas, world, this.currentLevel.getSource());
-		// this.player.reset();
-	}
-
-	generateRandomLevel(){
-		let lvlId = this.levels.length;
-		var level = new Level(lvlId, this.ctx, this.canvas, this, castToInt((lvlId + 1) * 10));
-		//this.player.getPower());
-		level.generate();
-		this.levels[lvlId] = level;
-		println("Generated level " + lvlId + ".");
-		return level;
-	}
-
-	getCurrentLevelId(){
-		return this.levels.length;
-	}
-
-	addLevel(level){
-		this.levels[this.getCurrentLevelId()] = level;
+		this.currentLevel = LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, this.currentLevel.getSource());
 	}
 
 	updateCurrentLevel(){
-		this.currentLevel = this.levels[this.getCurrentLevelId()];
+		this.currentLevel = this.levels[this.currentLevelId];
 	}
 
 	getLevel(lvlId){
@@ -157,10 +127,6 @@ class World{
 		this.player.moveTo(x, y);
 		removeFromArray(this.portals, portalTook);
 		this.player.changeLevel(this.currentLevel);
-
-		// chaining
-		//var generation = this.generateRandomLevel();
-		//this.connectLevels(this.currentLevel.getId(), generation.getId(), 4, 4, 8, 8);
 	}
 
 	getPlayer(){return this.player;}

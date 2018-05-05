@@ -102,9 +102,9 @@ class Player extends Entity{
 	}
 
 	shoot(){			
-	//	println("Power :" + this.power);
 		let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w/2, this.y + this.h/2, this.savedDirection, this.level.getEnemies());
 		this.projectiles.push(projectile);
+		this.power -= 2;
 	}
 
 	move(){
@@ -342,10 +342,11 @@ class Player extends Entity{
 
 	changeLevel(level){
 		if(level != null){
-			println("Player changed of level !");
 			this.level = level;	
 			this.map = this.level.getMap();
-		//	this.addPower(level.getPowerAmount());
+			this.x = this.level.getPlayerInitX();
+			this.y = this.level.getPlayerInitY();
+			this.power = this.level.getPlayerInitPower();
 		}
 	}
 

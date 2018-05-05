@@ -4,8 +4,6 @@ var EnemyContext = {
 class Enemy extends Entity{
 	constructor(ctx, canvas, world, x, y, direction, texture){
 		super(ctx, canvas, world, x, y, MapContext.getTileSize(), MapContext.getTileSize(), 0, 0);
-		println("Enemy generation...");
-
 		this.life = 1;
 		this.projectiles = [];
 		this.deadProjectiles = [];
@@ -13,8 +11,6 @@ class Enemy extends Entity{
 		this.shootCounter = null;
 		this.direction = direction;
 		this.texture = texture;
-
-		println("Enemy: OK.");
 	}
 
 	update(){

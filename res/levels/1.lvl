@@ -13,16 +13,16 @@
 # config is additional level configuration information
 
 ##levelData
-2 2 6 2 2 2 0 2 2 2 2 2 2 2 2
-2 6 1 1 1 1 1 1 1 1 1 1 1 1 2
-2 1 1 2 6 2 2 6 2 2 6 2 1 1 2
-2 1 1 2 1 1 1 1 1 1 1 2 1 1 2
-2 1 1 2 1 1 1 1 1 1 1 2 1 1 2
-2 1 1 3 1 1 1 1 1 1 1 4 1 7 2
-2 1 1 2 1 1 1 1 1 1 1 2 7 1 2
-2 1 1 1 1 1 1 1 1 1 1 1 1 5 2
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2
-2 2 2 2 2 5 2 5 2 5 2 2 5 2 2
+2 1 1 1 1 1 2 2 2 1 1 1 1 1 2
+2 1 1 1 1 1 2 0 2 1 1 1 1 1 2
+2 1 2 2 2 2 2 1 2 2 2 2 2 1 2
+2 1 2 1 1 1 1 1 1 1 1 1 4 1 2
+2 1 6 1 1 1 1 1 1 1 1 1 2 1 2
+2 2 2 2 2 2 2 2 2 2 2 2 2 1 2
+2 3 1 1 1 1 1 1 1 1 1 1 1 1 2
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 ##levelData
 
 ##numberOfTiles
@@ -30,9 +30,9 @@
 15
 ##numberOfTiles
 
-##numberOfEnergies
+##powerAmount
 30
-##numberOfEnergies
+##powerAmount
 
 ##levelName
 EmptyLevel

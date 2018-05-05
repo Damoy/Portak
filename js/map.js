@@ -16,12 +16,12 @@ class Map{
 		
 		// simulating multiple constructors...
 		if(arguments.length == 3){
-			println("Empty map detected.");
+			// println("Empty map detected.");
 			return;
 		}
 
 		if(arguments.length == 4){
-			println("Loaded map detected.");
+			// println("Loaded map detected.");
 			this.tiles = rows;
 			return;	
 		}
@@ -69,39 +69,6 @@ class Map{
 		let tdest = this.getTileAt(occupier.getRow(), occupier.getCol());
 		if(tdest != null)
 			tdest.occupyWith(occupier);
-
-	/*	let tdest = this.getTileAt(occupier.getRow(), occupier.getCol());
-		if(tdest != null) {
-
-			if(occupier.type == "enemy") {
-				println("COUCOU C'EST ENCORE MOI !")
-				tdest.antagoniseWith(occupier);
-			}
-
-			else if(occupier.type = "wall") {
-				tdest.occupyWith(occupier);
-			}
-
-			else if(occupier.type == "energy") {
-				tdest.powerUpWith(occupier);
-			} */
-
-
-		/*	switch(occupier){
-				case (occupier.type = "enemy"):
-					println("COUCOU C'EST ENCORE MOI !")
-					tdest.antagoniseWith(occupier);
-					break;
-				case (occupier.type = "energy"): 
-					tdest.powerUpWith(occupier);
-					break;
-				case (occupier.type = "wall"): 
-					tdest.occupyWith(occupier);
-					break;
-				default:
-					return;
-			} 
-		}*/
 	}
 
 	antogoniseTileWith(enemy){
