@@ -7,6 +7,9 @@
 # 06 = DownEnemy
 # 07 = power
 # 08 = portal
+# 4* = door
+# 5* = key 
+# Key 52 open door 42 
 # 15 tiles width (960)
 # 10 tiles height (704) (with UI 9)
 # level data is map organisation

@@ -111,12 +111,22 @@ var LevelLoadingContext = {
                     portalY = y;
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
-                case 9:
+                case 40:
+                case 41:
+                case 42:
+                case 43:
+                case 44:
+                case 45:
                     var door = new Door(ctx, canvas, world, x, y, fileValue);
                     doors.push(door);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
-                case 10:
+                case 50:
+                case 51:
+                case 52:
+                case 53:
+                case 54:
+                case 55:         
                     var key = new Key(ctx, canvas, world, x, y, fileValue);
                     keys.push(key);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);

@@ -45,7 +45,7 @@ class Map{
 			if(tile.key != tile.savedKey) {
 				this.tiles.forEach((otherTile) => {
 					if(otherTile.door != null) {
-						if(tile.savedKey.getId() == 10 && otherTile.door.getId() == 9){
+						if(tile.savedKey.getId() % 10 == otherTile.door.getId() % 10){
 							otherTile.unclose();
 						}
 					}
