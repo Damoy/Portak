@@ -41,9 +41,9 @@ class Player extends Entity{
 		println("Player: OK.");
 	}
 
-	reset(){
-		this.x = this.xInit;
-		this.y = this.yInit;
+	reset(x, y){
+		this.x = x;
+		this.y = y;
 		this.xSave = this.xInit;
 		this.ySave = this.yInit;
 		this.power = this.powerInit;
@@ -333,19 +333,11 @@ class Player extends Entity{
 	}
 
 	renderPower(){
-		//renderComposedText(this.ctx, this.power, " power", RenderingContext.getCanvasWidth(this.canvas) * (40 / 100), MapContext.getTileSize() * 1.2, RenderingContext.getCanvasHeight(this.canvas) + (RenderingContext.getUIHeight() >> 1), 0, "DarkGreen");
-		//let w = RenderingContext.getCanvasWidth(this.canvas) / 2;
-		let w = -(MapContext.getTileSize() >> 2);
-		let h = RenderingContext.getCanvasHeight(this.canvas);
-		TextureContext.getPowerTexture().render(w, h);
-		renderText(this.ctx, this.power, w + 50, h + 40, "Black"); // LightGreen, DarkGreen
-	/*	let tm = MapContext.getTileSize();
-		let startX = w * 0.10;
-		let startY = h + 4; // + (tm >> 1);
-
-		// TODO
-		for(let i = 0; i < this.power; i += 10)
-			TextureContext.getPowerTexture().render(startX + 8 * i, startY); */
+		let ts = MapContext.getTileSize();
+		let w = -(ts >> 2);
+		let h = RenderingContext.getCanvasHeight(this.canvas) - (ts >> 1);
+		TextureContext.getPowerTexture().render(w, h - (ts * 0.4));
+		renderText(this.ctx, this.power, w + (ts * 0.8), h + (ts * 0.25), "Black"); // LightGreen, DarkGreen
 	}
 
 	changeLevel(level){

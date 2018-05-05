@@ -70,8 +70,8 @@ class World{
 	}
 
 	resetCurrentLevel(){
-		this.currentLevel.reset();
-		this.player.reset();
+		this.currentLevel = LevelLoadingContext.loadRawTextLevelFromFileV1(ctx, canvas, world, this.currentLevel.getSource());
+		// this.player.reset();
 	}
 
 	generateRandomLevel(){

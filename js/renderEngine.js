@@ -30,7 +30,7 @@ var RenderingContext = {
   },
 
   getCanvasHeight : function(canvas){
-    return canvas.height - RenderingContext.getUIHeight();
+    return canvas.height;
   },
 
   getUIWidth : function(canvas){
@@ -38,7 +38,7 @@ var RenderingContext = {
   },
 
   getUIHeight : function(canvas){
-    return MapContext.getTileSize(); // << 1
+    return 0; // MapContext.getTileSize() (<< 1)
   }
 };
 

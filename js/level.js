@@ -8,9 +8,10 @@ var LevelContext = {
 
 /* -- Leveling -- */
 class Level{
-	constructor(id, ctx, canvas, world, map, walls, enemies, powers, powerAmount){
+	constructor(id, source, ctx, canvas, world, map, walls, enemies, powers, powerAmount){
 		println("Level generation...");
 		this.id = id;
+		this.source = source;
 		this.ctx = ctx;
 		this.canvas = canvas;
 		this.world = world;
@@ -151,4 +152,5 @@ class Level{
 	getPowerAmount(){return this.powerAmount;}
 	getEnemies(){return this.enemies;}
 	getWalls(){return this.walls;}
+	getSource(){return this.source;}
 }

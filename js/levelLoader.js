@@ -115,10 +115,11 @@ var LevelLoadingContext = {
         map.cols = mapCols;
         map.tiles = tiles;
 
-        var loadedLevel = new Level(world.getCurrentLevelId(), ctx, canvas, world, map, walls, enemies, powers, 10);
+        var loadedLevel = new Level(world.getCurrentLevelId(), filePath, ctx, canvas, world, map, walls, enemies, powers, 10);
 
-        world.getPlayer().setX(px);
-        world.getPlayer().setY(py);
+        world.getPlayer().reset(px, py);
+        //world.getPlayer().setX(px);
+        //world.getPlayer().setY(py);
         world.getPlayer().setPower(pEnergy);
 
         return loadedLevel;
