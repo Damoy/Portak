@@ -16,12 +16,12 @@ class Map{
 		
 		// simulating multiple constructors...
 		if(arguments.length == 3){
-			println("Empty map detected.");
+			// println("Empty map detected.");
 			return;
 		}
 
 		if(arguments.length == 4){
-			println("Loaded map detected.");
+			// println("Loaded map detected.");
 			this.tiles = rows;
 			return;	
 		}
@@ -80,6 +80,7 @@ class Map{
 		let tdest = this.getTileAt(key.getRow(), key.getCol());
 		if(tdest != null)
 			tdest.openUpWith(key);
+
 	}
 
 	antogoniseTileWith(enemy){

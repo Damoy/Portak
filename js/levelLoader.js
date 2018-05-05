@@ -1,6 +1,11 @@
 var jsons = [];
+var loadingID = 0;
 
 var LevelLoadingContext = {
+    getNewLoadingId : function(){
+        return ++loadingID;
+    },
+
     loadLevel : function(ctx, canvas, levelFilePath, width, height){
         println("Loading level...");
         let levelTexture = new Texture(ctx, canvas, levelFilePath, width, height);
@@ -10,14 +15,14 @@ var LevelLoadingContext = {
         println("Level loaded.");
     },
 
-    loadRawTextLevelFromFileV1 : function(ctx, canvas, world, filePath){
+    loadLevelFromFile : function(ctx, canvas, world, filePath){
         let xml = new XMLHttpRequest();
         xml.open("GET", filePath, false);
         xml.send();
         
         // retrieve the number of the player energies
-        let pEnergy = xml.responseText.split("##numberOfEnergies")[1].split(/\n/)[1];
-        println("Number of player energies: " + pEnergy);
+        let pAmount = xml.responseText.split("##powerAmount")[1].split(/\n/)[1];
+        println("Player power amount: " + pAmount);
 
         // retrieve the map size
         let numTiles = xml.responseText.split("##numberOfTiles")[1].split(/\n/);
@@ -126,12 +131,8 @@ var LevelLoadingContext = {
         map.rows = mapRows;
         map.cols = mapCols;
         map.tiles = tiles;
-
-        var loadedLevel = new Level(world.getCurrentLevelId(), ctx, canvas, world, map, walls, enemies, powers, 10, doors, keys);
-
-        world.getPlayer().setX(px);
-        world.getPlayer().setY(py);
-        world.getPlayer().setPower(pEnergy);
+        
+        var loadedLevel = new Level(LevelLoadingContext.getNewLoadingId(), filePath, ctx, canvas, world, map, walls, enemies, powers, 10, px, py, pAmount, doors, keys);
 
         return loadedLevel;
     },

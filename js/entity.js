@@ -31,6 +31,7 @@ class Entity {
 		this.box = new AABB(this.x, this.y, this.w, this.h) || EntityContext.getBaseBox();
 		this.syncBoxRequired = true;
 		this.requireBoxSync();
+		this.updateBox();
 	}
 
 	// updating

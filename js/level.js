@@ -8,9 +8,10 @@ var LevelContext = {
 
 /* -- Leveling -- */
 class Level{
-	constructor(id, ctx, canvas, world, map, walls, enemies, powers, powerAmount, doors, keys){
+	constructor(id, source, ctx, canvas, world, map, walls, enemies, powers, powerAmount, playerInitX, playerInitY, playerInitPower, doors, keys){
 		println("Level generation...");
 		this.id = id;
+		this.source = source;
 		this.ctx = ctx;
 		this.canvas = canvas;
 		this.world = world;
@@ -42,6 +43,9 @@ class Level{
 		}
 		
 		this.powerAmount = powerAmount || 0;
+		this.playerInitX = playerInitX;
+		this.playerInitY = playerInitY;
+		this.playerInitPower = playerInitPower;
 		println("Level: OK.");
 	}
 
@@ -199,4 +203,9 @@ class Level{
 	getPowerAmount(){return this.powerAmount;}
 	getEnemies(){return this.enemies;}
 	getWalls(){return this.walls;}
+	getSource(){return this.source;}
+	getPlayerInitX(){return this.playerInitX;}
+	getPlayerInitY(){return this.playerInitY;}
+	getPlayerInitPower(){return this.playerInitPower;}
+
 }
