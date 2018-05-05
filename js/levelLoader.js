@@ -131,7 +131,7 @@ var LevelLoadingContext = {
         map.rows = mapRows;
         map.cols = mapCols;
         map.tiles = tiles;
-        
+
         var loadedLevel = new Level(LevelLoadingContext.getNewLoadingId(), filePath, ctx, canvas, world, map, walls, enemies, powers, 10, px, py, pAmount, doors, keys);
 
         return loadedLevel;
