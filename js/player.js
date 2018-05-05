@@ -281,10 +281,9 @@ class Player extends Entity{
 	checkPortalsCollisions(){
 		let currentTile = this.map.getNormTileAt(this.x, this.y);
 		let portalCollision = this.world.portalCollision(currentTile);
+		
 		if(portalCollision != null){
-			println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\n");
 			portalCollision.interact(this);
-			this.resetMovementAndBlock();
 		}
 	}
 
@@ -343,8 +342,14 @@ class Player extends Entity{
 		renderText(this.ctx, this.power, w + (ts * 0.8), h + (ts * 0.25), "Black"); // LightGreen, DarkGreen
 	}
 
+	teleport(level){
+		this.reset();
+		this.changeLevel(level);
+	}
+
 	changeLevel(level){
 		if(level != null){
+			println("Level " + level.getId());
 			this.level = level;	
 			this.map = this.level.getMap();
 			this.x = this.level.getPlayerInitX();

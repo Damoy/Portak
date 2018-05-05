@@ -53,6 +53,8 @@ var LevelLoadingContext = {
         var keys = [];
         let basePowerValue = 10;
         var texture = TextureContext.getGrayTileTexture();
+        let portalX = 0;
+        let portalY = 0;
 
         for(let i = 0; i < levelData.length; ++i){
             let fileValue = castToInt(levelData[i]);
@@ -105,7 +107,8 @@ var LevelLoadingContext = {
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
                 case 8:
-                    // portal loading TODO
+                    portalX = x;
+                    portalY = y;
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
                 case 9:
@@ -134,7 +137,8 @@ var LevelLoadingContext = {
         map.tiles = tiles;
 
         var loadedLevel = new Level(LevelLoadingContext.getNewLoadingId(), filePath, ctx, canvas, world, map, walls, enemies, powers, 10, px, py, pAmount, doors, keys);
-
+        world.generatePortal(loadedLevel.getId(), portalX, portalY);
+        
         return loadedLevel;
     },
 
