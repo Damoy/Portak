@@ -31,6 +31,7 @@ class World{
 		this.currentLevel = null;
 		this.currentLevelId = 0;
 		this.portals = [];
+		this.currentPortal = null;
 
 		println("World: OK.");
 	}
@@ -42,6 +43,7 @@ class World{
 
 		this.levels = WorldContext.loadLevels(ctx, canvas, this);
 		this.updateCurrentLevel();
+		this.updatePortal();
 		this.player.changeLevel(this.currentLevel);
 	}
 
@@ -60,12 +62,18 @@ class World{
 	upgradeLevel(){
 		this.incrementLevel();
 		this.updateCurrentLevel();
-		// if(this.currentLevelId > this.levels.length){
-		// 	this.endGame();
-		// } else{
-		// 	this.incrementLevel();
-		// 	this.updateCurrentLevel();
-		// }
+		this.updatePortal();
+	}
+
+	updatePortal(){
+		if(this.currentLevel == null) this.endGame();
+		for(let i = 0; i < this.portals.length; ++i){
+			if(this.portals[i].getId() == this.currentLevel.getId()){
+				this.currentPortal = this.portals[i];
+			}
+		}
+
+		if(this.currentPortal == null) throw "Unknown portal";
 	}
 
 	generatePortal(id, x, y){
@@ -99,9 +107,8 @@ class World{
 	}
 
 	updateCurrentPortal(){
-		let portal = this.portals[this.currentLevelId];
-		if(portal != null)
-			portal.update();
+		if(this.currentPortal != null)
+			this.currentPortal.update();
 	}
 
 	render(){
@@ -111,21 +118,19 @@ class World{
 	}
 
 	renderCurrentPortal(){
-		let portal = this.portals[this.currentLevelId];
-		if(portal != null)
-			portal.render();
+		if(this.currentPortal != null)
+			this.currentPortal.render();
 	}
 
 	portalCollision(tile){
-		let portal = this.portals[this.currentLevelId];
-		if(portal == null) return null;
+		if(this.currentPortal == null) return null;
 
 		let ptile = this.currentLevel
 					.getMap()
-					.getNormTileAt(portal.getX(), portal.getY());
+					.getNormTileAt(this.currentPortal.getX(), this.currentPortal.getY());
 					
 		if(ptile == tile)
-			return portal;
+			return this.currentPortal;
 
 		return null;
 	}
