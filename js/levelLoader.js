@@ -121,6 +121,7 @@ var LevelLoadingContext = {
                 default:
                     throw "Unknown token found while loading level.\n";
             }
+            
             ++col;
             if(col >= mapCols){
                 col = 0;

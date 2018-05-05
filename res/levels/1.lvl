@@ -1,28 +1,28 @@
-# 0 = player
-# 1 = classic tiles
-# 2 = wall
-# 3 = RightEnemy
-# 4 = LeftEnemy
-# 5 = UpEnemy
-# 6 = DownEnemy
-# 7 = power
-# 8 = portal
+# 00 = player
+# 01 = classic tiles
+# 02 = wall
+# 03 = RightEnemy
+# 04 = LeftEnemy
+# 05 = UpEnemy
+# 06 = DownEnemy
+# 07 = power
+# 08 = portal
 # 15 tiles width (960)
 # 10 tiles height (704) (with UI 9)
 # level data is map organisation
 # config is additional level configuration information
 
 ##levelData
-2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-2 1 1 1 1 1 1 1 1 1 1 1 1 1 2
-2 1 1 1 1 1 2 2 2 1 1 1 1 1 2
-2 1 1 1 1 1 2 0 2 1 1 1 1 1 2
-2 1 2 2 2 2 2 1 2 2 2 2 2 1 2
-2 1 2 1 1 1 1 1 1 1 1 1 4 1 2
-2 1 6 1 1 1 1 1 1 1 1 1 2 1 2
-2 2 2 2 2 2 2 2 2 2 2 2 2 1 2
-2 3 1 1 1 1 1 1 1 1 1 1 1 1 2
-2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+02 02 02 02 02 02 02 02 02 02 02 02 02 02 02
+02 01 01 01 01 01 01 01 01 01 01 01 01 01 02
+02 01 01 01 01 01 02 02 02 01 01 01 01 01 02
+02 01 01 01 01 01 02 00 02 01 01 01 01 01 02
+02 01 02 02 02 02 02 01 02 02 02 02 02 01 02
+02 01 02 01 01 01 01 01 01 01 01 01 04 01 02
+02 01 06 01 01 01 01 01 01 01 01 01 02 01 02
+02 02 02 02 02 02 02 02 02 02 02 02 02 01 02
+02 03 01 01 01 01 01 01 01 01 01 01 01 01 02
+02 02 02 02 02 02 02 02 02 02 02 02 02 02 02
 ##levelData
 
 ##numberOfTiles

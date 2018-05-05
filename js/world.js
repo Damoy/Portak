@@ -29,7 +29,7 @@ class World{
 		// leveling
 		this.levels = [];
 		this.currentLevel = null;
-		this.currentLevelId = 0;
+		this.currentLevelId = 2;
 		this.portals = [];
 
 		println("World: OK.");
@@ -40,13 +40,10 @@ class World{
 		this.player = WorldContext.getBasePlayer(ctx, canvas, this);
 		mainPlayer = this.player;
 
-		// level 0
-
 		this.levels = WorldContext.loadLevels(ctx, canvas, this);
-		this.currentLevelId = 3;
+		// this.currentLevelId = 3;
 		this.updateCurrentLevel();
 		this.player.changeLevel(this.currentLevel);
-		this.incrementLevel();
 	}
 
 	incrementLevel(){
@@ -61,6 +58,8 @@ class World{
 
 	resetCurrentLevel(){
 		this.currentLevel = LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, this.currentLevel.getSource());
+		this.player.reset();
+		this.player.changeLevel(this.currentLevel);
 	}
 
 	updateCurrentLevel(){
