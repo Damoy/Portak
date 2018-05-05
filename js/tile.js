@@ -15,6 +15,7 @@ class Tile{
 		this.enemy = null;
 		this.door = null;
 		this.key = null;
+		this.savedKey = null;
 
 		if(texture != null)
 			this.texture = texture;
@@ -29,6 +30,7 @@ class Tile{
 		this.enemy = null;
 		this.door = null;
 		this.key = null;
+		this.savedKey = null;
 	}
 
 	update(){
@@ -61,6 +63,7 @@ class Tile{
 	openUpWith(key){
 		if(this.key == null){
 			this.key = key;
+			this.savedKey = key;
 		}
 		else {
 			throw "Tile was already blocked !";
@@ -93,6 +96,11 @@ class Tile{
 	unopen() {
         this.map.removeKey(this.key);
         this.key = null;
+	}
+	
+	unclose() {
+        this.map.removeDoor(this.door);
+        this.door = null;
     }
 
 	getOccupier(){return this.occupier;}

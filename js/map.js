@@ -42,6 +42,15 @@ class Map{
 	update(){
 		this.tiles.forEach((tile) => {
 			tile.update();
+			if(tile.key != tile.savedKey) {
+				this.tiles.forEach((otherTile) => {
+					if(otherTile.door != null) {
+						if(tile.savedKey.getId() == 10 && otherTile.door.getId() == 9){
+							otherTile.unclose();
+						}
+					}
+				});
+			}
 		});
 	}
 
@@ -107,6 +116,14 @@ class Map{
             this.level = this.world.getCurrentLevel();
 
         removeFromArray(this.level.keys, key);
+	}
+	
+		
+	removeDoor(door){
+        if(this.level == null)
+            this.level = this.world.getCurrentLevel();
+
+        removeFromArray(this.level.doors, door);
     }
 
 	nget(row, col){
