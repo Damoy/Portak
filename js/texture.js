@@ -12,7 +12,8 @@ var TextureContext = {
 		grayTileTexture = new Texture(ctx, canvas, "res/textures/tiles/grayTile.png", s, s);
 		powerTexture = new Texture(ctx, canvas, "res/textures/power/power32.png", s, s).scale(0.5, 0.5);
 		grayWallTexture = new Texture(ctx, canvas, "res/textures/walls/wall4.png", s, s);
-		//enemyTexture =  new Texture(ctx, canvas, "res/textures/enemies/redCube.png", s, s);
+		doorTexture = new Texture(ctx, canvas, "res/textures/doors/doorTemp.png", s, s);
+		keyTexture = new Texture(ctx, canvas, "res/textures/keys/keyTemp2.png", s, s).scale(1, 1);
 		zombieTexture = new Texture(ctx, canvas, "res/textures/enemies/zombie.png", s << 2, s);
 		textureLoadingCanvas = document.createElement("canvas");
 	},
@@ -27,6 +28,14 @@ var TextureContext = {
 
 	getGrayWallTexture : function(){
 		return grayWallTexture;
+	},
+
+	getDoorTexture : function(){
+		return doorTexture;
+	},
+
+	getKeyTexture : function(){
+		return keyTexture;
 	},
 
 	getPortalTexture : function(){

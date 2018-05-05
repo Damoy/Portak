@@ -65,43 +65,21 @@ class Map{
 	}
 
 	occupyTileWith(occupier){
-
 		let tdest = this.getTileAt(occupier.getRow(), occupier.getCol());
 		if(tdest != null)
 			tdest.occupyWith(occupier);
+	}
 
-	/*	let tdest = this.getTileAt(occupier.getRow(), occupier.getCol());
-		if(tdest != null) {
+	closeTileWith(door){
+		let tdest = this.getTileAt(door.getRow(), door.getCol());
+		if(tdest != null)
+			tdest.closeWith(door);
+	}
 
-			if(occupier.type == "enemy") {
-				println("COUCOU C'EST ENCORE MOI !")
-				tdest.antagoniseWith(occupier);
-			}
-
-			else if(occupier.type = "wall") {
-				tdest.occupyWith(occupier);
-			}
-
-			else if(occupier.type == "energy") {
-				tdest.powerUpWith(occupier);
-			} */
-
-
-		/*	switch(occupier){
-				case (occupier.type = "enemy"):
-					println("COUCOU C'EST ENCORE MOI !")
-					tdest.antagoniseWith(occupier);
-					break;
-				case (occupier.type = "energy"): 
-					tdest.powerUpWith(occupier);
-					break;
-				case (occupier.type = "wall"): 
-					tdest.occupyWith(occupier);
-					break;
-				default:
-					return;
-			} 
-		}*/
+	openUpTileWith(key){
+		let tdest = this.getTileAt(key.getRow(), key.getCol());
+		if(tdest != null)
+			tdest.openUpWith(key);
 	}
 
 	antogoniseTileWith(enemy){
@@ -121,6 +99,13 @@ class Map{
             this.level = this.world.getCurrentLevel();
 
         removeFromArray(this.level.powers, power);
+	}
+	
+	removeKey(key){
+        if(this.level == null)
+            this.level = this.world.getCurrentLevel();
+
+        removeFromArray(this.level.keys, key);
     }
 
 	nget(row, col){

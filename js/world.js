@@ -59,7 +59,7 @@ class World{
 		mainPlayer = this.player;
 
 		// level 0
-		var loadedTestLevel = LevelLoadingContext.loadRawTextLevelFromFileV1(ctx, canvas, world, "res/levels/testLevelBrother.txt");
+		var loadedTestLevel = LevelLoadingContext.loadRawTextLevelFromFileV1(ctx, canvas, world, "res/levels/testDoor.txt");
 		this.currentLevel = loadedTestLevel;
 
 		this.player.changeLevel(this.currentLevel);

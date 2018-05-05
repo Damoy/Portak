@@ -202,12 +202,15 @@ class Player extends Entity{
 
 				let tile = this.map.getTileAt(row, col);
 				if(tile != null) {
-					if(tile.isOccupied() || tile.isAntagonised()){
+					if(tile.isOccupied() || tile.isAntagonised() || tile.isClosed()){
 						this.resetMovement();
 						return false;
 					} else if(tile.isPoweredUp()){
 						this.addPower(tile.getPower().getValue());
 						tile.unpower();
+					}
+					else if(tile.isOpenedUp()){
+						tile.unopen();
 					}
 				}
 			}

@@ -44,6 +44,8 @@ var LevelLoadingContext = {
         var walls = [];
         var enemies = [];
         var powers = [];
+        var doors = [];
+        var keys = [];
         let basePowerValue = 10;
         var texture = TextureContext.getGrayTileTexture();
 
@@ -100,7 +102,17 @@ var LevelLoadingContext = {
                 case 8:
                     // portal loading TODO
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;   
+                    break;
+                case 9:
+                    var door = new Door(ctx, canvas, world, x, y, fileValue);
+                    doors.push(door);
+                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
+                    break;
+                case 10:
+                    var key = new Key(ctx, canvas, world, x, y, fileValue);
+                    keys.push(key);
+                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
+                    break;
                 default:
                     throw "Unknown token found while loading level.\n";
             }
@@ -115,7 +127,7 @@ var LevelLoadingContext = {
         map.cols = mapCols;
         map.tiles = tiles;
 
-        var loadedLevel = new Level(world.getCurrentLevelId(), ctx, canvas, world, map, walls, enemies, powers, 10);
+        var loadedLevel = new Level(world.getCurrentLevelId(), ctx, canvas, world, map, walls, enemies, powers, 10, doors, keys);
 
         world.getPlayer().setX(px);
         world.getPlayer().setY(py);

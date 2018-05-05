@@ -13,6 +13,8 @@ class Tile{
 		this.occupier = null;
 		this.power = null;
 		this.enemy = null;
+		this.door = null;
+		this.key = null;
 
 		if(texture != null)
 			this.texture = texture;
@@ -25,6 +27,8 @@ class Tile{
 		this.occupier = null;
 		this.power = null;
 		this.enemy = null;
+		this.door = null;
+		this.key = null;
 	}
 
 	update(){
@@ -42,6 +46,24 @@ class Tile{
 		}
 		else {
 			throw "Tile was already occupied !";
+		}
+	}
+
+	closeWith(door){
+		if(this.door == null){
+			this.door = door;
+		}
+		else {
+			throw "Tile was already blocked !";
+		}
+	}
+
+	openUpWith(key){
+		if(this.key == null){
+			this.key = key;
+		}
+		else {
+			throw "Tile was already blocked !";
 		}
 	}
 
@@ -66,6 +88,11 @@ class Tile{
     unpower() {
         this.map.removePower(this.power);
         this.power = null;
+	}
+	
+	unopen() {
+        this.map.removeKey(this.key);
+        this.key = null;
     }
 
 	getOccupier(){return this.occupier;}
@@ -83,6 +110,8 @@ class Tile{
 	getY(){return this.y;}
 	isPoweredUp(){return this.power != null;}
 	isAntagonised(){return this.enemy != null;}
+	isClosed(){return this.door != null;}
+	isOpenedUp(){return this.key != null;}
 	getPower(){return this.power;}
 	getId(){return this.id;}
 	forgetEnemy(){this.enemy = null;}

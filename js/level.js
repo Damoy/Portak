@@ -8,7 +8,7 @@ var LevelContext = {
 
 /* -- Leveling -- */
 class Level{
-	constructor(id, ctx, canvas, world, map, walls, enemies, powers, powerAmount){
+	constructor(id, ctx, canvas, world, map, walls, enemies, powers, powerAmount, doors, keys){
 		println("Level generation...");
 		this.id = id;
 		this.ctx = ctx;
@@ -16,11 +16,13 @@ class Level{
 		this.world = world;
 
 		// assumes that one null parameter is using the empty constructor
-		if(map != null && walls != null && enemies != null && powers != null){
+		if(map != null && walls != null && enemies != null && powers != null && doors != null && keys != null){
 			this.map = map;
 			this.setWalls(walls);
 			this.setEnemies(enemies);
 			this.setPowers(powers);
+			this.setDoors(doors);
+			this.setKeys(keys);
 			this.savedWalls = this.walls;
 			this.savedEnemies = this.enemies;
 			this.savedPowers = this.powers;
@@ -29,9 +31,14 @@ class Level{
 			this.walls = [];
 			this.enemies = [];
 			this.powers = [];
+			this.doors = [];
+			this.keys = [];
 			this.savedWalls = [];
 			this.savedEnemies = [];
 			this.savedPowers = [];
+			this.savedDoors = [];
+			this.savedKeys = [];
+
 		}
 		
 		this.powerAmount = powerAmount || 0;
@@ -49,6 +56,32 @@ class Level{
 		});
 
 		this.savedWalls = walls;
+	}
+
+	setDoors(doors){
+		if(this.map == null)
+			throw "Map should be set before doors.";
+
+		this.doors = doors;
+
+		this.doors.forEach((door) => {
+			this.map.closeTileWith(door);
+		});
+
+		this.savedDoors = doors;
+	}
+
+	setKeys(keys){
+		if(this.map == null)
+			throw "Map should be set before keys.";
+
+		this.keys = keys;
+
+		this.keys.forEach((key) => {
+			this.map.openUpTileWith(key);
+		});
+
+		this.savedKeys = keys;
 	}
 
 	setEnemies(enemies){
@@ -100,6 +133,14 @@ class Level{
 		this.powers.forEach((power) => {
 			power.update();
 		});
+
+		this.doors.forEach((door) => {
+			door.update();
+		});
+
+		this.keys.forEach((key) => {
+			key.update();
+		});
 	}
 
 	render(){
@@ -132,6 +173,13 @@ class Level{
 			enemy.render();
 		});
 
+		this.doors.forEach((door) => {
+			door.render();
+		});
+
+		this.keys.forEach((key) => {
+			key.render();
+		});
 	};
 
 	collision(x, y, w, h){
