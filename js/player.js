@@ -342,7 +342,7 @@ class Player extends Entity{
 		let w = -(ts >> 2);
 		let h = RenderingContext.getCanvasHeight(this.canvas) - (ts >> 1);
 		TextureContext.getPowerTexture().render(w, h - (ts * 0.4));
-		renderText(this.ctx, this.power, w + (ts * 0.8), h + (ts * 0.25), "Black"); // LightGreen, DarkGreen
+		renderSerifText(this.ctx, this.power, w + (ts * 0.8), h + (ts * 0.25), "Black"); // LightGreen, DarkGreen
 	}
 
 	teleport(level){

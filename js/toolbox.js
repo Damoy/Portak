@@ -37,10 +37,9 @@ function filterTextBy(text, regexp){
 	return text.replace(regexp, "");
 }
 
-  function renderText(ctx, text, x, y, color) {
-	ctx.save();
-	ctx.font = '25px serif';
-	ctx.fillStyle = color;
-	ctx.fillText(text, x , y);
-	ctx.restore();
-  }
+// function collides(x, y, w, h, x2, y2, w2, h2){
+// 		return !((x > (x2 + w2)) ||
+// 		((x + w) < x2) ||
+// 		(y > (y2 + h2)) ||
+// 		((y + h) < y2));
+// }

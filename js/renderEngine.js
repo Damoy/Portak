@@ -88,6 +88,14 @@ function renderText(ctx, text, x, y, color, fontSize){
   ctx.restore();
 }
 
+function renderSerifText(ctx, text, x, y, color) {
+	ctx.save();
+	ctx.font = '25px serif';
+	ctx.fillStyle = color;
+	ctx.fillText(text, x , y);
+  ctx.restore();
+}
+
 // rendering a composed text
 function renderComposedText(ctx, title, data, x, xoffset, y, yoffset, color) {
   ctx.save();

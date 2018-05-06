@@ -9,7 +9,7 @@ var TextureContext = {
 	init(ctx, canvas){
 		let s = MapContext.getTileSize();
 		grayTileTexture = new Texture(ctx, canvas, "res/textures/tiles/grayTile.png", s, s);
-		powerTexture = new Texture(ctx, canvas, "res/textures/power/power32.png", s, s).scale(0.5, 0.5);
+		powerTexture = new Texture(ctx, canvas, "res/textures/power/power.png", s, s).scale(0.5, 0.5);
 		grayWallTexture = new Texture(ctx, canvas, "res/textures/walls/wall.png", s, s);
 		doorTexture = new Texture(ctx, canvas, "res/textures/doors/door.png", s, s);
 		destructibleWallTexture = new Texture(ctx, canvas, "res/textures/walls/destructibleWall64.png", s, s);
