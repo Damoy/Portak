@@ -2,7 +2,6 @@ var grayTileTexture = null;
 var powerTexture = null;
 var grayWallTexture = null;
 var portalTexture = null;
-//var enemyTexture = null;
 var zombieTexture = null;
 var textureLoadingCanvas = null;
 
@@ -11,9 +10,9 @@ var TextureContext = {
 		let s = MapContext.getTileSize();
 		grayTileTexture = new Texture(ctx, canvas, "res/textures/tiles/grayTile.png", s, s);
 		powerTexture = new Texture(ctx, canvas, "res/textures/power/power32.png", s, s).scale(0.5, 0.5);
-		grayWallTexture = new Texture(ctx, canvas, "res/textures/walls/wall4.png", s, s);
-		doorTexture = new Texture(ctx, canvas, "res/textures/doors/doorTemp.png", s, s);
-		keyTexture = new Texture(ctx, canvas, "res/textures/keys/keyTemp2.png", s, s).scale(1, 1);
+		grayWallTexture = new Texture(ctx, canvas, "res/textures/walls/wall.png", s, s);
+		doorTexture = new Texture(ctx, canvas, "res/textures/doors/door.png", s, s);
+		keyTexture = new Texture(ctx, canvas, "res/textures/keys/key.png", s, s).scale(0.5, 0.5);
 		zombieTexture = new Texture(ctx, canvas, "res/textures/enemies/zombie.png", s << 2, s);
 		textureLoadingCanvas = document.createElement("canvas");
 	},
@@ -80,7 +79,6 @@ class Texture{
 		this.ctx.drawImage(this.data, x, y, w, h);
 	}
 
-	// https://www.w3schools.com/tags/canvas_drawimage.asp
 	clippedRender(startX, startY, startWidth, startHeight, x, y, w, h){
 		this.ctx.drawImage(this.data, startX, startY, startWidth, startHeight, x, y, w, h);
 	}
