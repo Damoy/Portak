@@ -1,8 +1,7 @@
-class Door extends Entity{
-	constructor(ctx, canvas, world, x, y, id){
+class DestructibleWall extends Entity{
+	constructor(ctx, canvas, world, x, y){
         super(ctx, canvas, world, x, y, MapContext.getTileSize(), MapContext.getTileSize(), 0, 0);
-        this.id = id;
-        this.texture = TextureContext.getDoorTexture();
+        this.texture = TextureContext.getDestructibleWallTexture();
 	}
 
 	update(){
@@ -14,9 +13,8 @@ class Door extends Entity{
 
 	textureRender(){
 		this.texture.render(this.x, this.y);
-	}
-
+    }
+    
     getTile(){return this.tile;}
-	getId(){return this.id;}
-	
+
 }

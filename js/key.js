@@ -8,10 +8,6 @@ class Key extends Entity{
 	update(){
 	}
 
-	interact(player){
-		player.addPower(this.value);
-	}
-
 	render(){
 		this.texture.render(this.x, this.y);
 	}

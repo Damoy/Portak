@@ -8,7 +8,7 @@ var LevelContext = {
 
 /* -- Leveling -- */
 class Level{
-	constructor(id, source, ctx, canvas, world, map, walls, enemies, powers, powerAmount, playerInitX, playerInitY, playerInitPower, doors, keys){
+	constructor(id, source, ctx, canvas, world, map, walls, enemies, powers, powerAmount, playerInitX, playerInitY, playerInitPower, doors, keys, destructiblesWalls){
 		println("Level generation...");
 		this.id = id;
 		this.source = source;
@@ -17,16 +17,20 @@ class Level{
 		this.world = world;
 
 		// assumes that one null parameter is using the empty constructor
-		if(map != null && walls != null && enemies != null && powers != null && doors != null && keys != null){
+		if(map != null && walls != null && enemies != null && powers != null && doors != null && keys != null && destructiblesWalls != null){
 			this.map = map;
 			this.setWalls(walls);
 			this.setEnemies(enemies);
 			this.setPowers(powers);
 			this.setDoors(doors);
 			this.setKeys(keys);
+			this.setDestructiblesWalls(destructiblesWalls);
 			this.savedWalls = this.walls;
 			this.savedEnemies = this.enemies;
 			this.savedPowers = this.powers;
+			this.savedDoors = this.doors;
+			this.savedKeys = this.keys;
+			this.savedDestructiblesWalls = this.destructiblesWalls;
 		} else {
 			this.map = null;
 			this.walls = [];
@@ -34,11 +38,13 @@ class Level{
 			this.powers = [];
 			this.doors = [];
 			this.keys = [];
+			this.destructiblesWalls = [];
 			this.savedWalls = [];
 			this.savedEnemies = [];
 			this.savedPowers = [];
 			this.savedDoors = [];
 			this.savedKeys = [];
+			this.savedDestructiblesWalls = [];
 
 		}
 		
@@ -88,6 +94,19 @@ class Level{
 		this.savedKeys = keys;
 	}
 
+	setDestructiblesWalls(destructiblesWalls){
+		if(this.map == null)
+			throw "Map should be set before destructiblesWalls.";
+
+		this.destructiblesWalls = destructiblesWalls;
+
+		this.destructiblesWalls.forEach((destructibleWall) => {
+			this.map.blockTileWith(destructibleWall);
+		});
+
+		this.savedDestructiblesWalls = destructiblesWalls;
+	}
+
 	setEnemies(enemies){
 		if(this.map == null)
 			throw "Map should be set before enemies.";
@@ -114,6 +133,10 @@ class Level{
 
 	removeEnemy(enemy) {
 		removeFromArray(this.enemies, enemy);
+	}
+
+	removeDestructibleWall(destructibleWall) {
+		removeFromArray(this.destructiblesWalls, destructibleWall);
 	}
 
 	update(){
@@ -144,6 +167,10 @@ class Level{
 
 		this.keys.forEach((key) => {
 			key.update();
+		});
+
+		this.destructiblesWalls.forEach((destructibleWall) => {
+			destructibleWall.update();
 		});
 	}
 
@@ -184,6 +211,10 @@ class Level{
 		this.keys.forEach((key) => {
 			key.render();
 		});
+
+		this.destructiblesWalls.forEach((destructibleWall) => {
+			destructibleWall.render();
+		});
 	};
 
 	collision(x, y, w, h){
@@ -202,6 +233,7 @@ class Level{
 	getId(){return this.id;}
 	getPowerAmount(){return this.powerAmount;}
 	getEnemies(){return this.enemies;}
+	getDestructiblesWalls(){return this.destructiblesWalls;}
 	getWalls(){return this.walls;}
 	getSource(){return this.source;}
 	getPlayerInitX(){return this.playerInitX;}

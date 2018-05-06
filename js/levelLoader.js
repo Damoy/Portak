@@ -51,6 +51,7 @@ var LevelLoadingContext = {
         var powers = [];
         var doors = [];
         var keys = [];
+        var destructiblesWalls = [];
         let basePowerValue = 10;
         var texture = TextureContext.getGrayTileTexture();
         let portalX = 0;
@@ -106,9 +107,14 @@ var LevelLoadingContext = {
                     powers.push(power);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
-                case 8:
+                case 8: 		
                     portalX = x;
                     portalY = y;
+                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
+                    break;
+                case 9:
+                    var destructibleWall = new DestructibleWall(ctx, canvas, world, x, y);
+                    destructiblesWalls.push(destructibleWall);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
                 case 40:
@@ -146,7 +152,7 @@ var LevelLoadingContext = {
         map.cols = mapCols;
         map.tiles = tiles;
 
-        var loadedLevel = new Level(LevelLoadingContext.getNewLoadingId(), filePath, ctx, canvas, world, map, walls, enemies, powers, 10, px, py, pAmount, doors, keys);
+        var loadedLevel = new Level(LevelLoadingContext.getNewLoadingId(), filePath, ctx, canvas, world, map, walls, enemies, powers, 10, px, py, pAmount, doors, keys, destructiblesWalls);
         world.generatePortal(loadedLevel.getId(), portalX, portalY);
         
         return loadedLevel;

@@ -102,7 +102,7 @@ class Player extends Entity{
 	}
 
 	shoot(){			
-		let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w/2, this.y + this.h/2, this.savedDirection, this.level.getEnemies());
+		let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w/2, this.y + this.h/2, this.savedDirection, this.level.getEnemies(), this.level.getDestructiblesWalls());
 		this.projectiles.push(projectile);
 		this.power -= 2;
 		SoundContext.getHitSound().play();
@@ -203,7 +203,7 @@ class Player extends Entity{
 
 				let tile = this.map.getTileAt(row, col);
 				if(tile != null) {
-					if(tile.isOccupied() || tile.isAntagonised() || tile.isClosed()){
+					if(tile.isOccupied() || tile.isAntagonised() || tile.isClosed() || tile.isBlocked()){
 						this.resetMovement();
 						return false;
 					} else if(tile.isPoweredUp()){

@@ -104,6 +104,13 @@ class Map{
 			tdest.powerUpWith(power);
 	}
 
+	blockTileWith(destructibleWall){
+		println(destructibleWall instanceof Entity)
+		let tdest = this.getTileAt(destructibleWall.getRow(), destructibleWall.getCol());
+		if(tdest != null)
+			tdest.blockWith(destructibleWall);
+	}
+
 	removePower(power){
         if(this.level == null)
             this.level = this.world.getCurrentLevel();
@@ -124,6 +131,13 @@ class Map{
             this.level = this.world.getCurrentLevel();
 
         removeFromArray(this.level.doors, door);
+	}
+	
+	removeDestructibleWall(destructibleWall){
+        if(this.level == null)
+            this.level = this.world.getCurrentLevel();
+
+        removeFromArray(this.level.destructiblesWalls, destructibleWall);
     }
 
 	nget(row, col){

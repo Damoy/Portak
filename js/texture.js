@@ -12,6 +12,7 @@ var TextureContext = {
 		powerTexture = new Texture(ctx, canvas, "res/textures/power/power32.png", s, s).scale(0.5, 0.5);
 		grayWallTexture = new Texture(ctx, canvas, "res/textures/walls/wall.png", s, s);
 		doorTexture = new Texture(ctx, canvas, "res/textures/doors/door.png", s, s);
+		destructibleWallTexture = new Texture(ctx, canvas, "res/textures/walls/destructibleWall64.png", s, s);
 		keyTexture = new Texture(ctx, canvas, "res/textures/keys/key.png", s, s).scale(0.5, 0.5);
 		zombieTexture = new Texture(ctx, canvas, "res/textures/enemies/zombie.png", s << 2, s);
 		textureLoadingCanvas = document.createElement("canvas");
@@ -23,6 +24,10 @@ var TextureContext = {
 
 	getPowerTexture : function(){
 		return powerTexture;
+	},
+
+	getDestructibleWallTexture : function(){
+		return destructibleWallTexture;
 	},
 
 	getGrayWallTexture : function(){
