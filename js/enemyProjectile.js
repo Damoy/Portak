@@ -18,6 +18,12 @@ class EnemyProjectile extends Projectile{
 			this.dead = true;
 			this.world.resetCurrentLevel();
 		}
+
+		// if(collides(this.x, this.y, this.w, this.h, p.getX(), p.getY(), p.getW(), p.getH())) {
+		// 	println("Enemy projectile collided player.");
+		// 	this.dead = true;
+		// 	this.world.resetCurrentLevel();
+		// }
 	}
 
 }

@@ -73,12 +73,8 @@ class Projectile extends Entity{
 			let h = wall.getH();
 			let w = wall.getW();
 
-			if(this.collides(x, y, w, h)){
+			if(this.collides(x, y, w, h))
 				this.dead = true;
-				// this.level.removeEnemy(wall);
-				// this.level.getMap().getNormTileAt(x,y).forgetEnemy();
-				return;
-			}
 		}
 	}
 
@@ -93,12 +89,8 @@ class Projectile extends Entity{
 			let h = enemy.getH();
 			let w = enemy.getW();
 
-			if(this.collides(x, y, w, h)){
+			if(this.collides(x, y, w, h))
 				this.dead = true;
-				// this.level.removeEnemy(enemy);
-				// this.level.getMap().getNormTileAt(x,y).forgetEnemy();
-				return;
-			}
 		}
 	}
 
