@@ -68,9 +68,9 @@ class Player extends Entity{
 			this.move();
 			this.checkBoundCollisions();
 			this.checkPortalsCollisions();
-			this.updateProjectiles();
 			this.updateBox();
 		}
+		this.updateProjectiles();
 	}
 
 	tick(){
@@ -105,6 +105,7 @@ class Player extends Entity{
 		let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w/2, this.y + this.h/2, this.savedDirection, this.level.getEnemies());
 		this.projectiles.push(projectile);
 		this.power -= 2;
+		SoundContext.getHitSound().play();
 	}
 
 	move(){
@@ -208,9 +209,11 @@ class Player extends Entity{
 					} else if(tile.isPoweredUp()){
 						this.addPower(tile.getPower().getValue());
 						tile.unpower();
+						SoundContext.getPowerupSound().play();
 					}
 					else if(tile.isOpenedUp()){
 						tile.unopen();
+						SoundContext.getDoorOpeningSound().play();
 					}
 				}
 			}
