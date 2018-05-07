@@ -235,6 +235,7 @@ class Level{
 	getEnemies(){return this.enemies;}
 	getDestructiblesWalls(){return this.destructiblesWalls;}
 	getWalls(){return this.walls;}
+	getDoors(){return this.doors;}
 	getSource(){return this.source;}
 	getPlayerInitX(){return this.playerInitX;}
 	getPlayerInitY(){return this.playerInitY;}

@@ -41,6 +41,7 @@ class Projectile extends Entity{
 			this.updateBox();
 			this.checkWallsCollision();
 			this.checkEnemiesCollision();
+			this.checkDoorsCollision();
 		}
 	}
 
@@ -88,6 +89,22 @@ class Projectile extends Entity{
 			let y = enemy.getY();
 			let h = enemy.getH();
 			let w = enemy.getW();
+
+			if(this.collides(x, y, w, h))
+				this.dead = true;
+		}
+	}
+
+	checkDoorsCollision(){
+		let doors = this.level.getDoors();
+
+		for(let i = 0; i < doors.length; i++){
+			let door = doors[i];
+			if(door == this.source) continue;
+			let x = door.getX();
+			let y = door.getY();
+			let h = door.getH();
+			let w = door.getW();
 
 			if(this.collides(x, y, w, h))
 				this.dead = true;

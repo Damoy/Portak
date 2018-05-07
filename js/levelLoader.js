@@ -21,8 +21,13 @@ var LevelLoadingContext = {
         xml.send();
         
         // retrieve the number of the player energies
-        let pAmount = xml.responseText.split("##powerAmount")[1].split(/\n/)[1];
-        println("Player power amount: " + pAmount);
+       let pAmount = xml.responseText.split("##powerAmount")[1].split(/\n/)[1];
+       println("Player power amount: " + pAmount);
+
+        // // retrieve the value of a level power
+        // let pValue = xml.responseText.split("##powerValue")[1].split(/\n/)[1];
+        // println("Power value: " + pValue);
+
 
         // retrieve the map size
         let numTiles = xml.responseText.split("##numberOfTiles")[1].split(/\n/);
@@ -102,8 +107,27 @@ var LevelLoadingContext = {
                     enemies.push(enemy);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break; 
-                case 7:
-                    var power = new Power(ctx, canvas, world, x, y, basePowerValue);
+                case 71:
+                case 72:
+                case 73:
+                case 74:
+                case 75:
+                case 76:
+                case 77:
+                case 78:
+                case 79:
+                case 80:
+                case 81:
+                case 82:
+                case 83:
+                case 84:
+                case 85:
+                case 86:
+                case 87:
+                case 88:
+                case 89:
+                case 90:
+                    var power = new Power(ctx, canvas, world, x, y, fileValue - 70);
                     powers.push(power);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;

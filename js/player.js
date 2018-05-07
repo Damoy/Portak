@@ -107,6 +107,8 @@ class Player extends Entity{
 				this.shootCounter.reset();
 				this.shoot();
 			}
+		} else if(isPressed(EventContext.resetKey())){
+			this.world.resetCurrentLevel();
 		}
 	}
 
@@ -388,7 +390,9 @@ class Player extends Entity{
 		}
 	}
 
-	addPower(value){this.power += value;}
+	addPower(value){
+		println("Player Power value : " + value);
+		this.power += value;}
 
 	subPower(value){
 		this.power -= value;

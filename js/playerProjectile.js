@@ -1,8 +1,6 @@
 class PlayerProjectile extends Projectile{
 	constructor(ctx, canvas, world, x, y, direction, enemies,destructiblesWalls){
 		super(ctx, canvas, world, x, y, 20, 10, direction,"LightSlateGray");
-		this.enemies = enemies;
-		this.destructiblesWalls = destructiblesWalls;
 	}
 
 	update(){
@@ -14,8 +12,9 @@ class PlayerProjectile extends Projectile{
 	}
 
 	checkEnemiesCollision(){
-		for(let i = 0; i < this.enemies.length; i++){
-			let e = this.enemies[i];
+		let enemies = this.level.getEnemies();
+		for(let i = 0; i < enemies.length; i++){
+			let e = enemies[i];
 			let x = e.getX();
 			let y = e.getY();
 			let h = e.getH();
@@ -30,8 +29,9 @@ class PlayerProjectile extends Projectile{
 	}
 
 	checkDestructiblesWallsCollision(){
-		for(let i = 0; i < this.destructiblesWalls.length; i++){
-			let dw = this.destructiblesWalls[i];
+		let destructiblesWalls = this.level.getDestructiblesWalls();
+		for(let i = 0; i < destructiblesWalls.length; i++){
+			let dw = destructiblesWalls[i];
 			let x = dw.getX();
 			let y = dw.getY();
 			let h = dw.getH();

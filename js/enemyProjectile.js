@@ -8,6 +8,7 @@ class EnemyProjectile extends Projectile{
 		if(!this.dead){
 			super.update();
 			this.checkPlayerCollision();
+			this.checkDestructiblesWallsCollision();
 		}
 	}
 
@@ -19,11 +20,21 @@ class EnemyProjectile extends Projectile{
 			this.world.resetCurrentLevel();
 		}
 
-		// if(collides(this.x, this.y, this.w, this.h, p.getX(), p.getY(), p.getW(), p.getH())) {
-		// 	println("Enemy projectile collided player.");
-		// 	this.dead = true;
-		// 	this.world.resetCurrentLevel();
-		// }
+	}
+
+	checkDestructiblesWallsCollision(){
+		let destructiblesWalls = this.level.getDestructiblesWalls();
+		for(let i = 0; i < destructiblesWalls.length; i++){
+			let dw = destructiblesWalls[i];
+			let x = dw.getX();
+			let y = dw.getY();
+			let h = dw.getH();
+			let w = dw.getW();
+			if(this.collides(x,y,w,h)){
+				this.dead = true;
+				return;
+			}
+		}
 	}
 
 }

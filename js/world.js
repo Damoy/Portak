@@ -14,6 +14,13 @@ var WorldContext = {
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/1.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/2.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/3.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/4.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/5.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/6.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/7.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/8.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/9.lvl"));
+
 		return levels;
 	}
 };
