@@ -36,6 +36,7 @@ class Player extends Entity{
 		this.xInit = this.x;
 		this.yInit = this.y;
 		this.powerInit = this.power;
+		this.deathTimer = null;
 
 
 		println("Player: OK.");
@@ -69,6 +70,14 @@ class Player extends Entity{
 			this.checkBoundCollisions();
 			this.checkPortalsCollisions();
 			this.updateBox();
+		} else if(this.deathTimer == null){
+			this.deathTimer = new TickCounter(180);
+		} else{
+			this.deathTimer.tick();
+			if(this.deathTimer.isStopped()){
+				this.deathTimer = null;
+				this.world.resetCurrentLevel();
+			}
 		}
 		this.updateProjectiles();
 	}
@@ -104,7 +113,7 @@ class Player extends Entity{
 	shoot(){			
 		let projectile = new PlayerProjectile(this.ctx, this.canvas, this.world, this.x + this.w/2, this.y + this.h/2, this.savedDirection, this.level.getEnemies(), this.level.getDestructiblesWalls());
 		this.projectiles.push(projectile);
-		this.power -= 2;
+		this.subPower(2);
 		SoundContext.getHitSound().play();
 	}
 
@@ -322,6 +331,25 @@ class Player extends Entity{
 		this.renderEntity();
 		this.renderPower();
 		this.renderProjectiles();
+		if(this.isDead()){
+			this.renderDeathTimer();
+		}
+	}
+
+	renderDeathTimer(){
+		if(this.deathTimer != null){
+			let secLeft = castToInt((this.deathTimer.getLimit() - this.deathTimer.getTicks() + 60)/ 60);
+			let emptyPowerText = "No more power !";
+			let timerTimeLeftText = secLeft + "s";
+
+			let w = RenderingContext.getCanvasWidth(this.canvas);
+			let h = RenderingContext.getCanvasHeight(this.canvas);
+			let x = w * 0.5;
+			let y = h * 0.5;
+
+			renderFontText(this.ctx, emptyPowerText, x * 0.65, y, "Black", "50px serif");
+			renderFontText(this.ctx, timerTimeLeftText, x - (w * 0.025), y + (h * 0.10), "Black", "50px serif");
+		}
 	}
 
 	renderProjectiles(){
@@ -362,7 +390,13 @@ class Player extends Entity{
 	}
 
 	addPower(value){this.power += value;}
-	subPower(value){this.power -= value;}
+
+	subPower(value){
+		this.power -= value;
+		if(this.power < 0)
+			this.power = 0;
+	}
+
 	getPower(){return this.power;}
 	setPower(value){this.power = value;}
 	getMaxSpeed(){return this.maxSpeed;}

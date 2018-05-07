@@ -88,6 +88,14 @@ function renderText(ctx, text, x, y, color, fontSize){
   ctx.restore();
 }
 
+function renderFontText(ctx, text, x, y, color, font){
+  ctx.save();
+  ctx.font = font;
+  ctx.fillStyle = color;
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
 function renderSerifText(ctx, text, x, y, color) {
 	ctx.save();
 	ctx.font = '25px serif';
