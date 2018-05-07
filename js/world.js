@@ -29,7 +29,7 @@ class World{
 		// leveling
 		this.levels = [];
 		this.currentLevel = null;
-		this.currentLevelId = 2;
+		this.currentLevelId = 0;
 		this.portals = [];
 		this.currentPortal = null;
 
@@ -122,14 +122,18 @@ class World{
 			this.currentPortal.render();
 	}
 
-	portalCollision(tile){
+	portalCollision(x, y){
 		if(this.currentPortal == null) return null;
 
-		let ptile = this.currentLevel
+		let playerTile = this.currentLevel
+						.getMap()
+						.getNormTileAt(x, y);
+
+		let portalTile = this.currentLevel
 					.getMap()
 					.getNormTileAt(this.currentPortal.getX(), this.currentPortal.getY());
-					
-		if(ptile == tile)
+
+		if(playerTile == portalTile)
 			return this.currentPortal;
 
 		return null;

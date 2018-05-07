@@ -141,7 +141,7 @@ class Map{
     }
 
 	nget(row, col){
-		return this.rows * col + row; // return this.cols * row + col; // this.rows * col + row;
+		return this.cols * row + col; // return this.cols * row + col; // this.rows * col + row;
 	}
 
 	getTileAt(row, col){

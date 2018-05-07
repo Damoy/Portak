@@ -291,8 +291,7 @@ class Player extends Entity{
 	}
 
 	checkPortalsCollisions(){
-		let currentTile = this.map.getNormTileAt(this.x, this.y);
-		let portalCollision = this.world.portalCollision(currentTile);
+		let portalCollision = this.world.portalCollision(this.x, this.y);
 		
 		if(portalCollision != null){
 			portalCollision.interact(this);
