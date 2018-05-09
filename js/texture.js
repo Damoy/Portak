@@ -69,6 +69,10 @@ class Texture{
 		this.dataPixels = null;
 	}
 
+	increaseRed(){
+		
+	}
+
 	split(xStart, width, yStart, height){
 		var splitTex = new Texture(this.ctx, this.canvas, this.path, width, height);
 		splitTex.xOffset = xStart;

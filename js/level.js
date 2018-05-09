@@ -8,9 +8,10 @@ var LevelContext = {
 
 /* -- Leveling -- */
 class Level{
-	constructor(id, source, ctx, canvas, world, map, walls, enemies, powers, powerAmount, playerInitX, playerInitY, playerInitPower, doors, keys, destructiblesWalls){
+	constructor(id, levelName, source, ctx, canvas, world, map, walls, enemies, powers, powerAmount, playerInitX, playerInitY, playerInitPower, doors, keys, destructiblesWalls){
 		println("Level generation...");
 		this.id = id;
+		this.levelName = levelName;
 		this.source = source;
 		this.ctx = ctx;
 		this.canvas = canvas;
@@ -25,12 +26,6 @@ class Level{
 			this.setDoors(doors);
 			this.setKeys(keys);
 			this.setDestructiblesWalls(destructiblesWalls);
-			this.savedWalls = this.walls;
-			this.savedEnemies = this.enemies;
-			this.savedPowers = this.powers;
-			this.savedDoors = this.doors;
-			this.savedKeys = this.keys;
-			this.savedDestructiblesWalls = this.destructiblesWalls;
 		} else {
 			this.map = null;
 			this.walls = [];
@@ -39,19 +34,14 @@ class Level{
 			this.doors = [];
 			this.keys = [];
 			this.destructiblesWalls = [];
-			this.savedWalls = [];
-			this.savedEnemies = [];
-			this.savedPowers = [];
-			this.savedDoors = [];
-			this.savedKeys = [];
-			this.savedDestructiblesWalls = [];
-
 		}
 		
 		this.powerAmount = powerAmount || 0;
 		this.playerInitX = playerInitX;
 		this.playerInitY = playerInitY;
 		this.playerInitPower = playerInitPower;
+
+		this.startInfosTimer = null;
 		println("Level: OK.");
 	}
 
@@ -64,8 +54,11 @@ class Level{
 		this.walls.forEach((wall) => {
 			this.map.occupyTileWith(wall);
 		});
+	}
 
-		this.savedWalls = walls;
+	start(){
+		if(this.startInfosTimer == null)
+			this.startInfosTimer = new TickCounter(180);
 	}
 
 	setDoors(doors){
@@ -77,8 +70,6 @@ class Level{
 		this.doors.forEach((door) => {
 			this.map.closeTileWith(door);
 		});
-
-		this.savedDoors = doors;
 	}
 
 	setKeys(keys){
@@ -90,8 +81,6 @@ class Level{
 		this.keys.forEach((key) => {
 			this.map.openUpTileWith(key);
 		});
-
-		this.savedKeys = keys;
 	}
 
 	setDestructiblesWalls(destructiblesWalls){
@@ -103,8 +92,6 @@ class Level{
 		this.destructiblesWalls.forEach((destructibleWall) => {
 			this.map.blockTileWith(destructibleWall);
 		});
-
-		this.savedDestructiblesWalls = destructiblesWalls;
 	}
 
 	setEnemies(enemies){
@@ -115,8 +102,6 @@ class Level{
 		this.enemies.forEach((enemy) => {
 			this.map.antogoniseTileWith(enemy);
 		});
-
-		this.savedEnemies = enemies;
 	}
 
 	setPowers(powers){
@@ -127,8 +112,6 @@ class Level{
 		this.powers.forEach((power) => {
 			this.map.powerUpTileWith(power);
 		});
-
-		this.savedPowers = powers;
 	}
 
 	removeEnemy(enemy) {
@@ -140,8 +123,17 @@ class Level{
 	}
 
 	update(){
+		this.updateStartTimer();
 		this.updateMap();
 		this.updatePopulation();
+	}
+
+	updateStartTimer(){
+		if(this.startInfosTimer != null){
+			this.startInfosTimer.tick();
+			if(this.startInfosTimer.isStopped())
+				this.startInfosTimer = null;
+		}
 	}
 
 	updateMap(){
@@ -177,18 +169,29 @@ class Level{
 	render(){
 		this.renderMap();
 		this.renderPopulation();
+		this.renderStartTimerInfos();
+	}
+
+	renderStartTimerInfos(){
+		if(this.startInfosTimer != null){
+			let secLeft = castToInt((this.startInfosTimer.getLimit() - this.startInfosTimer.getTicks() + 60)/ 60);
+			let levelNumberText = "Level " + this.id;
+			let levelNameText = "\"" + this.levelName + "\"";
+
+			let ts = MapContext.getTileSize();
+			let w = RenderingContext.getCanvasWidth(this.canvas);
+			let h = RenderingContext.getCanvasHeight(this.canvas);
+			let x = w * 0.5;
+			let y = h * 0.3;
+
+			let color = "White";
+			renderFontText(this.ctx, levelNumberText, x - (ts * 1.5), y, color, "50px serif");
+			renderFontText(this.ctx, levelNameText, x - (ts * 2.5), y + ts, color, "50px serif");
+		}
 	}
 
 	renderMap(){
 		this.map.render();
-	}
-
-	reset(){
-		println("Resetting level...");
-		this.map.reset();
-		this.setWalls(this.savedWalls);
-		this.setEnemies(this.savedEnemies);
-		this.setPowers(this.savedPowers);
 	}
 
 	renderPopulation(){
