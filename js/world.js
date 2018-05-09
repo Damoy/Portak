@@ -10,6 +10,7 @@ var WorldContext = {
 
 	loadLevels : function(ctx, canvas, world){
 		var levels = [];
+
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/0.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/1.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/2.lvl"));
@@ -20,6 +21,14 @@ var WorldContext = {
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/7.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/8.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/9.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/10.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/11.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/12.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/13.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/14.lvl"));
+		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/15.lvl"));
+
+		// LevelLoadingContext.resetLevelLoadingId();
 
 		return levels;
 	}
@@ -92,7 +101,7 @@ class World{
 	}
 
 	resetCurrentLevel(){
-		this.currentLevel = LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, this.currentLevel.getSource());
+		this.currentLevel = LevelLoadingContext.loadLevelFromFileGivenId(this.currentLevel.getId(), ctx, canvas, world, this.currentLevel.getSource());
 		this.player.reset();
 		this.player.changeLevel(this.currentLevel);
 	}

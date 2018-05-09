@@ -382,11 +382,12 @@ class Player extends Entity{
 	changeLevel(level){
 		if(level != null){
 			println("Level " + level.getId());
-			this.level = level;	
+			this.level = level;
 			this.map = this.level.getMap();
 			this.x = this.level.getPlayerInitX();
 			this.y = this.level.getPlayerInitY();
 			this.power = this.level.getPlayerInitPower();
+			this.level.start();
 		}
 	}
 

@@ -6,6 +6,10 @@ var LevelLoadingContext = {
         return ++loadingID;
     },
 
+    resetLevelLoadingId : function(){
+        loadingID = 0;
+    },
+
     loadLevel : function(ctx, canvas, levelFilePath, width, height){
         println("Loading level...");
         let levelTexture = new Texture(ctx, canvas, levelFilePath, width, height);
@@ -16,18 +20,21 @@ var LevelLoadingContext = {
     },
 
     loadLevelFromFile : function(ctx, canvas, world, filePath){
+        return LevelLoadingContext.loadLevelFromFileGivenId(LevelLoadingContext.getNewLoadingId(), ctx, canvas, world, filePath);
+    },
+
+    loadLevelFromFileGivenId : function(lid, ctx, canvas, world, filePath){
         let xml = new XMLHttpRequest();
         xml.open("GET", filePath, false);
         xml.send();
         
         // retrieve the number of the player energies
-       let pAmount = xml.responseText.split("##powerAmount")[1].split(/\n/)[1];
-       println("Player power amount: " + pAmount);
+        let pAmount = xml.responseText.split("##powerAmount")[1].split(/\n/)[1];
+        println("Player power amount: " + pAmount);
 
-        // // retrieve the value of a level power
-        // let pValue = xml.responseText.split("##powerValue")[1].split(/\n/)[1];
-        // println("Power value: " + pValue);
-
+        // retrieve the level name
+        let levelName = xml.responseText.split("##levelName")[1].split(/\n/)[1];
+        println("Level name: " + levelName);
 
         // retrieve the map size
         let numTiles = xml.responseText.split("##numberOfTiles")[1].split(/\n/);
@@ -68,10 +75,6 @@ var LevelLoadingContext = {
             let y = MapContext.getNormY(row);
 
             switch(fileValue){
-                // case x
-                //  texture == ...
-                // or tile = new XTile...
-
                 case 0:
                     // player position
                     py = y;
@@ -107,6 +110,44 @@ var LevelLoadingContext = {
                     enemies.push(enemy);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break; 
+                case 8: 		
+                    portalX = x;
+                    portalY = y;
+                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
+                    break;
+                case 9:
+                    var destructibleWall = new DestructibleWall(ctx, canvas, world, x, y);
+                    destructiblesWalls.push(destructibleWall);
+                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
+                    break;
+                case 40:
+                case 41:
+                case 42:
+                case 43:
+                case 44:
+                case 45:
+                case 46:
+                case 47:
+                case 48:
+                case 49:
+                    var door = new Door(ctx, canvas, world, x, y, fileValue);
+                    doors.push(door);
+                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
+                    break;
+                case 50:
+                case 51:
+                case 52:
+                case 53:
+                case 54:
+                case 55:
+                case 56:
+                case 57:
+                case 58:
+                case 59:
+                    var key = new Key(ctx, canvas, world, x, y, fileValue);
+                    keys.push(key);
+                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
+                    break;
                 case 71:
                 case 72:
                 case 73:
@@ -131,36 +172,6 @@ var LevelLoadingContext = {
                     powers.push(power);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;
-                case 8: 		
-                    portalX = x;
-                    portalY = y;
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 9:
-                    var destructibleWall = new DestructibleWall(ctx, canvas, world, x, y);
-                    destructiblesWalls.push(destructibleWall);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 40:
-                case 41:
-                case 42:
-                case 43:
-                case 44:
-                case 45:
-                    var door = new Door(ctx, canvas, world, x, y, fileValue);
-                    doors.push(door);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 50:
-                case 51:
-                case 52:
-                case 53:
-                case 54:
-                case 55:         
-                    var key = new Key(ctx, canvas, world, x, y, fileValue);
-                    keys.push(key);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
                 default:
                     throw "Unknown token found while loading level.\n";
             }
@@ -176,7 +187,7 @@ var LevelLoadingContext = {
         map.cols = mapCols;
         map.tiles = tiles;
 
-        var loadedLevel = new Level(LevelLoadingContext.getNewLoadingId(), filePath, ctx, canvas, world, map, walls, enemies, powers, 10, px, py, pAmount, doors, keys, destructiblesWalls);
+        var loadedLevel = new Level(lid, levelName, filePath, ctx, canvas, world, map, walls, enemies, powers, 10, px, py, pAmount, doors, keys, destructiblesWalls);
         world.generatePortal(loadedLevel.getId(), portalX, portalY);
         
         return loadedLevel;
