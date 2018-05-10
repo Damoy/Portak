@@ -50,11 +50,8 @@ function initRendering(ctx, canvas){
 }
 
 // global rendering
-function render(canvas, world){
-  clear(canvas);
-  //renderUI(world.getContext(), canvas);
+function render(world){
   world.render();
-  requestAnimationFrame(run);
 }
 
 // render user interface

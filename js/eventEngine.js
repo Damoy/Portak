@@ -45,13 +45,17 @@ function initListeners(canvas){
 // -- Keyboard
 
 function keySet(key, pressed){
-    if(key == EventContext.jsUpKey()) keyState[EventContext.upKey()] = pressed;
-    else if(key == EventContext.jsLeftKey()) keyState[EventContext.leftKey()] = pressed;
-    else if(key == EventContext.jsDownKey()) keyState[EventContext.downKey()] = pressed;
-    else if(key == EventContext.jsRightKey()) keyState[EventContext.rightKey()] = pressed;
-    else if(key == EventContext.jsSpaceKey()) keyState[EventContext.spaceKey()] = pressed;
-    else if(key == EventContext.jsResetKey()) keyState[EventContext.resetKey()] = pressed;
-    else if(key == EventContext.jsMusicEnDisablingKey()) keyState[EventContext.musicKey()] = pressed;
+    if(key == EventContext.jsUpKey()) keyState[hash(EventContext.upKey())] = pressed;
+    else if(key == EventContext.jsLeftKey()) keyState[hash(EventContext.leftKey())] = pressed;
+    else if(key == EventContext.jsDownKey()) keyState[hash(EventContext.downKey())] = pressed;
+    else if(key == EventContext.jsRightKey()) keyState[hash(EventContext.rightKey())] = pressed;
+    else if(key == EventContext.jsSpaceKey()) keyState[hash(EventContext.spaceKey())] = pressed;
+    else if(key == EventContext.jsResetKey()) keyState[hash(EventContext.resetKey())] = pressed;
+    else if(key == EventContext.jsMusicEnDisablingKey()) keyState[hash(EventContext.musicKey())] = pressed;
+}
+
+function hash(ownKeyCode){
+    return ownKeyCode;
 }
 
 function keyPressed(evt){
@@ -68,7 +72,7 @@ function updateKeyEvents(){
 }
 
 function isPressed(ownKeyCode){
-  return keyState[ownKeyCode] & !prevKeyState[ownKeyCode];
+  return keyState[hash(ownKeyCode)] & !prevKeyState[hash(ownKeyCode)];
 }
 
 // -- Mouse

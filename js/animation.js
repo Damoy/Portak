@@ -98,11 +98,11 @@ class Animation{
     }
 
     // animation updating
-    tick(){
+    update(){
         if(this.frameCounter == null)
             return;
         
-        this.frameCounter.tick();
+        this.frameCounter.update();
 
         // time of frame update
         if(this.frameCounter.isStopped()){

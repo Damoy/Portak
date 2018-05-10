@@ -43,7 +43,7 @@ class World{
 		// leveling
 		this.levels = [];
 		this.currentLevel = null;
-		this.currentLevelId = 10;
+		this.currentLevelId = 0;
 		this.portals = [];
 		this.currentPortal = null;
 
@@ -51,6 +51,7 @@ class World{
 	}
 
 	start(){
+		mainMenu = null;
 		// player
 		this.player = WorldContext.getBasePlayer(ctx, canvas, this);
 		mainPlayer = this.player;

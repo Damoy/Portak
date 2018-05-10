@@ -7,7 +7,9 @@ var canEnable = true;
 
 var SoundContext = {
     init(){
-        wallHitSound = SoundContext.load("res/sounds/wall_hit.wav");
+        // a shared variable to avoid to polluate audio
+        // with wall collision sound
+        wallHitSound = SoundContext.load("res/sounds/wallHit.wav");
     },
 
     update(){
@@ -15,7 +17,7 @@ var SoundContext = {
             return;
         }
 
-        musicEnableCounter.tick();
+        musicEnableCounter.update();
 
         if(musicEnableCounter.isStopped()){
             musicEnableCounter = null;
@@ -42,7 +44,7 @@ var SoundContext = {
     },
 
     getDoorOpeningSound(){
-        return SoundContext.load("res/sounds/door_open.wav");
+        return SoundContext.load("res/sounds/doorOpen.wav");
     },
 
     getHitSound(){
@@ -54,7 +56,7 @@ var SoundContext = {
     },
 
     getDeathSound(){
-        return SoundContext.load("res/sounds/deathh.wav");
+        return SoundContext.load("res/sounds/death.wav");
     },
 
     getWallHitSound(){
@@ -62,11 +64,19 @@ var SoundContext = {
     },
 
     getPortalSound(){
-        return SoundContext.load("res/sounds/Portal.wav");
+        return SoundContext.load("res/sounds/portal.wav");
     },
 
     getBackgroundMusic(){
-        return SoundContext.load("res/sounds/background.mp3");
+        return SoundContext.load("res/sounds/main.mp3");
+    },
+
+    getMenuOptionSound(){
+        return SoundContext.load("res/sounds/menuOption.wav");
+    },
+
+    getMenuSelectionSound(){
+        return SoundContext.load("res/sounds/menuSelection.wav");
     },
 
     isMusicMute(){

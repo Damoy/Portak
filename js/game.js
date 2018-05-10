@@ -3,7 +3,8 @@ window.onload = main;
 var canvas;
 var ctx;
 var world;
-var bgMusicCounter = null;
+var mainMenu;
+var bgMusicCounter;
 
 function setMainCanvas(cvn){
   canvas = cvn;
@@ -37,19 +38,24 @@ function main() {
   SoundContext.init();
   // init the world
   initWorld(ctx, canvas);
-  // start the gameloop
-  start();
+  // build the main menu
+  buildMenu();
 }
 
 function initWorld(){
   world = new World(ctx, canvas);
-  world.start();
+}
+
+function buildMenu(){
+  mainMenu = new Menu(ctx, canvas, world);
+  requestAnimationFrame(run);
 }
 
 function start(){
+  mainMenu = null;
   bgMusicCounter = new TickCounter(39 * 60);
   SoundContext.getBackgroundMusic().play();
-  requestAnimationFrame(run);
+  world.start();
 }
 
 /*
@@ -60,15 +66,28 @@ function start(){
 
 function run() {
    update();
-   render(canvas, world);
+   clear(canvas);
+
+   if(mainMenu != null){
+     mainMenu.render();
+   } else {
+     render(world);
+   }
+
+   requestAnimationFrame(run);
 }
 
 function update(){
-  bgMusicCounter.tick();
-  if(bgMusicCounter.isStopped()){
-    bgMusicCounter.reset();
-    SoundContext.getBackgroundMusic().play();
+  if(mainMenu != null){
+    mainMenu.update();
+  } else {
+    bgMusicCounter.update();
+    if(bgMusicCounter.isStopped()){
+      bgMusicCounter.reset();
+      SoundContext.getBackgroundMusic().play();
+    }
+    world.update();
   }
-  world.update();
+
   SoundContext.update();
 }

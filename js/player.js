@@ -65,7 +65,7 @@ class Player extends Entity{
 
 	update(){
 		if(!this.isDead()) {
-			this.tick();
+			this.updateShootCounter();
 			this.handleInput();
 			this.move();
 			this.checkBoundCollisions();
@@ -74,7 +74,7 @@ class Player extends Entity{
 		} else if(this.deathTimer == null){
 			this.deathTimer = new TickCounter(180);
 		} else{
-			this.deathTimer.tick();
+			this.deathTimer.update();
 			if(this.deathTimer.isStopped()){
 				this.deathTimer = null;
 				this.world.resetCurrentLevel();
@@ -83,9 +83,9 @@ class Player extends Entity{
 		this.updateProjectiles();
 	}
 
-	tick(){
+	updateShootCounter(){
 		if(this.shootCounter != null)
-			this.shootCounter.tick();
+			this.shootCounter.update();
 	}
 
 	handleInput(){
@@ -236,7 +236,7 @@ class Player extends Entity{
 
 		this.addX(dx);
 		this.addY(dy);
-		this.animation.tick();
+		this.animation.update();
 
 		// can move
 		return true;
@@ -445,7 +445,7 @@ class Player extends Entity{
 
 	renderDeathTimer(){
 		if(this.deathTimer != null){
-			let secLeft = castToInt((this.deathTimer.getLimit() - this.deathTimer.getTicks() + 60)/ 60);
+			let secLeft = castToInt((this.deathTimer.getLimit() - this.deathTimer.getUpdates() + 60)/ 60);
 			let emptyPowerText = "No more power !";
 			let timerTimeLeftText = secLeft + "s";
 

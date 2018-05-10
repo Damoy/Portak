@@ -15,15 +15,13 @@ class Enemy extends Entity{
 
 	update(){
 		if(!this.isDead()) {
-			this.tick();
+			this.updateShootCounter();
 			this.updateProjectiles();
 			this.updateBox();
 		}
 	}
 
-	//TODO => Modify tickCounter() depending on the level 
-
-	tick(){
+	updateShootCounter(){
 		if(this.shootCounter == null){
 			this.shoot();
 			this.shootCounter = new TickCounter(60);
@@ -31,7 +29,7 @@ class Enemy extends Entity{
 		}
 
 		if(this.shootCounter != null)
-			this.shootCounter.tick();
+			this.shootCounter.update();
 
 		if(this.shootCounter.isStopped()){
 			this.shootCounter.reset();

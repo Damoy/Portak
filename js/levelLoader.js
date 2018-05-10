@@ -10,6 +10,10 @@ var LevelLoadingContext = {
         loadingID = 0;
     },
 
+    getMenuFilePath : function(){
+        return "res/levels/menu.lvl";
+    },
+
     loadLevel : function(ctx, canvas, levelFilePath, width, height){
         println("Loading level...");
         let levelTexture = new Texture(ctx, canvas, levelFilePath, width, height);

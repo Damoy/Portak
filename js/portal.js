@@ -27,10 +27,10 @@ class Portal extends Entity{
 
 	update(){
 		if(this.animationTickCounter.isStopped()){
-			this.animation.tick();
+			this.animation.update();
 			this.animationTickCounter.reset();
 		} else {
-			this.animationTickCounter.tick();
+			this.animationTickCounter.update();
 		}
 	}
 

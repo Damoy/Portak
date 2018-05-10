@@ -1,25 +1,25 @@
 class TickCounter{
 	constructor(limit){
-		this.ticks = 0;
+		this.updates = 0;
 		this.limit = limit;
 		this.stopped = false;
 	}
 
-	tick(){
+	update(){
 		if(this.stopped)
 			return;
 
-		this.ticks++;
+		this.updates++;
 
-		if(this.ticks >= this.limit){
+		if(this.updates >= this.limit){
 			this.stopped = true;
 		}
 
-		return this.ticks;
+		return this.updates;
 	}
 
 	reset(){
-		this.ticks = 0;
+		this.updates = 0;
 		this.stopped = false;
 	}
 
@@ -28,13 +28,13 @@ class TickCounter{
 		this.limit = newLimit;
 	}
 
-	resetOf(ticksOffset){
-		this.ticks = ticksOffset;
+	resetOf(updatesOffset){
+		this.updates = updatesOffset;
 		this.stopped = false;
 	}
 
-	getTicks(){
-		return this.ticks;
+	getUpdates(){
+		return this.updates;
 	}
 
 	getLimit(){

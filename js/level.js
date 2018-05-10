@@ -130,7 +130,7 @@ class Level{
 
 	updateStartTimer(){
 		if(this.startInfosTimer != null){
-			this.startInfosTimer.tick();
+			this.startInfosTimer.update();
 			if(this.startInfosTimer.isStopped())
 				this.startInfosTimer = null;
 		}
@@ -175,7 +175,7 @@ class Level{
 
 	renderStartTimerInfos(){
 		if(this.startInfosTimer != null){
-			let secLeft = castToInt((this.startInfosTimer.getLimit() - this.startInfosTimer.getTicks() + 60) / 60);
+			let secLeft = castToInt((this.startInfosTimer.getLimit() - this.startInfosTimer.getUpdates() + 60) / 60);
 			let levelNumberText = "Level " + this.id;
 			let levelNameText = "\"" + this.levelName + "\"";
 
