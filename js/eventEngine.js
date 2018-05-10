@@ -22,6 +22,7 @@ var EventContext = {
   jsRightKey : function(){return 'ArrowRight';},
   jsSpaceKey : function(){return 'Space';},
   jsResetKey : function(){return 'Enter';},
+  jsMusicEnDisablingKey : function(){return 'Semicolon';},
 
   // own key code
   upKey : function(){return 0;},
@@ -30,8 +31,9 @@ var EventContext = {
   rightKey : function(){return 3;},
   spaceKey : function(){return 4;},
   resetKey : function(){return 5;},
+  musicKey : function(){return 6;},
 
-  getKeyCount : function(){return 6;}
+  getKeyCount : function(){return 7;}
 }
 
 function initListeners(canvas){
@@ -49,6 +51,7 @@ function keySet(key, pressed){
     else if(key == EventContext.jsRightKey()) keyState[EventContext.rightKey()] = pressed;
     else if(key == EventContext.jsSpaceKey()) keyState[EventContext.spaceKey()] = pressed;
     else if(key == EventContext.jsResetKey()) keyState[EventContext.resetKey()] = pressed;
+    else if(key == EventContext.jsMusicEnDisablingKey()) keyState[EventContext.musicKey()] = pressed;
 }
 
 function keyPressed(evt){

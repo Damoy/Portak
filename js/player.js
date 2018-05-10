@@ -91,7 +91,6 @@ class Player extends Entity{
 	handleInput(){
 		if(isPressed(EventContext.upKey())){
 			this.changeDirection(AnimationContext.getUpDirValue());
-			SoundContext.pressSoundButton();
 		} else if(isPressed(EventContext.leftKey())){
 			this.changeDirection(AnimationContext.getLeftDirValue());
 		} else if(isPressed(EventContext.downKey())){
@@ -111,6 +110,8 @@ class Player extends Entity{
 			}
 		} else if(isPressed(EventContext.resetKey())){
 			this.world.resetCurrentLevel();
+		} else if(isPressed(EventContext.musicKey())){
+			SoundContext.pressSoundButton();
 		}
 	}
 
@@ -451,7 +452,7 @@ class Player extends Entity{
 			let w = RenderingContext.getCanvasWidth(this.canvas);
 			let h = RenderingContext.getCanvasHeight(this.canvas);
 			let x = w * 0.5;
-			let y = h * 0.5;
+			let y = h * 0.4;
 
 			renderFontText(this.ctx, emptyPowerText, x * 0.65, y, "Black", "50px serif");
 			renderFontText(this.ctx, timerTimeLeftText, x - (w * 0.025), y + (h * 0.10), "Black", "50px serif");
@@ -475,8 +476,18 @@ class Player extends Entity{
 		let ts = MapContext.getTileSize();
 		let w = -(ts >> 2);
 		let h = RenderingContext.getCanvasHeight(this.canvas) - (ts >> 1);
+
 		TextureContext.getPowerTexture().render(w, h - (ts * 0.4));
-		renderSerifText(this.ctx, this.power, w + (ts * 0.8), h + (ts * 0.25), "Black"); // LightGreen, DarkGreen
+
+		let x = w + (ts * 0.8);
+		let fontSize = 40; 
+
+		if(this.power % 10 != this.power){
+			x -= (ts * 0.1);
+			fontSize = 32;
+		}
+
+		renderFontText(this.ctx, this.power, x, h + (ts * 0.3), "White", fontSize + "px serif"); // Black, LightGreen, DarkGreen
 	}
 
 	teleport(level){

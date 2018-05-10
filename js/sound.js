@@ -20,6 +20,7 @@ var SoundContext = {
         if(musicEnableCounter.isStopped()){
             musicEnableCounter = null;
             canEnable = true;
+            println("Can enable music !");
         }
 
     },
@@ -76,12 +77,19 @@ var SoundContext = {
         if(!canEnable) return;
         musicEnable = true;
         musicEnableCounter = new TickCounter(60);
+        canEnable = false;
+        SoundContext.getBackgroundMusic().play();
     },
 
     disableSounds(){
         if(!canEnable) return;
         musicEnable = false;
         musicEnableCounter = new TickCounter(60);
+        canEnable = false;
+
+        sounds.forEach((sound) => {
+            sound.stop();
+        });
     }
 }
 
@@ -95,6 +103,11 @@ class Sound{
     play(){
         if(SoundContext.isMusicMute()) return;
         this.audio.play();
+    }
+
+    stop(){
+        this.audio.pause();
+        this.audio.currentTime = 0;
     }
 
     getId(){return this.id;}
