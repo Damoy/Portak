@@ -13,14 +13,18 @@ class EnemyProjectile extends Projectile{
 	}
 
 	checkPlayerCollision(){
-		let p = this.player;
-		if(this.collides(p.getX(), p.getY(), p.getW(), p.getH())) {
+		// let p = this.player;
+		// if(this.collides(p.getX(), p.getY(), p.getW(), p.getH())) {
+		// 	println("Enemy projectile collided player.");
+		// 	this.dead = true;
+		// 	this.world.resetCurrentLevel();
+		// 	SoundContext.getDeathSound().play();
+		// }
+		if(this.player.accurateProjCollision(this.x, this.y, this.radius)){
 			println("Enemy projectile collided player.");
 			this.dead = true;
 			this.world.resetCurrentLevel();
-			SoundContext.getDeathSound().play();
 		}
-
 	}
 
 	checkDestructiblesWallsCollision(){

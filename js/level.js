@@ -169,24 +169,31 @@ class Level{
 	render(){
 		this.renderMap();
 		this.renderPopulation();
+		this.world.renderCurrentPortal();
 		this.renderStartTimerInfos();
 	}
 
 	renderStartTimerInfos(){
 		if(this.startInfosTimer != null){
-			let secLeft = castToInt((this.startInfosTimer.getLimit() - this.startInfosTimer.getTicks() + 60)/ 60);
+			let secLeft = castToInt((this.startInfosTimer.getLimit() - this.startInfosTimer.getTicks() + 60) / 60);
 			let levelNumberText = "Level " + this.id;
 			let levelNameText = "\"" + this.levelName + "\"";
 
 			let ts = MapContext.getTileSize();
 			let w = RenderingContext.getCanvasWidth(this.canvas);
 			let h = RenderingContext.getCanvasHeight(this.canvas);
-			let x = w * 0.5;
-			let y = h * 0.3;
 
 			let color = "White";
-			renderFontText(this.ctx, levelNumberText, x - (ts * 1.5), y, color, "50px serif");
-			renderFontText(this.ctx, levelNameText, x - (ts * 2.5), y + ts, color, "50px serif");
+			let fontSize = 50;
+			let font = fontSize + "px serif";
+
+			let x = (w * 0.5) - ((levelNumberText.length * 0.25) * fontSize);
+			let y = h * 0.3;
+
+			let lengthDiff = Math.abs(levelNumberText.length - levelNameText.length) * fontSize;
+
+			renderFontText(this.ctx, levelNumberText, x, y, color, font);
+			renderFontText(this.ctx, levelNameText, x - (lengthDiff * 0.25), y + ts, color, font);
 		}
 	}
 

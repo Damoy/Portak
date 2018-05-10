@@ -28,8 +28,6 @@ var WorldContext = {
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/14.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/15.lvl"));
 
-		// LevelLoadingContext.resetLevelLoadingId();
-
 		return levels;
 	}
 };
@@ -45,7 +43,7 @@ class World{
 		// leveling
 		this.levels = [];
 		this.currentLevel = null;
-		this.currentLevelId = 0;
+		this.currentLevelId = 4;
 		this.portals = [];
 		this.currentPortal = null;
 
@@ -129,7 +127,6 @@ class World{
 
 	render(){
 		this.currentLevel.render();
-		this.renderCurrentPortal();
 		this.player.render();
 	}
 

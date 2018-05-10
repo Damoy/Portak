@@ -241,6 +241,108 @@ class Player extends Entity{
 		return true;
 	}
 
+	accurateProjCollision(px, py, pradius){
+		let p2 = pradius >> 1;
+		this.updateBoxAccordingToFrame();
+		return this.box.collides(px + p2, py + p2, pradius, pradius);
+	}
+
+	updateBoxAccordingToFrame(){
+		let x = this.x;
+		let y = this.y;
+		let w = 0;
+		let h = 0;
+		let scale = MapContext.getTileSize() >> 4; // ts / 16
+
+		// println("animation count: " + this.animation.frameUpdates);
+
+		switch(this.direction){
+			case AnimationContext.getDownDirValue():
+			switch(this.animation.frameUpdates){
+					case 0:
+						x += (2 * scale);
+						y += y + (2 * scale);
+						w = (16 - 3) * scale;
+						h = (16 - 3) * scale;
+						break;
+					case 1:
+						x += (3 * scale);
+						y += (3 * scale);
+						w = (16 - 3) * scale;
+						h = (16 - 3) * scale;
+						break;
+				}
+				break;
+			case AnimationContext.getLeftDirValue():
+				switch(this.animation.frameUpdates){
+					case 0:
+						x += (3 * scale);
+						y += (2 * scale);
+						w = (16 - 8) * scale;
+						h = (16 - 3) * scale;
+						break;
+					case 1:
+						x += (2 * scale);
+						y += (2 * scale);
+						w = (16 - 6) * scale;
+						h = (16 - 3) * scale;
+						break;
+					case 2:
+						x += (2 * scale);
+						y += (2 * scale);
+						w = (16 - 6) * scale;
+						h = (16 - 3) * scale;
+						break;
+				}
+				break;
+			case AnimationContext.getRightDirValue():
+				switch(this.animation.frameUpdates){
+					case 0:
+						x += (2 * scale);
+						y += (2 * scale);
+						w = (16 - 8) * scale;
+						h = (16 - 3) * scale;
+						break;
+					case 1:
+						x += (3 * scale);
+						y += (2 * scale);
+						w = (16 - 6) * scale;
+						h = (16 - 3) * scale;
+						break;
+					case 2:
+						x += (3 * scale);
+						y += (2 * scale);
+						w = (16 - 6) * scale;
+						h = (16 - 3) * scale;
+						break;
+				}
+				break;
+			case AnimationContext.getUpDirValue():
+				switch(this.animation.frameUpdates){
+					case 0:
+					case 1:
+						x += (3 * scale);
+						y += (3 * scale);
+						w = (16 - 3) * scale;
+						h = (16 - 3) * scale;
+						break;
+				}
+				break;
+			case AnimationContext.getNullValue():
+				break;
+		}
+
+		if(w <= 0 || h <= 0){
+			this.requireBoxSync();
+			this.updateBox();
+		} else {
+			this.box.x = x;
+			this.box.y = y;
+			this.box.w = w;
+			this.box.h = h;
+		}
+	}
+
 	changeDirection(dir){
 		if(this.tileDestReached){
 			this.stopped = false;

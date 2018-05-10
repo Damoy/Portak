@@ -45,6 +45,17 @@ class Projectile extends Entity{
 		}
 	}
 
+	static collides(x, y, w, h, x2, y2, w2, h2){
+		return !((x > (x2 + w2)) ||
+		((x + w) < x2) ||
+		(y > (y2 + h2)) ||
+		((y + h) < y2));
+	}
+
+	projCollision(x2, y2, w2, h2){
+		return Projectile.collides(this.x, this.y, this.radius, this.radius, x2, y2, w2, h2);
+	}
+
 	render(){
 		if(this.dead)
 			return;
@@ -74,8 +85,10 @@ class Projectile extends Entity{
 			let h = wall.getH();
 			let w = wall.getW();
 
-			if(this.collides(x, y, w, h))
+			if(this.projCollision(x, y, w, h))
 				this.dead = true;
+			// if(this.collides(x, y, w, h))
+			// 	this.dead = true;
 		}
 	}
 
@@ -90,8 +103,11 @@ class Projectile extends Entity{
 			let h = enemy.getH();
 			let w = enemy.getW();
 
-			if(this.collides(x, y, w, h))
+			if(this.projCollision(x, y, w, h))
 				this.dead = true;
+
+			// if(this.collides(x, y, w, h))
+			// 	this.dead = true;
 		}
 	}
 
@@ -106,8 +122,11 @@ class Projectile extends Entity{
 			let h = door.getH();
 			let w = door.getW();
 
-			if(this.collides(x, y, w, h))
+			if(this.projCollision(x, y, w, h))
 				this.dead = true;
+
+			// if(this.collides(x, y, w, h))
+			// 	this.dead = true;
 		}
 	}
 
