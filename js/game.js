@@ -3,6 +3,7 @@ window.onload = main;
 var canvas;
 var ctx;
 var world;
+var bgMusicCounter = null;
 
 function setMainCanvas(cvn){
   canvas = cvn;
@@ -32,6 +33,8 @@ function main() {
   initRendering(ctx, canvas);
   // eventEngine
   initListeners(canvas);
+  // sound engine
+  SoundContext.init();
   // init the world
   initWorld(ctx, canvas);
   // start the gameloop
@@ -44,6 +47,8 @@ function initWorld(){
 }
 
 function start(){
+  bgMusicCounter = new TickCounter(39 * 60);
+  SoundContext.getBackgroundMusic().play();
   requestAnimationFrame(run);
 }
 
@@ -58,9 +63,12 @@ function run() {
    render(canvas, world);
 }
 
-// TODO delta time
 function update(){
-  let mousePos = EventContext.getMousePos();
+  bgMusicCounter.tick();
+  if(bgMusicCounter.isStopped()){
+    bgMusicCounter.reset();
+    SoundContext.getBackgroundMusic().play();
+  }
   world.update();
-  // println("Mouse x: " + mousePos.x + ", y: " + mousePos.y);
+  SoundContext.update();
 }

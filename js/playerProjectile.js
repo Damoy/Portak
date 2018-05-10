@@ -23,6 +23,7 @@ class PlayerProjectile extends Projectile{
 				this.dead = true;
 				this.level.removeEnemy(e);
 				this.level.getMap().getNormTileAt(x,y).forgetEnemy();
+				SoundContext.getDeathSound().play();
 				return;
 			}
 		}

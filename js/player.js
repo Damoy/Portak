@@ -38,6 +38,7 @@ class Player extends Entity{
 		this.powerInit = this.power;
 		this.deathTimer = null;
 
+		this.musicEnableCounter = null;
 
 		println("Player: OK.");
 	}
@@ -90,6 +91,7 @@ class Player extends Entity{
 	handleInput(){
 		if(isPressed(EventContext.upKey())){
 			this.changeDirection(AnimationContext.getUpDirValue());
+			SoundContext.pressSoundButton();
 		} else if(isPressed(EventContext.leftKey())){
 			this.changeDirection(AnimationContext.getLeftDirValue());
 		} else if(isPressed(EventContext.downKey())){
@@ -216,6 +218,7 @@ class Player extends Entity{
 				if(tile != null) {
 					if(tile.isOccupied() || tile.isAntagonised() || tile.isClosed() || tile.isBlocked()){
 						this.resetMovement();
+						SoundContext.getWallHitSound().play();
 						return false;
 					} else if(tile.isPoweredUp()){
 						this.addPower(tile.getPower().getValue());
