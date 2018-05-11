@@ -24,6 +24,7 @@ class EnemyProjectile extends Projectile{
 			println("Enemy projectile collided player.");
 			this.dead = true;
 			this.world.resetCurrentLevel();
+			SoundContext.getDeathSound().play();
 		}
 	}
 

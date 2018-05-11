@@ -48,7 +48,7 @@ class Menu{
         let font = this.renderingFont;
         let color = this.renderingColor;
         let changeFont = "75px serif";
-        let changeColor = "Pink";
+        let changeColor = "LightGreen";
 
         if(this.selection == 0){
             font = changeFont;

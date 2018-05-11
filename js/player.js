@@ -27,7 +27,7 @@ class Player extends Entity{
 		this.projectiles = [];
 		this.deadProjectiles = [];
 		
-		this.animation = new Animation(this.ctx, this.canvas, "res/textures/player/player.png",
+		this.animation = new Animation(this.ctx, this.canvas, "res/textures/player/greenPlayer.png",
 			644, 64, 0, 64, 64, this.savedDirection, AnimationContext.getNullValue(), 2, 2, 3, 3, 0, 128, 256, 448);
 		this.animation.start();
 
@@ -454,8 +454,8 @@ class Player extends Entity{
 			let x = w * 0.5;
 			let y = h * 0.4;
 
-			renderFontText(this.ctx, emptyPowerText, x * 0.65, y, "Black", "50px serif");
-			renderFontText(this.ctx, timerTimeLeftText, x - (w * 0.025), y + (h * 0.10), "Black", "50px serif");
+			renderFontText(this.ctx, emptyPowerText, x * 0.65, y, "White", "50px serif"); // DarkRed
+			renderFontText(this.ctx, timerTimeLeftText, x - (w * 0.025), y + (h * 0.10), "White", "50px serif");
 		}
 	}
 

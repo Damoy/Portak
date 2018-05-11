@@ -75,6 +75,7 @@ class World{
 	}
 
 	upgradeLevel(){
+		this.updateBackgroundMusic();
 		this.incrementLevel();
 		this.updateCurrentLevel();
 		this.updatePortal();
@@ -89,6 +90,10 @@ class World{
 		}
 
 		if(this.currentPortal == null) throw "Unknown portal";
+	}
+
+	updateBackgroundMusic(){
+		SoundContext.accelerateBackgroundMusic();
 	}
 
 	generatePortal(id, x, y){
