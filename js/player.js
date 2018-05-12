@@ -27,7 +27,7 @@ class Player extends Entity{
 		this.projectiles = [];
 		this.deadProjectiles = [];
 		
-		this.animation = new Animation(this.ctx, this.canvas, "res/textures/player/greenPlayer.png",
+		this.animation = new Animation(this.ctx, this.canvas, "res/textures/player/normalPlayer.png",
 			644, 64, 0, 64, 64, this.savedDirection, AnimationContext.getNullValue(), 2, 2, 3, 3, 0, 128, 256, 448);
 		this.animation.start();
 

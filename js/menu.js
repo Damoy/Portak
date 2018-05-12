@@ -1,3 +1,5 @@
+var ARCADECLASSIC = 'ARCADECLASSIC';
+
 class Menu{
     constructor(ctx, canvas, world){
         this.ctx = ctx;
@@ -8,7 +10,7 @@ class Menu{
         this.selection = 0;
         this.optionsCount = 3;
         this.renderingColor = "White";
-        this.renderingFont = "50px serif";
+        this.renderingFont = "50px " + ARCADECLASSIC;
         this.selectionTimer = new TickCounter(10);
         this.canSelect = true;
     }
@@ -47,7 +49,7 @@ class Menu{
 
         let font = this.renderingFont;
         let color = this.renderingColor;
-        let changeFont = "75px serif";
+        let changeFont = "75px " + ARCADECLASSIC;
         let changeColor = "LightGreen";
 
         if(this.selection == 0){

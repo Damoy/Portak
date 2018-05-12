@@ -1,4 +1,12 @@
 #mainCanvas {
 	border:1px solid;
-	background: #FFFFFF; //DDDDDD
+	background: #FFFFFF;
+}
+
+@font-face {
+	font-family: 'ARCADECLASSIC';
+	font-style: normal;
+	font-weight: 400;
+	src: local('ARCADECLASSIC'),
+		 url(res/fonts/ARCADECLASSIC.ttf) format('truetype');
 }
