@@ -85,8 +85,8 @@ function renderText(ctx, text, x, y, color, fontSize){
   ctx.restore();
 }
 
-var loadedFont = new FontFaceObserver('ARCADECLASSIC');
-loadedFont.load();
+// var loadedFont = new FontFaceObserver('ARCADECLASSIC');
+// loadedFont.load();
 
 function lrenderFontText(ctx, text, x, y, color){
   ctx.save();

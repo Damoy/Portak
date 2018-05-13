@@ -40,6 +40,7 @@ function main() {
   initWorld(ctx, canvas);
   // build the main menu
   buildMenu();
+  requestAnimationFrame(run);
 }
 
 function initWorld(){
@@ -48,12 +49,11 @@ function initWorld(){
 
 function buildMenu(){
   mainMenu = new Menu(ctx, canvas, world);
-  requestAnimationFrame(run);
 }
 
 function start(){
   mainMenu = null;
-  bgMusicCounter = new TickCounter(39 * 60);
+  bgMusicCounter = new TickCounter(40 * 60);
   SoundContext.getBackgroundMusic().play();
   world.start();
 }

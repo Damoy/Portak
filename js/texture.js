@@ -5,6 +5,13 @@ var portalTexture = null;
 var zombieTexture = null;
 var textureLoadingCanvas = null;
 
+var normalPlayerTexture = null; 
+var bluePlayerTexture = null; 
+var greenPlayerTexture = null; 
+var pinkPlayerTexture = null; 
+
+var arrowTexture = null;
+
 var TextureContext = {
 	init(ctx, canvas){
 		let s = MapContext.getTileSize();
@@ -12,10 +19,40 @@ var TextureContext = {
 		powerTexture = new Texture(ctx, canvas, "res/textures/power/power.png", s, s).scale(0.5, 0.5);
 		grayWallTexture = new Texture(ctx, canvas, "res/textures/walls/wall.png", s, s);
 		doorTexture = new Texture(ctx, canvas, "res/textures/doors/door2.png", s, s);
-		destructibleWallTexture = new Texture(ctx, canvas, "res/textures/walls/destructibleWall64.png", s, s);
+		destructibleWallTexture = new Texture(ctx, canvas, "res/textures/walls/destructibleWall.png", s, s);
 		keyTexture = new Texture(ctx, canvas, "res/textures/keys/key.png", s, s).scale(0.5, 0.5);
 		zombieTexture = new Texture(ctx, canvas, "res/textures/enemies/zombie.png", s << 2, s);
 		textureLoadingCanvas = document.createElement("canvas");
+
+		let pw = 48;
+		let ph = 52;
+
+		normalPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/normalPlayerIcon3.png", pw, ph);
+		bluePlayerTexture = new Texture(ctx, canvas, "res/textures/icons/bluePlayerIcon3.png", pw, ph);
+		greenPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/greenPlayerIcon3.png", pw, ph);
+		pinkPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/pinkPlayerIcon3.png", pw, ph);
+
+		arrowTexture = new Texture(ctx, canvas, "res/textures/others/arrowUp2.png", 22, 35);
+	},
+
+	getArrowTexture(){
+		return arrowTexture;
+	},
+
+	getNormalPlayerTexture : function(){
+		return normalPlayerTexture;
+	},
+
+	getBluePlayerTexture : function(){
+		return bluePlayerTexture;
+	},
+
+	getGreenPlayerTexture : function(){
+		return greenPlayerTexture;
+	},
+
+	getPinkPlayerTexture : function(){
+		return pinkPlayerTexture;
 	},
 
 	getGrayTileTexture : function(){
@@ -81,15 +118,21 @@ class Texture{
 	}
 
 	render(x, y){
+		this.ctx.save();
 		this.ctx.drawImage(this.data, x + this.xOffset, y + this.yOffset, this.width, this.height);
+		this.ctx.restore();
 	}
 
 	sizedRender(x, y, w, h){
+		this.ctx.save();
 		this.ctx.drawImage(this.data, x, y, w, h);
+		this.ctx.restore();
 	}
 
 	clippedRender(startX, startY, startWidth, startHeight, x, y, w, h){
+		this.ctx.save();
 		this.ctx.drawImage(this.data, startX, startY, startWidth, startHeight, x, y, w, h);
+		this.ctx.restore();
 	}
 
 	// scales the texture and center it in the tile

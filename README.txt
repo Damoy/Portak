@@ -81,8 +81,6 @@ II. Architecture du code
 - toolbox.js 			: contient des méthodes utilitaires utilisées dans le code
 
 
-- pathFinding.js (inutilisé) : algorithme A* implémenté pour ajouter la génération aléatoire de niveaux
-
 
 
 III. Répartition du travail
@@ -115,7 +113,6 @@ III. Répartition du travail
 				- zombie.js
 				- menu.js
 				- sound.js
-				- pathFinding.js
 
 	Commun:
 				- entity.js

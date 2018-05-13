@@ -94,6 +94,18 @@ var SoundContext = {
         }
     },
 
+    resetBackgroundMusic(){
+        if(currentBgMusic != null){
+            currentBgMusic.setSpeed(bgPlayBackSpeed).setVolume(bgMusicBaseVolume);
+        }
+    },
+
+    stopAll(){
+        sounds.forEach((sound) => {
+            sound.stop();
+        });
+    },
+
     accelerateBackgroundMusic(){
         if(currentBgMusic == null) return;
         currentBgMusic.increaseSpeed(0.1);
@@ -117,6 +129,13 @@ var SoundContext = {
         musicEnableCounter = new TickCounter(60);
         canEnable = false;
         SoundContext.getBackgroundMusic().play();
+    },
+
+    enableSoundsNoBgLaunch(){
+        if(!canEnable) return;
+        musicEnable = true;
+        musicEnableCounter = new TickCounter(60);
+        canEnable = false;
     },
 
     disableSounds(){

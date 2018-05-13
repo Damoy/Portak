@@ -34,7 +34,7 @@ class Portal extends Entity{
 		}
 	}
 
-	interact(player){
+	interact(){
 		SoundContext.getPortalSound().play();
 		this.world.upgradeLevel();
 		this.world.destroyPortal(this);
