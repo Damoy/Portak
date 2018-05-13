@@ -23,6 +23,7 @@ I. Description
 II. Architecture du code
 III. Répartition du travail
 IV. Difficultés rencontrées
+IV. Points faibles et points forts
 
 ----
 
@@ -121,8 +122,6 @@ III. Répartition du travail
 				- Création des différents niveaux du jeu
 				- Choix des sons et de la musique de fond
 
-
-
 IV. Difficultés rencontrées
 
 	1. Difficultés liées au langage
@@ -136,4 +135,19 @@ IV. Difficultés rencontrées
 
 		Le déplacement du joueur fut aussi compliqué, nous avons fait en sorte que lorsque l'utilisateur ordonne un déplacement au joueur, tant que celui-ci ne s'est pas déplacé jusqu'à la tile de destination, le jeu continue à le faire avancer de 1 pixel vers cette direction. Nous obtenons donc un déplacement fluide du joueur vers la tile suivante ce qui nous permet d'éviter un quelconque soucis de collision.
 
-		Nous avons voulu ajouter un mode génération de niveaux aléatoires mais après avoir rencontré quelques difficultés nous avons préféré nous concentrer sur le design de niveaux faits à la main dans un fichier .lvl plutôt que de générer des niveaux peu complexes et sans intérêts. 
+		Nous avons voulu ajouter un mode génération de niveaux aléatoires mais après avoir rencontré quelques difficultés nous avons préféré nous concentrer sur le design de niveaux faits à la main dans un fichier .lvl plutôt que de générer des niveaux peu complexes et sans intérêts.
+        
+IV. Points faibles et points forts
+
+    1. Points faibles
+    
+    - Pas de redimensionnement dynamique de la taille du jeu : fonctionnalité trop longue a implémenter.
+    - Modularité du contenu de player.js améliorable
+    
+    2. Points forts
+    
+    - Pixel Art personnalisé : graphismes homogènes.
+    - Level design varié et réfléchi : le joueur doit mettre en place différentes stratégies en fonction du niveau.
+    - Ressenti global du jeu : jeu complet.
+    - Code évolutif : possibilité de facilement ajouter de nouvelles fonctionnalités/de nouveaux élements grâce, notamment, au levelLoader.
+
