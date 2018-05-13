@@ -23,7 +23,7 @@ I. Description
 II. Architecture du code
 III. Répartition du travail
 IV. Difficultés rencontrées
-IV. Points faibles et points forts
+V. Points faibles et points forts
 
 ----
 
@@ -98,7 +98,7 @@ III. Répartition du travail
 				- destructibleWall.js
 				- enemy.js
 				- aabb.js
-
+                 - Niveaux créés : 1, 2, 3, 6, 7, 9, 10, 12, 13
 
 	Damien:
 				- eventEngine.js
@@ -113,13 +113,13 @@ III. Répartition du travail
 				- zombie.js
 				- menu.js
 				- sound.js
+                 - Niveaux créés : 4, 5, 6, 8, 11
 
 	Commun:
 				- entity.js
 				- level.js
 				- tile.js
 				- map.js
-				- Création des différents niveaux du jeu
 				- Choix des sons et de la musique de fond
 
 IV. Difficultés rencontrées
@@ -137,7 +137,7 @@ IV. Difficultés rencontrées
 
 		Nous avons voulu ajouter un mode génération de niveaux aléatoires mais après avoir rencontré quelques difficultés nous avons préféré nous concentrer sur le design de niveaux faits à la main dans un fichier .lvl plutôt que de générer des niveaux peu complexes et sans intérêts.
         
-IV. Points faibles et points forts
+V. Points faibles et points forts
 
     1. Points faibles
     
