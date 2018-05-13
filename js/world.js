@@ -98,11 +98,26 @@ class World{
 		this.player.changeLevel(this.currentLevel);
 	}
 
+	reloadLevel(id){
+		let levelPath = "res/levels/" + id + ".lvl";
+		this.levels[id] = LevelLoadingContext.loadLevelFromFileGivenId(id + 1, ctx, canvas, world, levelPath); 
+	}
+
 	incrementLevel(){
 		if(this.currentLevelId <= this.levels.length){
 			++this.currentLevelId;
+			if(this.currentLevelId == 12){
+				LevelLoadingContext.resetLevelLoadingId();
+			}
 		} else {
 			this.endGame();
+		}
+	}
+
+	deincrementLevel(){
+		if(this.currentLevelId > 0){
+			this.currentLevelId = this.currentLevelId - 1;
+			this.reloadLevel(this.currentLevelId);
 		}
 	}
 
@@ -132,6 +147,13 @@ class World{
 		this.updateCurrentLevel();
 		this.updatePortal();
 	}
+	
+	downgradeLevel(){
+		this.downgradeBackgroundMusic();
+		this.deincrementLevel();
+		this.updateCurrentLevel();
+		this.updatePortal();
+	}
 
 	updatePortal(){
 		if(this.currentLevel == null) this.endGame();
@@ -146,6 +168,10 @@ class World{
 
 	updateBackgroundMusic(){
 		SoundContext.accelerateBackgroundMusic();
+	}
+
+	downgradeBackgroundMusic(){
+		SoundContext.deaccelerateBackgroundMusic();
 	}
 
 	generatePortal(id, x, y){
@@ -305,6 +331,26 @@ class World{
 
 		if(playerTile == portalTile)
 			return this.currentPortal;
+
+		return null;
+	}
+
+	fakePortalCollision(x, y){
+		if(this.lastLevelAdditionalPortals == null || this.lastLevelAdditionalPortals.length <= 0)
+			return null;
+
+		let playerTile = this.currentLevel
+						.getMap()
+						.getNormTileAt(x, y);
+
+		for(let i = 0; i < this.lastLevelAdditionalPortals.length; ++i){
+			let portal = this.lastLevelAdditionalPortals[i];
+			let portalTile = this.currentLevel
+								.getMap()
+								.getNormTileAt(portal.getX(), portal.getY());
+			if(playerTile == portalTile)
+				return portal;
+		}
 
 		return null;
 	}

@@ -17,7 +17,7 @@ class Portal extends Entity{
 		this.id = id;
 
 		let NULL = AnimationContext.getNullValue();
-		this.animation = new Animation(this.ctx, this.canvas, "res/textures/portal/portal64.png",
+		this.animation = new Animation(this.ctx, this.canvas, "res/textures/portal/portal.png",
 		256, 64, 0, 64, 64, NULL, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 		this.animation.start();
 		this.animationTickCounter = new TickCounter(32);
@@ -37,6 +37,17 @@ class Portal extends Entity{
 	interact(){
 		SoundContext.getPortalSound().play();
 		this.world.upgradeLevel();
+		this.world.destroyPortal(this);
+	}
+
+	downInteract(){
+		SoundContext.getPortalSound().play();
+		let levelOffset = Math.abs(this.id % 10) - 4;
+		
+		for(let i = 0; i < levelOffset; ++i){
+			this.world.downgradeLevel();
+		}
+
 		this.world.destroyPortal(this);
 	}
 

@@ -398,7 +398,15 @@ class Player extends Entity{
 		let portalCollision = this.world.portalCollision(this.x, this.y);
 		
 		if(portalCollision != null){
-			portalCollision.interact(this);
+			portalCollision.interact();
+		}
+
+		if(this.world.currentLevelId != 12) return;
+		
+		let fakePortalCollision = this.world.fakePortalCollision(this.x, this.y);
+
+		if(fakePortalCollision != null){
+			fakePortalCollision.downInteract();
 		}
 	}
 

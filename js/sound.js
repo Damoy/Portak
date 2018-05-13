@@ -123,6 +123,11 @@ var SoundContext = {
         currentBgMusic.increaseSpeed(0.1);
     },
 
+    deaccelerateBackgroundMusic(){
+        if(currentBgMusic == null) return;
+        currentBgMusic.increaseSpeed(-0.1);
+    },
+
     getMenuOptionSound(){
         return SoundContext.load("res/sounds/menuOption.wav");
     },
