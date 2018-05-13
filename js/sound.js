@@ -131,13 +131,6 @@ var SoundContext = {
         SoundContext.getBackgroundMusic().play();
     },
 
-    enableSoundsNoBgLaunch(){
-        if(!canEnable) return;
-        musicEnable = true;
-        musicEnableCounter = new TickCounter(60);
-        canEnable = false;
-    },
-
     disableSounds(){
         if(!canEnable) return;
         musicEnable = false;
@@ -147,6 +140,14 @@ var SoundContext = {
         sounds.forEach((sound) => {
             sound.stop();
         });
+    },
+
+    enableSoundsNoCheck(){
+        musicEnable = true;
+    },
+
+    disableSoundsNoCheck(){
+        musicEnable = false;
     }
 }
 

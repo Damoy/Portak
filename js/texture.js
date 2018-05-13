@@ -10,6 +10,11 @@ var bluePlayerTexture = null;
 var greenPlayerTexture = null; 
 var pinkPlayerTexture = null; 
 
+var normalPlayerIcon = null;
+var bluePlayerIcon = null;
+var greenPlayerIcon = null;
+var pinkPlayerIcon = null;
+
 var arrowTexture = null;
 
 var TextureContext = {
@@ -27,10 +32,18 @@ var TextureContext = {
 		let pw = 48;
 		let ph = 52;
 
-		normalPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/normalPlayerIcon.png", pw, ph);
-		bluePlayerTexture = new Texture(ctx, canvas, "res/textures/icons/bluePlayerIcon.png", pw, ph);
-		greenPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/greenPlayerIcon.png", pw, ph);
-		pinkPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/pinkPlayerIcon.png", pw, ph);
+		normalPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/normalPlayerSelection.png", pw, ph);
+		bluePlayerTexture = new Texture(ctx, canvas, "res/textures/icons/bluePlayerSelection.png", pw, ph);
+		greenPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/greenPlayerSelection.png", pw, ph);
+		pinkPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/pinkPlayerSelection.png", pw, ph);
+
+		pw = 48;
+		ph = 40;
+
+		normalPlayerIcon = new Texture(ctx, canvas, "res/textures/icons/normalPlayerIcon.png", pw, ph);
+		bluePlayerIcon = new Texture(ctx, canvas, "res/textures/icons/bluePlayerIcon.png", pw, ph);
+		greenPlayerIcon = new Texture(ctx, canvas, "res/textures/icons/greenPlayerIcon.png", pw, ph);
+		pinkPlayerIcon = new Texture(ctx, canvas, "res/textures/icons/pinkPlayerIcon.png", pw, ph);
 
 		arrowTexture = new Texture(ctx, canvas, "res/textures/others/arrowUp2.png", 22, 35);
 	},
@@ -53,6 +66,22 @@ var TextureContext = {
 
 	getPinkPlayerTexture : function(){
 		return pinkPlayerTexture;
+	},
+
+	getNormalPlayerIcon : function(){
+		return normalPlayerIcon;
+	},
+
+	getBluePlayerIcon : function(){
+		return bluePlayerIcon;
+	},
+
+	getGreenPlayerIcon : function(){
+		return greenPlayerIcon;
+	},
+
+	getPinkPlayerIcon : function(){
+		return pinkPlayerIcon;
 	},
 
 	getGrayTileTexture : function(){

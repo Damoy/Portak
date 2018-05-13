@@ -1,7 +1,12 @@
 var ARCADECLASSIC = 'ARCADECLASSIC';
 var userPlayerSelection = "res/textures/player/normalPlayer.png";
+var userPlayerIcon = null;
 
 var MenuContext = {
+    init(){
+      userPlayerIcon = TextureContext.getNormalPlayerIcon();
+    },
+
     getUserPlayerSelection : function(){
         return userPlayerSelection;
     },
@@ -9,6 +14,14 @@ var MenuContext = {
     setUserPlayerSelection : function(path){
         userPlayerSelection = path;
     },
+
+    getUserPlayerIcon : function(){
+        return userPlayerIcon;
+    },
+
+    setUserPlayerIcon : function(texture){
+        userPlayerIcon = texture;
+    }
 };
 
 class Menu{
@@ -91,6 +104,10 @@ class Menu{
             }
         }
 
+        if(this.selection >= this.maxSelection){
+            this.selection = this.maxSelection - 1;
+        }
+
         this.mod = mod;
         if(this.mod < 0)
             this.mod = 0;
@@ -136,35 +153,16 @@ class Menu{
 
         let font = this.renderingFont;
         let color = this.renderingColor;
-        let changeFont = "75px " + ARCADECLASSIC;
-        let changeColor = "LightGreen";
 
-        if(this.selection == 0){
-            font = changeFont;
-            color = changeColor;
-        }
+        this.renderIcon(x, y, ts, this.selection);
 
         renderText(this.ctx, "Play", x, y, color, font);
-        font = this.renderingFont;
-        color = this.renderingColor;
-
-        if(this.selection == 1){
-            font = changeFont;
-            color = changeColor;
-        }
-
         renderText(this.ctx, "Options", x, y + ts, color, font);
-        font = this.renderingFont;
-        color = this.renderingColor;
-
-        if(this.selection == 2){
-            font = changeFont;
-            color = changeColor;
-        }
-
         renderText(this.ctx, "Credits", x, y + ts + ts, color, font);
-        font = this.renderingFont;
-        color = this.renderingColor;
+    }
+
+    renderIcon(x, y, ts, selection){
+        MenuContext.getUserPlayerIcon().render(x - ts * 1.375, y - 40 + ts * selection);
     }
 
     renderOptions(){
@@ -174,13 +172,8 @@ class Menu{
 
         let font = this.renderingFont;
         let color = this.renderingColor;
-        let changeFont = "75px " + ARCADECLASSIC;
-        let changeColor = "LightGreen";
 
-        if(this.selection == 0){
-            font = changeFont;
-            color = changeColor;
-        }
+        this.renderIcon(x, y, ts, this.selection);
 
         if(this.mute){
             renderText(this.ctx, "Unmute", x, y, color, font);
@@ -188,18 +181,7 @@ class Menu{
             renderText(this.ctx, "Mute", x, y, color, font);
         }
 
-        font = this.renderingFont;
-        color = this.renderingColor;
-
-        if(this.selection == 1){
-            font = changeFont;
-            color = changeColor;
-        }
-
         renderText(this.ctx, "Player selection", x, y + ts, color, font);
-
-        font = this.renderingFont;
-        color = this.renderingColor;
     }
 
     renderCredits(){
@@ -227,7 +209,7 @@ class Menu{
 
         renderText(this.ctx, "Player selection", x + ts, y - ts - ts - 8, changeColor, font);
 
-        this.renderArrowSelection(x, y, this.selection, ts);
+        this.renderPlayerSelection2(x, y, this.selection, ts);
 
         TextureContext.getNormalPlayerTexture().render(x, y);
         TextureContext.getBluePlayerTexture().render(x + (ts * 2), y);
@@ -235,8 +217,8 @@ class Menu{
         TextureContext.getPinkPlayerTexture().render(x + (ts * 6), y);
     }
 
-    renderArrowSelection(x, y, selection, ts){
-        TextureContext.getArrowTexture().render(x + (selection * (ts * 2)) + ts * 0.25 - 4, y + ts + (ts >> 2));
+    renderPlayerSelection2(x, y, selection, ts){
+        MenuContext.getUserPlayerIcon().render(x - 12 + (selection * (ts * 2)) + ts * 0.25 - 4, y + ts + (ts >> 2));
     }
 
     renderTileHighlight(baseX, baseY, pselection, ts){
@@ -307,7 +289,7 @@ class Menu{
 
             if(this.selection == 0){
                 if(this.mute){
-                    SoundContext.enableSoundsNoBgLaunch();
+                    SoundContext.enableSoundsNoCheck();
                     this.mute = false;
                     println("go unmute");
 
@@ -316,7 +298,7 @@ class Menu{
                     else
                         SoundContext.getMenuOptionSound().play();
                 } else {
-                    SoundContext.disableSounds();
+                    SoundContext.disableSoundsNoCheck();
                     this.mute = true;
                     println("go unmute");
 
@@ -347,15 +329,19 @@ class Menu{
         switch(selection){
             case 0:
                 path += "normalPlayer.png";
+                MenuContext.setUserPlayerIcon(TextureContext.getNormalPlayerIcon());
                 break;
             case 1:
                 path += "bluePlayer.png";
+                MenuContext.setUserPlayerIcon(TextureContext.getBluePlayerIcon());
                 break;
             case 2:
                 path += "greenPlayer.png";
+                MenuContext.setUserPlayerIcon(TextureContext.getGreenPlayerIcon());
                 break;
             case 3:
                 path += "pinkPlayer.png";
+                MenuContext.setUserPlayerIcon(TextureContext.getPinkPlayerIcon());
                 break;
         }
 
@@ -390,10 +376,11 @@ class Menu{
         }
 
         if(isPressed(EventContext.resetKey()) && this.canSelect){
+            this.preventSelection();
             SoundContext.getMenuOptionSound().play();
             this.setPlayerSelection(this.selection);
-            this.setMod(1);
-            this.savedSelection2 = -1;
+            // this.setMod(1);
+            // this.savedSelection2 = -1;
         }
 
         if(isPressed(EventContext.escapeKey()) && this.canSelect){

@@ -48,6 +48,7 @@ function initWorld(){
 }
 
 function buildMenu(){
+  MenuContext.init();
   mainMenu = new Menu(ctx, canvas, world);
 }
 
