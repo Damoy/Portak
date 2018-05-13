@@ -1,5 +1,6 @@
 var mainPlayer = null;
 var endgameLevel = null;
+var endgamePortals = [];
 
 var WorldContext = {
 	getBasePlayer : function(ctx, canvas, world){
@@ -27,6 +28,20 @@ var WorldContext = {
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/12.lvl"));
 
 		endgameLevel = LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/end.lvl");
+		let endPtr = world.lastLevelAdditionalPortals.length - 1;
+		if(endPtr < 0) return levels;
+
+		let lastPortal = world.lastLevelAdditionalPortals[endPtr];
+		let llastPortal = world.lastLevelAdditionalPortals[endPtr - 1];
+		let lllastPortal = world.lastLevelAdditionalPortals[endPtr - 2];
+
+		endgamePortals[0] = lastPortal;
+		endgamePortals[1] = llastPortal;
+		endgamePortals[2] = lllastPortal;
+
+		removeFromArray(world.lastLevelAdditionalPortals, lllastPortal);
+		removeFromArray(world.lastLevelAdditionalPortals, llastPortal);
+		removeFromArray(world.lastLevelAdditionalPortals, lastPortal);
 
 		return levels;
 	}
@@ -43,7 +58,7 @@ class World{
 		// leveling
 		this.levels = [];
 		this.currentLevel = null;
-		this.currentLevelId = 0;
+		this.currentLevelId = 12;
 		this.portals = [];
 		this.lastLevelAdditionalPortals = [];
 		this.currentPortal = null;
@@ -103,6 +118,12 @@ class World{
 		this.greenPlayerCounter = new TickCounter(30);
 		this.bluePlayerCounter = new TickCounter(30);
 		this.pinkPlayerCounter = new TickCounter(30);
+
+		// take in account the endgame portals
+		this.lastLevelAdditionalPortals = [];
+		endgamePortals.forEach((portal) => {
+			this.lastLevelAdditionalPortals.push(portal);
+		});
 	}
 
 	upgradeLevel(){

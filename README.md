@@ -52,6 +52,8 @@ II. Lancement du jeu
         6. Une fois le serveur lancé, se rendre à l'adresse donnée par nodejs, par exemple : http://127.0.0.1:8080/Portak.html
 
     Après avoir suivi toutes ces étapes, vous aurez accès au menu principal du jeu et pourrez commencer une partie.
+
+    // FONT
     
 III. Architecture du code
 

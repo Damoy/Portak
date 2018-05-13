@@ -89,7 +89,9 @@ class Player extends Entity{
 	}
 
 	handleInput(){
-		if(isPressed(EventContext.upKey())){
+		if(isPressed(EventContext.resetKey())){
+			this.world.resetCurrentLevel();
+		} else if(isPressed(EventContext.upKey())){
 			this.changeDirection(AnimationContext.getUpDirValue());
 		} else if(isPressed(EventContext.leftKey())){
 			this.changeDirection(AnimationContext.getLeftDirValue());

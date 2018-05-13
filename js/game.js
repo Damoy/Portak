@@ -82,10 +82,13 @@ function update(){
   if(mainMenu != null){
     mainMenu.update();
   } else {
-    bgMusicCounter.update();
-    if(bgMusicCounter.isStopped()){
-      bgMusicCounter.reset();
-      SoundContext.getBackgroundMusic().play();
+
+    if(world != null && !world.endgame || world == null){
+      bgMusicCounter.update();
+      if(bgMusicCounter.isStopped()){
+        bgMusicCounter.reset();
+        SoundContext.getBackgroundMusic().play();
+      }
     }
 
     handleMainInput();

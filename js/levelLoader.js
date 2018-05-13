@@ -170,14 +170,14 @@ var LevelLoadingContext = {
                     powers.push(power);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
                     break;  
-                case 95: 
-                case 96: 
-                case 97: 
-                case 98: 
-                case 99: 
-                    world.generatePortalsFinalLevel( - fileValue % 10 , x, y);
+                case 95:
+                case 96:
+                case 97:
+                case 98:
+                case 99:
+                    world.generatePortalsFinalLevel(-fileValue % 10, x, y);
                     LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break    
+                    break;
                 default:
                     throw "Unknown token found while loading level.\n";
             }
