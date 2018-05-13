@@ -36,19 +36,14 @@ var LevelLoadingContext = {
         
         // retrieve the number of the player energies
         let pAmount = xml.responseText.split("##powerAmount")[1].split(/\n/)[1];
-        println("Loading >> Player power amount: " + pAmount);
 
         // retrieve the level name
         let levelName = xml.responseText.split("##levelName")[1].split(/\n/)[1];
-        println("Loading >> Level name: " + levelName);
 
         // retrieve the map size
         let numTiles = xml.responseText.split("##numberOfTiles")[1].split(/\n/);
         let mapRows = numTiles[1];
         let mapCols = numTiles[2];
-
-        println("Loading >> Rows: " + mapRows);
-        println("Loading >> Cols: " + mapCols);
 
         // retrieve the map information
         let levelDataText = filterTextBy(xml.responseText.split("##levelData")[1], /#.*/g).replace(/\n/g, " ").trim();
@@ -201,7 +196,7 @@ var LevelLoadingContext = {
         var loadedLevel = new Level(lid, levelName, filePath, ctx, canvas, world, map, walls, enemies, powers, 10, px, py, pAmount, doors, keys, destructiblesWalls);
         world.generatePortal(loadedLevel.getId(), portalX, portalY);
 
-        println("Level " + levelName + " loaded.");
+        println("Level \"" + levelName + "\" loaded.");
         
         return loadedLevel;
     },

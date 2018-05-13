@@ -14,14 +14,12 @@ class Map{
 		this.canvas = canvas;
 		this.world = world;
 		
-		// simulating multiple constructors...
+		// multiple constructors...
 		if(arguments.length == 3){
-			// println("Empty map detected.");
 			return;
 		}
 
 		if(arguments.length == 4){
-			// println("Loaded map detected.");
 			this.tiles = rows;
 			return;	
 		}

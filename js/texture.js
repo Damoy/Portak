@@ -15,7 +15,8 @@ var bluePlayerIcon = null;
 var greenPlayerIcon = null;
 var pinkPlayerIcon = null;
 
-var arrowTexture = null;
+var arrowUpTexture = null;
+var arrowDownTexture = null;
 
 var TextureContext = {
 	init(ctx, canvas){
@@ -45,11 +46,16 @@ var TextureContext = {
 		greenPlayerIcon = new Texture(ctx, canvas, "res/textures/icons/greenPlayerIcon.png", pw, ph);
 		pinkPlayerIcon = new Texture(ctx, canvas, "res/textures/icons/pinkPlayerIcon.png", pw, ph);
 
-		arrowTexture = new Texture(ctx, canvas, "res/textures/others/arrowUp2.png", 22, 35);
+		arrowUpTexture = new Texture(ctx, canvas, "res/textures/others/arrowUp.png", 22, 35);
+		arrowDownTexture = new Texture(ctx, canvas, "res/textures/others/arrowDown.png", 22, 35);
 	},
 
-	getArrowTexture(){
-		return arrowTexture;
+	getArrowUpTexture(){
+		return arrowUpTexture;
+	},
+
+	getArrowDownTexture(){
+		return arrowDownTexture;
 	},
 
 	getNormalPlayerTexture : function(){

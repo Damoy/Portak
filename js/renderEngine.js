@@ -1,8 +1,4 @@
-/*
-
-  ------ Rendering ------
-
-*/
+var mainFont = "serif";
 
 // rendering singleton
 var RenderingContext = {
@@ -12,12 +8,10 @@ var RenderingContext = {
     setMainContext(canvas.getContext("2d"));
     hideCursor(canvas);
     changeFavicon("res/textures/icons/normalPlayerIcon3.png");
+    changeFont("ARCADECLASSIC");
   },
 
-  getFontSize : function(){return MapContext.getTileSize();},
-  getPxFontSized : function(){return RenderingContext.getFontSize() + RenderingContext.getPxFont();},
-  getPxFont : function(){return "px " + RenderingContext.getFont();},
-  getFont : function(){return "arial";},
+  getFont : function(){return mainFont;},
 
   getClearBaseX : function(){return 0;},
   getClearBaseY : function(){return 0;},
@@ -27,19 +21,19 @@ var RenderingContext = {
   noCursor : function(){return "none";},
 
   getCanvasWidth : function(canvas){
-    return canvas.width;
+    return canvas.width - RenderingContext.getUIWidth();
   },
 
   getCanvasHeight : function(canvas){
-    return canvas.height;
+    return canvas.height - RenderingContext.getUIHeight();
   },
 
   getUIWidth : function(canvas){
-    return canvas.width;
+    return 0;
   },
 
   getUIHeight : function(canvas){
-    return 0; // MapContext.getTileSize() (<< 1)
+    return 0;
   }
 };
 
@@ -69,57 +63,12 @@ function renderUI(ctx, canvas){
   ctx.restore();
 }
 
-// some info' rendering
-function renderInfo(){
-}
-
-// end game rendering
-function renderEndGame(){
-}
-
 // rendering a simple text
 function renderText(ctx, text, x, y, color, fontSize){
   ctx.save();
-  ctx.font = fontSize + RenderingContext.getPxFont();
+  ctx.font = fontSize + "px " + RenderingContext.getFont();
   ctx.fillStyle = color;
   ctx.fillText(text, x, y);
-  ctx.restore();
-}
-
-// var loadedFont = new FontFaceObserver('ARCADECLASSIC');
-// loadedFont.load();
-
-function lrenderFontText(ctx, text, x, y, color){
-  ctx.save();
-  ctx.font = "48px ARCADECLASSIC";
-  ctx.fillStyle = color;
-  ctx.fillText(text, x, y);
-  ctx.restore();
-}
-
-function renderFontText(ctx, text, x, y, color, font){
-  ctx.save();
-  ctx.font = font;
-  ctx.fillStyle = color;
-  ctx.fillText(text, x, y);
-  ctx.restore();
-}
-
-function renderSerifText(ctx, text, x, y, color) {
-	ctx.save();
-	ctx.font = '25px serif';
-	ctx.fillStyle = color;
-	ctx.fillText(text, x , y);
-  ctx.restore();
-}
-
-// rendering a composed text
-function renderComposedText(ctx, title, data, x, xoffset, y, yoffset, color) {
-  ctx.save();
-  ctx.font = RenderingContext.getPxFontSized();
-  ctx.fillStyle = color;
-  ctx.fillText(title, x, y);
-  ctx.fillText(data, x + xoffset, y + yoffset);
   ctx.restore();
 }
 
@@ -130,5 +79,27 @@ function hideCursor(canvas){
 function clear(canvas){
   ctx.clearRect(RenderingContext.getClearBaseX(), RenderingContext.getClearBaseY(),
     RenderingContext.getClearWidth(canvas), RenderingContext.getClearHeight(canvas));
+}
+
+document.head = document.head || document.getElementsByTagName('head')[0];
+
+function changeFavicon(src) {
+	var link = document.createElement('link'),
+	oldLink = document.getElementById('dynamic-favicon');
+	
+	link.id = 'dynamic-favicon';
+	link.rel = 'shortcut icon';
+	link.href = src;
+
+	if (oldLink) {
+		document.head.removeChild(oldLink);
+	}
+
+	document.head.appendChild(link);
+}
+
+function changeFont(font){
+  mainFont = font;
+  println("Font used: " + font + ".");
 }
 

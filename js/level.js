@@ -183,17 +183,16 @@ class Level{
 			let w = RenderingContext.getCanvasWidth(this.canvas);
 			let h = RenderingContext.getCanvasHeight(this.canvas);
 
-			let color = "White" // DarkRed;
-			let fontSize = 50;
-			let font = fontSize + "px serif";
+			let color = "LightGreen" // DarkRed, LightGreen, 
+			let fontSize = 48;
 
-			let x = (w * 0.5) - ((levelNumberText.length * 0.25) * fontSize);
+			let x = (w * 0.5) - ((levelNumberText.length * 0.25) * fontSize) - (fontSize >> 3);
 			let y = h * 0.3;
 
 			let lengthDiff = Math.abs(levelNumberText.length - levelNameText.length) * fontSize;
 
-			renderFontText(this.ctx, levelNumberText, x, y, color, font);
-			renderFontText(this.ctx, levelNameText, x - (lengthDiff * 0.125), y + ts, color, font);
+			renderText(this.ctx, levelNumberText, x, y, color, fontSize);
+			renderText(this.ctx, levelNameText, x - (lengthDiff * 0.125), y + ts, color, fontSize);
 		}
 	}
 

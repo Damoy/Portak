@@ -1,4 +1,3 @@
-var ARCADECLASSIC = 'ARCADECLASSIC';
 var userPlayerSelection = "res/textures/player/normalPlayer.png";
 var userPlayerIcon = null;
 
@@ -34,7 +33,7 @@ class Menu{
         this.selection = 0;
         this.maxSelection = 3;
         this.renderingColor = "White";
-        this.renderingFont = "50px " + ARCADECLASSIC;
+        this.renderingFontSize = 72;
         this.selectionTimer = new TickCounter(10);
         this.canSelect = true;
         this.mod = 0;
@@ -42,6 +41,9 @@ class Menu{
         this.mute = false;
         this.savedSelection = 0;
         this.savedSelection2 = -1;
+        this.ts = MapContext.getTileSize();
+        this.renderingBaseX = RenderingContext.getCanvasWidth(this.canvas) * 0.5 - this.ts;
+        this.renderingBaseY = RenderingContext.getCanvasHeight(this.canvas) * 0.5 - this.ts;
     }
 
     update(){
@@ -86,7 +88,8 @@ class Menu{
             this.maxSelection = 3;
         else if(mod == 1)
             this.maxSelection = 2;
-        
+        else if(mod == 2)
+            this.maxSelection = 2;
         else if(mod == 3){
             this.maxSelection = 4;
             this.selection = 0;
@@ -147,54 +150,100 @@ class Menu{
     }
 
     renderMain(){
-        let ts = MapContext.getTileSize();
-        let x = RenderingContext.getCanvasWidth(this.canvas) * 0.5 - ts;
-        let y = RenderingContext.getCanvasHeight(this.canvas) * 0.5 - ts;
+        let ts = this.ts;
+        let x = this.renderingBaseX;
+        let y = this.renderingBaseY;
 
-        let font = this.renderingFont;
+        let fontSize = this.renderingFontSize;
         let color = this.renderingColor;
 
         this.renderIcon(x, y, ts, this.selection);
 
-        renderText(this.ctx, "Play", x, y, color, font);
-        renderText(this.ctx, "Options", x, y + ts, color, font);
-        renderText(this.ctx, "Credits", x, y + ts + ts, color, font);
+        this.renderPortak(x, y);
+        
+        renderText(this.ctx, "Play", x - 8, y + ts, color, fontSize);
+        renderText(this.ctx, "Options", x - 8, y + ts + ts, color, fontSize);
+        renderText(this.ctx, "Credits", x - 8, y + ts + ts + ts, color, fontSize);
+    }
+
+    renderPortak(x, y){
+        renderText(this.ctx, "PORTAK", x - (this.ts * 2) - (this.ts >> 2), y - this.ts + 10, "DarkRed", 128);
     }
 
     renderIcon(x, y, ts, selection){
-        MenuContext.getUserPlayerIcon().render(x - ts * 1.375, y - 40 + ts * selection);
+        MenuContext.getUserPlayerIcon().render(x - ts * 1.375, y - 40 + ts + ts * selection);
     }
 
     renderOptions(){
-        let ts = MapContext.getTileSize();
+        let ts = this.ts;
         let x = RenderingContext.getCanvasWidth(this.canvas) * 0.5 - ts;
         let y = RenderingContext.getCanvasHeight(this.canvas) * 0.5 - ts;
 
-        let font = this.renderingFont;
+        let fontSize = this.renderingFontSize;
         let color = this.renderingColor;
 
-        this.renderIcon(x, y, ts, this.selection);
+        this.renderPortak(x, y);
+
+        this.renderIcon(x - ts, y, ts, this.selection);
 
         if(this.mute){
-            renderText(this.ctx, "Unmute", x, y, color, font);
+            renderText(this.ctx, "Unmute", x - ts - 8, y + ts, "LightGreen", fontSize);
         } else {
-            renderText(this.ctx, "Mute", x, y, color, font);
+            renderText(this.ctx, "Mute", x - ts - 8, y + ts, "Red", fontSize);
         }
 
-        renderText(this.ctx, "Player selection", x, y + ts, color, font);
+        renderText(this.ctx, "Select player", x - ts - 8, y + ts + ts, color, fontSize);
     }
 
     renderCredits(){
         let ts = MapContext.getTileSize();
-        let x = RenderingContext.getCanvasWidth(this.canvas) * 0.5 - ts;
-        let y = RenderingContext.getCanvasHeight(this.canvas) * 0.5 - ts;
+        let x = this.renderingBaseX;
+        let y = this.renderingBaseY;
 
-        let font = this.renderingFont;
-        let color = this.renderingColor;
-        let changeFont = "75px " + ARCADECLASSIC;
-        let changeColor = "LightGreen";
+        let fontSize = 42;
+        let color = "White";
 
-        renderText(this.ctx, "Ti ve de sou ?", x, y, color, font);
+        this.renderPortak(x, y);
+        if(this.selection == 0){
+            this.renderCredits1(x, y, ts, fontSize, color);
+        } else{
+            this.renderCredits2(x, y, ts, fontSize, color);
+        }
+    }
+
+    renderCredits1(x, y, ts, fontSize, color){
+        y += ts * 0.8;
+        x = x - ts * 5 - 16;
+
+        renderText(this.ctx, "University   project   game", x, y, color, fontSize);
+        y += ts;
+
+        renderText(this.ctx, "By   BENZA   Amandine   and   FORNALI   Damien", x, y, color, fontSize);
+        y += ts;
+
+        renderText(this.ctx, "University   of   Nice-Sophia-Antipolis", x, y, color, fontSize);
+        y += ts;
+
+        renderText(this.ctx, "Master   I   IFI", x, y, color, fontSize);
+        renderText(this.ctx, "2017-2018", x + ts * 9 + 24, y, color, fontSize);
+
+        TextureContext.getArrowDownTexture().render(x + ts * 6 + 8, y + (ts * 0.5));
+    }
+
+    renderCredits2(x, y, ts, fontSize, color){
+        y += ts * 0.8;
+        x = x - ts * 5 - 16 + ts;
+
+        renderText(this.ctx, "Code   and  all  textures  by  us", x, y, color, fontSize);
+        y += ts;
+
+        renderText(this.ctx, "Sounds   effects   are   free   to  use", x, y, color, fontSize);
+        y += ts;
+
+        renderText(this.ctx, "Background   music   by   Snabisch", x, y, color, fontSize);
+        y += ts;
+
+        TextureContext.getArrowUpTexture().render(x - ts + ts * 6 + 8, y + (ts * 0.5));
     }
 
     renderPlayerSelection(){
@@ -202,14 +251,12 @@ class Menu{
         let x = 4 * ts + 8;
         let y = 5 * ts + 6;
 
-        let font = this.renderingFont;
+        let fontSize = this.renderingFontSize;
         let color = this.renderingColor;
-        let changeFont = "75px " + ARCADECLASSIC;
-        let changeColor = "LightGreen";
 
-        renderText(this.ctx, "Player selection", x + ts, y - ts - ts - 8, changeColor, font);
+        this.renderPortak(this.renderingBaseX, this.renderingBaseY);
 
-        this.renderPlayerSelection2(x, y, this.selection, ts);
+        this.renderIconPlayerSelection(x, y, this.selection, ts);
 
         TextureContext.getNormalPlayerTexture().render(x, y);
         TextureContext.getBluePlayerTexture().render(x + (ts * 2), y);
@@ -217,17 +264,8 @@ class Menu{
         TextureContext.getPinkPlayerTexture().render(x + (ts * 6), y);
     }
 
-    renderPlayerSelection2(x, y, selection, ts){
+    renderIconPlayerSelection(x, y, selection, ts){
         MenuContext.getUserPlayerIcon().render(x - 12 + (selection * (ts * 2)) + ts * 0.25 - 4, y + ts + (ts >> 2));
-    }
-
-    renderTileHighlight(baseX, baseY, pselection, ts){
-        let xoff = pselection * (ts * 2) - 8;
-        this.ctx.save();
-        this.ctx.fillStyle = "LightGreen";
-        this.ctx.rect(baseX + xoff, baseY - 6, ts - 1, ts - 1);
-        this.ctx.fill();
-        this.ctx.restore();
     }
 
     preventSelection(){
@@ -289,25 +327,16 @@ class Menu{
 
             if(this.selection == 0){
                 if(this.mute){
+                    SoundContext.getMenuSelectionSound().play();
                     SoundContext.enableSoundsNoCheck();
                     this.mute = false;
-                    println("go unmute");
-
-                    if(this.selection < 0)
-                        this.selection = 0;
-                    else
-                        SoundContext.getMenuOptionSound().play();
                 } else {
+                    SoundContext.getMenuSelectionSound().play();
                     SoundContext.disableSoundsNoCheck();
                     this.mute = true;
-                    println("go unmute");
-
-                    if(this.selection < 0)
-                        this.selection = 0;
-                    else
-                        SoundContext.getMenuOptionSound().play();
                 }
             } else if(this.selection == 1){
+                SoundContext.getMenuSelectionSound().play();
                 this.savedSelection2 = this.savedSelection;
                 this.setMod(3);
             }
@@ -319,6 +348,8 @@ class Menu{
     }
 
     handleCreditsInput(){
+        this.optionInput();
+
         if(isPressed(EventContext.escapeKey()) && this.canSelect){
             this.setMod(0);
         }
@@ -329,23 +360,36 @@ class Menu{
         switch(selection){
             case 0:
                 path += "normalPlayer.png";
-                MenuContext.setUserPlayerIcon(TextureContext.getNormalPlayerIcon());
                 break;
             case 1:
                 path += "bluePlayer.png";
-                MenuContext.setUserPlayerIcon(TextureContext.getBluePlayerIcon());
                 break;
             case 2:
                 path += "greenPlayer.png";
-                MenuContext.setUserPlayerIcon(TextureContext.getGreenPlayerIcon());
                 break;
             case 3:
                 path += "pinkPlayer.png";
-                MenuContext.setUserPlayerIcon(TextureContext.getPinkPlayerIcon());
                 break;
         }
 
         MenuContext.setUserPlayerSelection(path);
+    }
+
+    setPlayerIcon(selection){
+        switch(selection){
+            case 0:
+                MenuContext.setUserPlayerIcon(TextureContext.getNormalPlayerIcon());
+                break;
+            case 1:
+                MenuContext.setUserPlayerIcon(TextureContext.getBluePlayerIcon());
+                break;
+            case 2:
+                MenuContext.setUserPlayerIcon(TextureContext.getGreenPlayerIcon());
+                break;
+            case 3:
+                MenuContext.setUserPlayerIcon(TextureContext.getPinkPlayerIcon());
+                break;
+        }
     }
 
     handlePlayerSelectionInput(){
@@ -379,8 +423,7 @@ class Menu{
             this.preventSelection();
             SoundContext.getMenuOptionSound().play();
             this.setPlayerSelection(this.selection);
-            // this.setMod(1);
-            // this.savedSelection2 = -1;
+            this.setPlayerIcon(this.selection);
         }
 
         if(isPressed(EventContext.escapeKey()) && this.canSelect){

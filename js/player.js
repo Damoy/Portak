@@ -117,7 +117,9 @@ class Player extends Entity{
 			LevelLoadingContext.resetLevelLoadingId();
 			SoundContext.stopAll();
 			initWorld(this.ctx, this.canvas);
+			let savedMenuIcon = MenuContext.getUserPlayerIcon();
 			buildMenu();
+			MenuContext.setUserPlayerIcon(savedMenuIcon);
 		}
 	}
 
@@ -483,17 +485,17 @@ class Player extends Entity{
 		let w = -(ts >> 2);
 		let h = RenderingContext.getCanvasHeight(this.canvas) - (ts >> 1);
 
-		TextureContext.getPowerTexture().render(w, h - (ts * 0.4));
+		TextureContext.getPowerTexture().render(w - 2, h - (ts * 0.4));
 
 		let x = w + (ts * 0.8);
 		let fontSize = 40; 
 
 		if(this.power % 10 != this.power){
 			x -= (ts * 0.1);
-			fontSize = 32;
+			fontSize = 30;
 		}
 
-		renderFontText(this.ctx, this.power, x, h + (ts * 0.3), "White", fontSize + "px serif"); // Black, LightGreen, DarkGreen
+		renderText(this.ctx, this.power, x - 2, h + (ts * 0.3), "White", fontSize);
 	}
 
 	teleport(level){
