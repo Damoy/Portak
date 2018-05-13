@@ -41,19 +41,20 @@ I. Description
 
 II. Lancement du jeu
 
-    Pour pouvoir lancer Portak, il faut avant tout installer un serveur via nodejs. 
-    Voici la marche à suivre en quelques étapes simples: 
+    Pour pouvoir lancer Portak, il faut avant tout installer un serveur via nodejs ainsi que la police arcadeclassic.
+    Voici la marche à suivre en quelques étapes simples:
 
         1. Télécharger l'archive du jeu via Github
-        2. Télécharger nodejs : https://nodejs.org/en/
-        3. En ligne de commande, se rendre dans le dossier Portak via la commande : cd */Portak
-        4. Créer le serveur via la commande : npm install http-server -g
-        5. Lancer le serveur dans ce même dossier via la commande : http-server ./
-        6. Une fois le serveur lancé, se rendre à l'adresse donnée par nodejs, par exemple : http://127.0.0.1:8080/Portak.html
+        2. En ligne de commande, se rendre dans le dossier Portak via la commande : cd */Portak
+        3. Télécharger nodejs : https://nodejs.org/en/
+        4. À partir de la racine du fichier Portak, se rendre dans le dossier arcadeclassic via la commande : cd res/fonts/arcadeclassic
+        5. Double cliquer sur ARCADECLASSIC.TTF et appuyer sur "Installer la police".
+        6. Retourner à la racine du fichier via la commande : cd ../../../
+        7. Créer le serveur via la commande : npm install http-server -g
+        8. Lancer le serveur dans ce même dossier via la commande : http-server ./
+        9. Une fois le serveur lancé, se rendre à l'adresse donnée par nodejs, par exemple : http://127.0.0.1:8080/Portak.html
 
     Après avoir suivi toutes ces étapes, vous aurez accès au menu principal du jeu et pourrez commencer une partie.
-
-    // FONT
     
 III. Architecture du code
 
