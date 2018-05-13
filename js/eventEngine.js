@@ -1,4 +1,3 @@
-var mousePos = {x:0, y:0};
 var keyState = [];
 var prevKeyState = [];
 
@@ -7,13 +6,7 @@ var EventContext = {
   initListeners : function(canvas){
     window.onkeydown = keyPressed;
     window.onkeyup = keyReleased;
-
-    canvas.addEventListener('mousemove', function (evt) {
-      mousePos = getMousePos(canvas, evt);
-    }, false); 
   },
-
-  getMousePos : function(){return mousePos;},
 
   // javascript key codes
   jsUpKey : function(){return 'ArrowUp';},
@@ -23,6 +16,7 @@ var EventContext = {
   jsSpaceKey : function(){return 'Space';},
   jsResetKey : function(){return 'Enter';},
   jsMusicEnDisablingKey : function(){return 'Semicolon';},
+  jsEscapeKey : function(){return 'Escape';},
 
   // own key code
   upKey : function(){return 0;},
@@ -32,8 +26,9 @@ var EventContext = {
   spaceKey : function(){return 4;},
   resetKey : function(){return 5;},
   musicKey : function(){return 6;},
+  escapeKey : function(){return 8;},
 
-  getKeyCount : function(){return 7;}
+  getKeyCount : function(){return 8;}
 }
 
 function initListeners(canvas){
@@ -52,6 +47,7 @@ function keySet(key, pressed){
     else if(key == EventContext.jsSpaceKey()) keyState[hash(EventContext.spaceKey())] = pressed;
     else if(key == EventContext.jsResetKey()) keyState[hash(EventContext.resetKey())] = pressed;
     else if(key == EventContext.jsMusicEnDisablingKey()) keyState[hash(EventContext.musicKey())] = pressed;
+    else if(key == EventContext.jsEscapeKey()) keyState[hash(EventContext.escapeKey())] = pressed;
 }
 
 function hash(ownKeyCode){
@@ -75,16 +71,3 @@ function isPressed(ownKeyCode){
   return keyState[hash(ownKeyCode)] & !prevKeyState[hash(ownKeyCode)];
 }
 
-// -- Mouse
-
-function mouseMoved(evt){
-}
-
-function getMousePos(canvas, evt) {
-  // necessary to take into account CSS boundaries
-  let bcr = canvas.getBoundingClientRect();
-  return {
-     x: evt.clientX - bcr.left,
-     y: evt.clientY - bcr.top
-   }
-};

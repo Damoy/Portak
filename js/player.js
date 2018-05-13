@@ -27,7 +27,7 @@ class Player extends Entity{
 		this.projectiles = [];
 		this.deadProjectiles = [];
 		
-		this.animation = new Animation(this.ctx, this.canvas, "res/textures/player/normalPlayer.png",
+		this.animation = new Animation(this.ctx, this.canvas, MenuContext.getUserPlayerSelection(),
 			644, 64, 0, 64, 64, this.savedDirection, AnimationContext.getNullValue(), 2, 2, 3, 3, 0, 128, 256, 448);
 		this.animation.start();
 
@@ -112,6 +112,12 @@ class Player extends Entity{
 			this.world.resetCurrentLevel();
 		} else if(isPressed(EventContext.musicKey())){
 			SoundContext.pressSoundButton();
+		} else if(isPressed(EventContext.escapeKey())){
+			SoundContext.resetBackgroundMusic();
+			LevelLoadingContext.resetLevelLoadingId();
+			SoundContext.stopAll();
+			initWorld(this.ctx, this.canvas);
+			buildMenu();
 		}
 	}
 

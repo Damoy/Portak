@@ -25,8 +25,6 @@ var WorldContext = {
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/11.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/12.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/13.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/14.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/15.lvl"));
 
 		return levels;
 	}
@@ -102,6 +100,14 @@ class World{
 
 	destroyPortal(portal){
 		removeFromArray(this.portals, portal);
+	}
+
+	clear(){
+		this.levels = [];
+		this.currentLevel = null;
+		this.currentLevelId = 0;
+		this.portals = [];
+		this.currentPortal = null;
 	}
 
 	resetCurrentLevel(){
