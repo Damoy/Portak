@@ -24,10 +24,6 @@ var WorldContext = {
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/10.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/11.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/12.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/13.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/14.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/15.lvl"));
-
 		return levels;
 	}
 };
@@ -43,8 +39,9 @@ class World{
 		// leveling
 		this.levels = [];
 		this.currentLevel = null;
-		this.currentLevelId = 0;
+		this.currentLevelId = 12;
 		this.portals = [];
+		this.lastLevelAdditionalPortals = [];
 		this.currentPortal = null;
 
 		println("World: OK.");
@@ -100,6 +97,10 @@ class World{
 		this.portals.push(new Portal(id, ctx, canvas, world, x, y));
 	}
 
+	generatePortalsFinalLevel(id, x, y){
+		this.lastLevelAdditionalPortals.push(new Portal(id, ctx, canvas, world, x, y));
+	}
+
 	destroyPortal(portal){
 		removeFromArray(this.portals, portal);
 	}
@@ -129,6 +130,11 @@ class World{
 	updateCurrentPortal(){
 		if(this.currentPortal != null)
 			this.currentPortal.update();
+			if(this.lastLevelAdditionalPortals != null && this.currentLevelId == 12) {
+				this.lastLevelAdditionalPortals.forEach((portal) => {
+				portal.update();
+			});
+		}
 	}
 
 	render(){
@@ -139,6 +145,11 @@ class World{
 	renderCurrentPortal(){
 		if(this.currentPortal != null)
 			this.currentPortal.render();
+		if(this.lastLevelAdditionalPortals != null && this.currentLevelId == 12) {
+			this.lastLevelAdditionalPortals.forEach((portal) => {
+				portal.render();
+			});
+		}
 	}
 
 	portalCollision(x, y){
