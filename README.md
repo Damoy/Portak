@@ -20,10 +20,11 @@ Projet Javascript, création d'un jeu vidéo 2D
 - Sommaire
 
 I. Description
-II. Architecture du code
-III. Répartition du travail
-IV. Difficultés rencontrées
+II. Lancement du jeu
+III. Architecture du code
+IV. Répartition du travail
 V. Points faibles et points forts
+VI. Difficultés rencontrées
 
 ----
 
@@ -38,26 +39,39 @@ I. Description
     Nous avons créé toutes les textures du jeu à l'aide des logiciels paint.net et Photoshop. Nous voulions obtenir un résultat cohérent et homogène correspondant à l'idée que nous nous faisions du jeu.
     Nous avons ajouté des sons synchronisés avec les évènements du jeu ainsi qu'une musique de fond dont le tempo varie en fonction du niveau. En revanche, les sons utilisés ont été récupéré sur internet et n'ont pas été composé par nos soins.
 
+II. Lancement du jeu
 
-II. Architecture du code
+    Pour pouvoir lancer Portak, il faut avant tout installer un serveur via nodejs. 
+    Voici la marche à suivre en quelques étapes simples: 
 
-    - game.js 				: boucle de jeu principale
+        1. Télécharger l'archive du jeu via Github
+        2. Télécharger nodejs : https://nodejs.org/en/
+        3. En ligne de commande, se rendre dans le dossier Portak via la commande : cd */Portak
+        4. Créer le serveur via la commande : npm install http-server -g
+        5. Lancer le serveur dans ce même dossier via la commande : http-server ./
+        6. Une fois le serveur lancé, se rendre à l'adresse donnée par nodejs, par exemple : http://127.0.0.1:8080/Portak.html
+
+    Après avoir suivi toutes ces étapes, vous aurez accès au menu principal du jeu et pourrez commencer une partie.
+    
+III. Architecture du code
+
+    - game.js               : boucle de jeu principale
     - eventEngine.js 		: moteur gérant les évenènements au clavier de l'utilisateur
     - renderEngine.js 		: contient l'appel d'affichage principal ainsi que des méthodes d'affichage de texte
 
     - world.js 				: le monde de jeu, contient le joueur, le niveau actuel et les portails
     - level.js 				: un niveau de jeu, contient la carte, les obstacles ainsi que les objets à collecter
     - levelLoader.js 		: le chargeur de niveaux, charge un niveau complet depuis un fichier .lvl
-    - map.js 				: la carte, elle contient les tiles du jeu
+    - map.js 				    : la carte, elle contient les tiles du jeu
     - tile.js 				: une fraction de la carte, peut savoir si elle est occupée par un élément du niveau
 
-    - entity.js 			: classe mère de tous les éléments du monde exceptée la carte et ses tiles
+    - entity.js 			    : classe mère de tous les éléments du monde exceptée la carte et ses tiles
     - enemy.js 				: classe mère des ennemies du joueur
-    - zombie.js 			: l'unique type d'ennemi implémenté
+    - zombie.js 			    : l'unique type d'ennemi implémenté
 
-    - player.js 			: le joueur est la source principale d'intéractivité avec le jeu. Il écoute les évènements du clavier provoqués par l'utilisateur pendant le déroulement            d'un niveau du jeu. Il agit en fonction de ces derniers et vérifie lui même les collisions avec son environnement.
+    - player.js 			    : le joueur est la source principale d'intéractivité avec le jeu. Il écoute les évènements du clavier provoqués par l'utilisateur pendant le déroulement d'un niveau du jeu. Il agit en fonction de ces derniers et vérifie lui même les collisions avec son environnement.
 
-    - projectile.js 		: classe mère des projectiles tirés par les ennemis et le joueur
+    - projectile.js 		    : classe mère des projectiles tirés par les ennemis et le joueur
     - enemyProjectile.js 	: projectiles tirés par les ennemis qui blessent uniquement le joueur
     - playerProjectile.js 	: projectiles tirés par le joueur permettant de tuer les ennemis et de détruire les murs destructibles
 
@@ -65,9 +79,9 @@ II. Architecture du code
     - destructibleWall.js 	: mur destructible par le joueur
 
     - door.js 				: obstacle que le joueur peut ouvrir à l'aide de la bonne clé
-    - key.js 				: objet permettant au joueur d'ouvrir la porte correspondante
+    - key.js 				    : objet permettant au joueur d'ouvrir la porte correspondante
 
-    - portal.js 			: portail permettant d'accéder au niveau suivant
+    - portal.js 			    : portail permettant d'accéder au niveau suivant
     - power.js 				: source d'énergie que le joueur peut récupèrer
 
     - texture.js 			: objet utilisé pour l'affichage de tous les sprites du jeu
@@ -81,7 +95,7 @@ II. Architecture du code
     - toolbox.js 			: contient des méthodes utilitaires utilisées dans le code
 
 
-III. Répartition du travail
+IV. Répartition du travail
 
     Un membre s'étant occupé d'un fichierX.js s'est également occupé de son intégration dans le jeu.
     
@@ -98,7 +112,7 @@ III. Répartition du travail
 				- destructibleWall.js
 				- enemy.js
 				- aabb.js
-                 - Niveaux créés : 1, 2, 3, 6, 7, 9, 10, 12, 13
+                - Niveaux créés : 1, 2, 3, 6, 7, 9, 10, 12, 13
 
 	Damien:
 				- eventEngine.js
@@ -113,7 +127,7 @@ III. Répartition du travail
 				- zombie.js
 				- menu.js
 				- sound.js
-                 - Niveaux créés : 4, 5, 6, 8, 11
+                - Niveaux créés : 4, 5, 6, 8, 11
 
 	Commun:
 				- entity.js
@@ -122,21 +136,6 @@ III. Répartition du travail
 				- map.js
 				- Choix des sons et de la musique de fond
 
-IV. Difficultés rencontrées
-
-	1. Difficultés liées au langage
-
-		La déclaration / initialisation automatique de variables inconnues de Javascript a parfois fait apparaître des anomalies dans le comportement du jeu sans nous indiquer que la variable utilisée était mauvaise (erreur dans l'orthographe du nom de la variable).
-
-	2. Difficultés algorithmiques
-
-		Nous avons rencontré quelques difficultés lors de l'implémentation des projectiles, de l'animation.
-		Nous avons repensé plusieurs fois l'architecture globale du jeu ainsi que la localisation de l'affichage (méthodes de render présentes dans les objets et non pas dans renderEngine).
-
-		Le déplacement du joueur fut aussi compliqué, nous avons fait en sorte que lorsque l'utilisateur ordonne un déplacement au joueur, tant que celui-ci ne s'est pas déplacé jusqu'à la tile de destination, le jeu continue à le faire avancer de 1 pixel vers cette direction. Nous obtenons donc un déplacement fluide du joueur vers la tile suivante ce qui nous permet d'éviter un quelconque soucis de collision.
-
-		Nous avons voulu ajouter un mode génération de niveaux aléatoires mais après avoir rencontré quelques difficultés nous avons préféré nous concentrer sur le design de niveaux faits à la main dans un fichier .lvl plutôt que de générer des niveaux peu complexes et sans intérêts.
-        
 V. Points faibles et points forts
 
     1. Points faibles
@@ -151,3 +150,18 @@ V. Points faibles et points forts
     - Ressenti global du jeu : jeu complet.
     - Code évolutif : possibilité de facilement ajouter de nouvelles fonctionnalités/de nouveaux élements grâce, notamment, au levelLoader.
 
+VI. Difficultés rencontrées
+
+	1. Difficultés liées au langage
+
+		La déclaration / initialisation automatique de variables inconnues de Javascript a parfois fait apparaître des anomalies dans le comportement du jeu sans nous indiquer que la variable utilisée était mauvaise (erreur dans l'orthographe du nom de la variable).
+
+	2. Difficultés algorithmiques
+
+		Nous avons rencontré quelques difficultés lors de l'implémentation des projectiles, de l'animation.
+		Nous avons repensé plusieurs fois l'architecture globale du jeu ainsi que la localisation de l'affichage (méthodes de render présentes dans les objets et non pas dans renderEngine).
+
+		Le déplacement du joueur fut aussi compliqué, nous avons fait en sorte que lorsque l'utilisateur ordonne un déplacement au joueur, tant que celui-ci ne s'est pas déplacé jusqu'à la tile de destination, le jeu continue à le faire avancer de 1 pixel vers cette direction. Nous obtenons donc un déplacement fluide du joueur vers la tile suivante ce qui nous permet d'éviter un quelconque soucis de collision.
+
+		Nous avons voulu ajouter un mode génération de niveaux aléatoires mais après avoir rencontré quelques difficultés nous avons préféré nous concentrer sur le design de niveaux faits à la main dans un fichier .lvl plutôt que de générer des niveaux peu complexes et sans intérêts.
+        
