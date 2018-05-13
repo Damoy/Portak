@@ -40,7 +40,7 @@ class World{
 		// leveling
 		this.levels = [];
 		this.currentLevel = null;
-		this.currentLevelId = 12;
+		this.currentLevelId = 0;
 		this.portals = [];
 		this.lastLevelAdditionalPortals = [];
 		this.currentPortal = null;
