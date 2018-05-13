@@ -37,9 +37,19 @@ function filterTextBy(text, regexp){
 	return text.replace(regexp, "");
 }
 
-// function collides(x, y, w, h, x2, y2, w2, h2){
-// 		return !((x > (x2 + w2)) ||
-// 		((x + w) < x2) ||
-// 		(y > (y2 + h2)) ||
-// 		((y + h) < y2));
-// }
+document.head = document.head || document.getElementsByTagName('head')[0];
+
+function changeFavicon(src) {
+	var link = document.createElement('link'),
+	oldLink = document.getElementById('dynamic-favicon');
+	
+	link.id = 'dynamic-favicon';
+	link.rel = 'shortcut icon';
+	link.href = src;
+
+	if (oldLink) {
+		document.head.removeChild(oldLink);
+	}
+
+	document.head.appendChild(link);
+}

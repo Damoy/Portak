@@ -11,6 +11,7 @@ var RenderingContext = {
     setMainCanvas(canvas);
     setMainContext(canvas.getContext("2d"));
     hideCursor(canvas);
+    changeFavicon("res/textures/icons/normalPlayerIcon3.png");
   },
 
   getFontSize : function(){return MapContext.getTileSize();},

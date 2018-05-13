@@ -225,8 +225,7 @@ class Menu{
         let changeFont = "75px " + ARCADECLASSIC;
         let changeColor = "LightGreen";
 
-        // println("sel: " + this.selection);
-        // this.renderTileHighlight(x, y, this.selection, ts);
+        renderText(this.ctx, "Player selection", x + ts, y - ts - ts - 8, changeColor, font);
 
         this.renderArrowSelection(x, y, this.selection, ts);
 
@@ -237,7 +236,7 @@ class Menu{
     }
 
     renderArrowSelection(x, y, selection, ts){
-        TextureContext.getArrowTexture().render(x + (selection * (ts * 2)) + ts * 0.25 - 4, y + ts);
+        TextureContext.getArrowTexture().render(x + (selection * (ts * 2)) + ts * 0.25 - 4, y + ts + (ts >> 2));
     }
 
     renderTileHighlight(baseX, baseY, pselection, ts){

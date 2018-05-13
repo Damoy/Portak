@@ -27,10 +27,10 @@ var TextureContext = {
 		let pw = 48;
 		let ph = 52;
 
-		normalPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/normalPlayerIcon3.png", pw, ph);
-		bluePlayerTexture = new Texture(ctx, canvas, "res/textures/icons/bluePlayerIcon3.png", pw, ph);
-		greenPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/greenPlayerIcon3.png", pw, ph);
-		pinkPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/pinkPlayerIcon3.png", pw, ph);
+		normalPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/normalPlayerIcon.png", pw, ph);
+		bluePlayerTexture = new Texture(ctx, canvas, "res/textures/icons/bluePlayerIcon.png", pw, ph);
+		greenPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/greenPlayerIcon.png", pw, ph);
+		pinkPlayerTexture = new Texture(ctx, canvas, "res/textures/icons/pinkPlayerIcon.png", pw, ph);
 
 		arrowTexture = new Texture(ctx, canvas, "res/textures/others/arrowUp2.png", 22, 35);
 	},
