@@ -6,6 +6,7 @@ var AABBContext = {
 	getBaseH : function(){return 0;}
 };
 
+// Axis-align bounding box
 class AABB{
 	constructor(x, y, w, h){
 		this.x = x || AABBContext.getBaseX();

@@ -45,7 +45,15 @@ var SoundContext = {
     pressSoundButton(){
         if(SoundContext.isMusicMute())
             SoundContext.enableSounds();
-        else SoundContext.disableSounds();
+        else
+            SoundContext.disableSounds();
+    },
+
+    pressEndGameSoundButton(){
+        if(SoundContext.isMusicMute())
+            SoundContext.enableSoundsEndGame();
+        else 
+            SoundContext.disableSounds();
     },
 
     load(path){
@@ -80,6 +88,10 @@ var SoundContext = {
 
     getPortalSound(){
         return SoundContext.load("res/sounds/portal.wav");
+    },
+
+    getEndGameMusic(){
+        return SoundContext.load("res/sounds/endgame.mp3").setVolume(0.3);
     },
 
     getBackgroundMusic(){
@@ -129,6 +141,14 @@ var SoundContext = {
         musicEnableCounter = new TickCounter(60);
         canEnable = false;
         SoundContext.getBackgroundMusic().play();
+    },
+
+    enableSoundsEndGame(){
+        if(!canEnable) return;
+        musicEnable = true;
+        musicEnableCounter = new TickCounter(60);
+        canEnable = false;
+        SoundContext.getEndGameMusic().play();
     },
 
     disableSounds(){

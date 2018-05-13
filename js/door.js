@@ -1,3 +1,4 @@
+// A door can be opened by only one key
 class Door extends Entity{
 	constructor(ctx, canvas, world, x, y, id){
         super(ctx, canvas, world, x, y, MapContext.getTileSize(), MapContext.getTileSize(), 0, 0);

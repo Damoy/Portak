@@ -166,11 +166,14 @@ class Level{
 		});
 	}
 
-	render(){
+	render(avoidRendering){
 		this.renderMap();
 		this.renderPopulation();
 		this.world.renderCurrentPortal();
-		this.renderStartTimerInfos();
+
+		if(avoidRendering == null || !avoidRendering){
+			this.renderStartTimerInfos();
+		}
 	}
 
 	renderStartTimerInfos(){

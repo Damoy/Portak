@@ -44,7 +44,69 @@ class Menu{
         this.ts = MapContext.getTileSize();
         this.renderingBaseX = RenderingContext.getCanvasWidth(this.canvas) * 0.5 - this.ts;
         this.renderingBaseY = RenderingContext.getCanvasHeight(this.canvas) * 0.5 - this.ts;
+
+        // players texture reference
+		this.npt = TextureContext.getNormalPlayerTexture();
+		this.bpt = TextureContext.getBluePlayerTexture();
+		this.gpt = TextureContext.getGreenPlayerTexture();
+		this.ppt = TextureContext.getPinkPlayerTexture();
+
+		this.nptFlip = false;
+		this.bptFlip = false;
+		this.gptFlip = false;
+        this.pptFlip = false;
+        
+        this.normalPlayerCounter = null;
+		this.greenPlayerCounter = null;
+		this.bluePlayerCounter = null;
+		this.pinkPlayerCounter = null;
     }
+
+    generatePlayerSelectionCounter(){
+        this.normalPlayerCounter = new TickCounter(30);
+		this.greenPlayerCounter = new TickCounter(30);
+		this.bluePlayerCounter = new TickCounter(30);
+		this.pinkPlayerCounter = new TickCounter(30);
+    }
+
+    updateEndgameCounters(){
+		this.checkNptFlip();
+		this.checkBptFlip();
+		this.checkGptFlip();
+		this.checkPptFlip();
+	}
+
+	checkNptFlip(){
+		this.normalPlayerCounter.update();
+		if(this.normalPlayerCounter.isStopped()){
+			this.normalPlayerCounter.reset();
+			this.nptFlip = !this.nptFlip;
+		}
+	}
+
+	checkBptFlip(){
+		this.bluePlayerCounter.update();
+		if(this.bluePlayerCounter.isStopped()){
+			this.bluePlayerCounter.reset();
+			this.bptFlip = !this.bptFlip;
+		}
+	}
+
+	checkGptFlip(){
+		this.greenPlayerCounter.update();
+		if(this.greenPlayerCounter.isStopped()){
+			this.greenPlayerCounter.reset();
+			this.gptFlip = !this.gptFlip;
+		}
+	}
+
+	checkPptFlip(){
+		this.pinkPlayerCounter.update();
+		if(this.pinkPlayerCounter.isStopped()){
+			this.pinkPlayerCounter.reset();
+			this.pptFlip = !this.pptFlip;
+		}
+	}
 
     update(){
         this.backgroundLevel.update();
@@ -62,9 +124,9 @@ class Menu{
                 break;
             case 3:
                 this.handlePlayerSelectionInput();
+                this.updateEndgameCounters();
                 break;
         }
-
     }
 
     updateSelectionTimer(){
@@ -93,6 +155,7 @@ class Menu{
         else if(mod == 3){
             this.maxSelection = 4;
             this.selection = 0;
+            this.generatePlayerSelectionCounter();
         }
 
         this.preventSelection();
@@ -117,8 +180,6 @@ class Menu{
 
         if(this.mod >= this.maxMods)
             this.mod = this.maxMods - 1;
-
-        println("Set mod: " + this.mod);
     }
 
     resetSelection(){
@@ -248,21 +309,30 @@ class Menu{
 
     renderPlayerSelection(){
         let ts = MapContext.getTileSize();
-        let x = 4 * ts + 8;
-        let y = 5 * ts + 6;
+		let x = 4 * ts + 8;
+		let y = 5 * ts + 6 + ts;
 
         let fontSize = this.renderingFontSize;
         let color = this.renderingColor;
 
         this.renderPortak(this.renderingBaseX, this.renderingBaseY);
+        renderText(this.ctx, "Select your player !", x - ts * 1.5, y - ts, "LightGreen", 72);
 
         this.renderIconPlayerSelection(x, y, this.selection, ts);
 
-        TextureContext.getNormalPlayerTexture().render(x, y);
-        TextureContext.getBluePlayerTexture().render(x + (ts * 2), y);
-        TextureContext.getGreenPlayerTexture().render(x + (ts * 4), y);
-        TextureContext.getPinkPlayerTexture().render(x + (ts * 6), y);
+		this.renderPlayerTexture(this.npt, this.nptFlip, x, y);
+		this.renderPlayerTexture(this.bpt, this.bptFlip, x + (ts * 2), y);
+		this.renderPlayerTexture(this.gpt, this.gptFlip, x + (ts * 4), y);
+		this.renderPlayerTexture(this.ppt, this.pptFlip, x + (ts * 6), y);
     }
+
+    renderPlayerTexture(tex, flip, x, y){
+		if(flip){
+			tex.flipRender(x, y);
+		} else {
+			tex.render(x, y);
+		}
+	}
 
     renderIconPlayerSelection(x, y, selection, ts){
         MenuContext.getUserPlayerIcon().render(x - 12 + (selection * (ts * 2)) + ts * 0.25 - 4, y + ts + (ts >> 2));
@@ -339,6 +409,7 @@ class Menu{
                 SoundContext.getMenuSelectionSound().play();
                 this.savedSelection2 = this.savedSelection;
                 this.setMod(3);
+                this.generatePlayerSelectionCounter();
             }
         } 
 

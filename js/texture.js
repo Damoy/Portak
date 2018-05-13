@@ -141,8 +141,11 @@ class Texture{
 		this.dataPixels = null;
 	}
 
-	increaseRed(){
-		
+	flipRender(x, y){
+		this.ctx.save();
+		this.ctx.scale(-1, 1);
+		this.ctx.drawImage(this.data, -x, y, this.width * (-1), this.height);
+		this.ctx.restore();
 	}
 
 	split(xStart, width, yStart, height){

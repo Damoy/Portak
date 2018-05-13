@@ -1,6 +1,3 @@
-var EnemyContext = {
-};
-
 class Enemy extends Entity{
 	constructor(ctx, canvas, world, x, y, direction, texture){
 		super(ctx, canvas, world, x, y, MapContext.getTileSize(), MapContext.getTileSize(), 0, 0);

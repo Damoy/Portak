@@ -1,4 +1,5 @@
 var mainPlayer = null;
+var endgameLevel = null;
 
 var WorldContext = {
 	getBasePlayer : function(ctx, canvas, world){
@@ -25,6 +26,8 @@ var WorldContext = {
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/11.lvl"));
 		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/12.lvl"));
 
+		endgameLevel = LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/end.lvl");
+
 		return levels;
 	}
 };
@@ -44,6 +47,26 @@ class World{
 		this.portals = [];
 		this.lastLevelAdditionalPortals = [];
 		this.currentPortal = null;
+
+		// endgame
+		this.endgame = false;
+
+		// endgame textures
+		this.normalPlayerCounter = null;
+		this.greenPlayerCounter = null;
+		this.bluePlayerCounter = null;
+		this.pinkPlayerCounter = null;
+
+		// normal player texture reference...
+		this.npt = TextureContext.getNormalPlayerTexture();
+		this.bpt = TextureContext.getBluePlayerTexture();
+		this.gpt = TextureContext.getGreenPlayerTexture();
+		this.ppt = TextureContext.getPinkPlayerTexture();
+
+		this.nptFlip = false;
+		this.bptFlip = false;
+		this.gptFlip = false;
+		this.pptFlip = false;
 
 		println("World: OK.");
 	}
@@ -69,7 +92,17 @@ class World{
 	}
 
 	endGame(){
-		println("ENDDDDDDDDDDDDD GAMEEEEEEEEEEEEEEEE");
+		// player still exists but we want to avoid collision with current portal
+		SoundContext.getBackgroundMusic().stop();
+		SoundContext.getEndGameMusic().play();
+		this.player = null;
+		this.endgame = true;
+		this.currentLevel = endgameLevel;
+
+		this.normalPlayerCounter = new TickCounter(30);
+		this.greenPlayerCounter = new TickCounter(30);
+		this.bluePlayerCounter = new TickCounter(30);
+		this.pinkPlayerCounter = new TickCounter(30);
 	}
 
 	upgradeLevel(){
@@ -133,13 +166,58 @@ class World{
 	update(){
 		this.currentLevel.update();
 		this.updateCurrentPortal();
-		this.player.update();
+
+		if(this.player != null)
+			this.player.update();
+
+		if(this.endgame){
+			this.updateEndgameCounters();
+		}
+	}
+
+	updateEndgameCounters(){
+		this.checkNptFlip();
+		this.checkBptFlip();
+		this.checkGptFlip();
+		this.checkPptFlip();
+	}
+
+	checkNptFlip(){
+		this.normalPlayerCounter.update();
+		if(this.normalPlayerCounter.isStopped()){
+			this.normalPlayerCounter.reset();
+			this.nptFlip = !this.nptFlip;
+		}
+	}
+
+	checkBptFlip(){
+		this.bluePlayerCounter.update();
+		if(this.bluePlayerCounter.isStopped()){
+			this.bluePlayerCounter.reset();
+			this.bptFlip = !this.bptFlip;
+		}
+	}
+
+	checkGptFlip(){
+		this.greenPlayerCounter.update();
+		if(this.greenPlayerCounter.isStopped()){
+			this.greenPlayerCounter.reset();
+			this.gptFlip = !this.gptFlip;
+		}
+	}
+
+	checkPptFlip(){
+		this.pinkPlayerCounter.update();
+		if(this.pinkPlayerCounter.isStopped()){
+			this.pinkPlayerCounter.reset();
+			this.pptFlip = !this.pptFlip;
+		}
 	}
 
 	updateCurrentPortal(){
 		if(this.currentPortal != null)
 			this.currentPortal.update();
-			if(this.lastLevelAdditionalPortals != null && this.currentLevelId == 12) {
+			if(this.lastLevelAdditionalPortals != null && (this.currentLevelId == 12 || this.endgame)) {
 				this.lastLevelAdditionalPortals.forEach((portal) => {
 				portal.update();
 			});
@@ -147,14 +225,46 @@ class World{
 	}
 
 	render(){
+		if(!this.endgame){
+			this.currentLevel.render();
+			this.player.render();
+		} else {
+			this.renderEndGame();
+		}
+	}
+
+	renderEndGame(){
 		this.currentLevel.render();
-		this.player.render();
+
+		let ts = MapContext.getTileSize();
+		let x = RenderingContext.getCanvasWidth(this.canvas) * 0.5 - ts;
+		let y = RenderingContext.getCanvasHeight(this.canvas) * 0.5 - ts;
+
+		renderText(this.ctx, "PORTAK", x - (ts * 2) - (ts >> 2), y - ts + 10, "DarkRed", 128);
+
+		x = 4 * ts + 8;
+		y = 5 * ts + 6 + ts;
+
+		renderText(this.ctx, "Congratulations !", x - ts * 1.5, y - ts, "LightGreen", 72);
+		
+		this.renderPlayerTexture(this.npt, this.nptFlip, x, y);
+		this.renderPlayerTexture(this.bpt, this.bptFlip, x + (ts * 2), y);
+		this.renderPlayerTexture(this.gpt, this.gptFlip, x + (ts * 4), y);
+		this.renderPlayerTexture(this.ppt, this.pptFlip, x + (ts * 6), y);
+	}
+
+	renderPlayerTexture(tex, flip, x, y){
+		if(flip){
+			tex.flipRender(x, y);
+		} else {
+			tex.render(x, y);
+		}
 	}
 
 	renderCurrentPortal(){
 		if(this.currentPortal != null)
 			this.currentPortal.render();
-		if(this.lastLevelAdditionalPortals != null && this.currentLevelId == 12) {
+		if(this.lastLevelAdditionalPortals != null && (this.currentLevelId == 12 || this.endgame)) {
 			this.lastLevelAdditionalPortals.forEach((portal) => {
 				portal.render();
 			});

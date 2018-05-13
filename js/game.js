@@ -87,8 +87,31 @@ function update(){
       bgMusicCounter.reset();
       SoundContext.getBackgroundMusic().play();
     }
+
+    handleMainInput();
     world.update();
   }
 
   SoundContext.update();
+}
+
+function handleMainInput(){
+  if(isPressed(EventContext.musicKey())){
+    if(world != null && world.endgame)
+      SoundContext.pressEndGameSoundButton();
+    if(world != null)
+      SoundContext.pressSoundButton();
+  } else if(isPressed(EventContext.escapeKey())){
+    reset();
+  }
+}
+
+function reset(){
+  SoundContext.resetBackgroundMusic();
+  LevelLoadingContext.resetLevelLoadingId();
+  SoundContext.stopAll();
+  initWorld(ctx, canvas);
+  let savedMenuIcon = MenuContext.getUserPlayerIcon();
+  buildMenu();
+  MenuContext.setUserPlayerIcon(savedMenuIcon);
 }

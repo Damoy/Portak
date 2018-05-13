@@ -108,18 +108,6 @@ class Player extends Entity{
 				this.shootCounter.reset();
 				this.shoot();
 			}
-		} else if(isPressed(EventContext.resetKey())){
-			this.world.resetCurrentLevel();
-		} else if(isPressed(EventContext.musicKey())){
-			SoundContext.pressSoundButton();
-		} else if(isPressed(EventContext.escapeKey())){
-			SoundContext.resetBackgroundMusic();
-			LevelLoadingContext.resetLevelLoadingId();
-			SoundContext.stopAll();
-			initWorld(this.ctx, this.canvas);
-			let savedMenuIcon = MenuContext.getUserPlayerIcon();
-			buildMenu();
-			MenuContext.setUserPlayerIcon(savedMenuIcon);
 		}
 	}
 
@@ -261,9 +249,7 @@ class Player extends Entity{
 		let y = this.y;
 		let w = 0;
 		let h = 0;
-		let scale = MapContext.getTileSize() >> 4; // ts / 16
-
-		// println("animation count: " + this.animation.frameUpdates);
+		let scale = MapContext.getTileSize() >> 4;
 
 		switch(this.direction){
 			case AnimationContext.getDownDirValue():
@@ -454,7 +440,7 @@ class Player extends Entity{
 	renderDeathTimer(){
 		if(this.deathTimer != null){
 			let secLeft = castToInt((this.deathTimer.getLimit() - this.deathTimer.getUpdates() + 60)/ 60);
-			let emptyPowerText = "No more power !";
+			let emptyPowerText = "No   more   power  !";
 			let timerTimeLeftText = secLeft + "s";
 
 			let w = RenderingContext.getCanvasWidth(this.canvas);
@@ -462,8 +448,11 @@ class Player extends Entity{
 			let x = w * 0.5;
 			let y = h * 0.4;
 
-			renderFontText(this.ctx, emptyPowerText, x * 0.65, y, "White", "50px serif"); // DarkRed
-			renderFontText(this.ctx, timerTimeLeftText, x - (w * 0.025), y + (h * 0.10), "White", "50px serif");
+			let fontSize = 48;
+			let color = "White";
+
+			renderText(this.ctx, emptyPowerText, x * 0.65, y, color, fontSize);
+			renderText(this.ctx, timerTimeLeftText, x - (w * 0.025), y + (h * 0.10), color, fontSize);
 		}
 	}
 

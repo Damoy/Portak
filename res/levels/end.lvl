@@ -1,0 +1,43 @@
+# 00 = player
+# 01 = classic tiles
+# 02 = wall
+# 03 = RightEnemy
+# 04 = LeftEnemy
+# 05 = UpEnemy
+# 06 = DownEnemy
+# 71 - 90 = power
+# 08 = portal
+# 09 = destructible wall
+# 4* = door
+# 5* = key 
+# Key 52 open door 42 
+# 15 tiles width (90060)
+# 10 tiles height (704) (with UI 9)
+# level data is map organisation
+# config is additional level configuration information
+
+##levelData
+02 02 02 02 02 02 02 02 02 02 02 02 02 02 02
+02 01 01 01 01 01 01 01 01 01 01 01 01 01 02
+02 01 01 01 01 01 01 01 01 01 01 01 01 01 02
+02 01 01 01 01 01 01 01 01 01 01 01 01 01 02
+02 01 01 01 01 01 01 01 01 01 01 01 01 01 02
+02 01 01 01 01 01 01 01 01 01 01 01 01 01 02
+02 01 01 01 01 01 01 01 01 01 01 01 01 01 02
+02 01 01 01 08 01 95 01 95 01 95 01 01 01 02
+02 01 01 01 01 01 01 00 01 01 01 01 01 01 02
+02 02 02 02 02 02 02 02 02 02 02 02 02 02 02
+##levelData
+
+##numberOfTiles
+10
+15
+##numberOfTiles
+
+##powerAmount
+30
+##powerAmount
+
+##levelName
+EmptyLevel
+##levelName

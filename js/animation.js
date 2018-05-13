@@ -53,7 +53,6 @@ class Animation{
         this.leftDelay = this.getDelayFromFrames(leftFrames);
 
         // the current delay is get from the direction
-        // TODO handle when no direction
         this.delay = this.getDelay(direction);
 
         // one frame counter object by direction
