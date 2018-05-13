@@ -58,7 +58,7 @@ class World{
 		// leveling
 		this.levels = [];
 		this.currentLevel = null;
-		this.currentLevelId = 0;
+		this.currentLevelId = 9;
 		this.portals = [];
 		this.lastLevelAdditionalPortals = [];
 		this.currentPortal = null;
@@ -118,6 +118,7 @@ class World{
 		if(this.currentLevelId > 0){
 			this.currentLevelId = this.currentLevelId - 1;
 			this.reloadLevel(this.currentLevelId);
+			this.reloadLevel(this.currentLevelId + 1);
 		}
 	}
 
