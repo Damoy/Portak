@@ -13,21 +13,21 @@ var WorldContext = {
 	loadLevels : function(ctx, canvas, world){
 		var levels = [];
 
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/0.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/1.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/2.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/3.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/4.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/5.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/6.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/7.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/8.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/9.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/10.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/11.lvl"));
-		levels.push(LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/12.lvl"));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_zero, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_one, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_two, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_three, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_four, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_five, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_six, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_seven, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_eight, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_nine, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_ten, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_eleven, ctx, canvas, world));
+		levels.push(LevelLoadingContext.loadJsonLevelGivenId(level_twelve, ctx, canvas, world));
 
-		endgameLevel = LevelLoadingContext.loadLevelFromFile(ctx, canvas, world, "res/levels/end.lvl");
+		endgameLevel = LevelLoadingContext.loadJsonLevelGivenId(level_end, ctx, canvas, world);
 		let endPtr = world.lastLevelAdditionalPortals.length - 1;
 		if(endPtr < 0) return levels;
 
@@ -94,13 +94,13 @@ class World{
 
 		this.levels = WorldContext.loadLevels(ctx, canvas, this);
 		this.updateCurrentLevel();
+
 		this.updatePortal();
 		this.player.changeLevel(this.currentLevel);
 	}
 
 	reloadLevel(id){
-		let levelPath = "res/levels/" + id + ".lvl";
-		this.levels[id] = LevelLoadingContext.loadLevelFromFileGivenId(id + 1, ctx, canvas, world, levelPath); 
+		this.levels[id] = LevelLoadingContext.loadJsonLevelGivenId(LevelLoadingContext.getLevelDataAccordingToId(id), ctx, canvas, world);
 	}
 
 	incrementLevel(){
@@ -176,6 +176,7 @@ class World{
 	}
 
 	generatePortal(id, x, y){
+		console.log("Generate portal " + x + "," + y);
 		this.portals.push(new Portal(id, ctx, canvas, world, x, y));
 	}
 
@@ -196,7 +197,7 @@ class World{
 	}
 
 	resetCurrentLevel(){
-		this.currentLevel = LevelLoadingContext.loadLevelFromFileGivenId(this.currentLevel.getId(), ctx, canvas, world, this.currentLevel.getSource());
+		this.currentLevel = LevelLoadingContext.loadJsonLevelGivenId(LevelLoadingContext.getLevelDataAccordingToId(this.currentLevel.getId()), ctx, canvas, world);
 		this.player.reset();
 		this.player.changeLevel(this.currentLevel);
 	}

@@ -23,39 +23,44 @@ var LevelLoadingContext = {
         println("Level loaded.");
     },
 
-    loadLevelFromFile : function(ctx, canvas, world, filePath){
-        return LevelLoadingContext.loadLevelFromFileGivenId(LevelLoadingContext.getNewLoadingId(), ctx, canvas, world, filePath);
+    getLevelDataAccordingToId : function(id){
+        switch(id){
+            case 0: return level_zero;
+            case 1: return level_one;
+            case 2: return level_two;
+            case 3: return level_three;
+            case 4: return level_four;
+            case 5: return level_five;
+            case 6: return level_six;
+            case 7: return level_seven;
+            case 8: return level_eight;
+            case 9: return level_nine;
+            case 10: return level_ten;
+            case 11: return level_eleven;
+            case 12: return level_twelve;
+            default: throw "Unknown level identifier.";
+        }
     },
 
-    loadLevelFromFileGivenId : function(lid, ctx, canvas, world, filePath){
-        let xml = new XMLHttpRequest();
-        xml.open("GET", filePath, false);
-        xml.send();
+    loadJsonLevelGivenId : function(jsonData, ctx, canvas, world){
+        let levelJson = jsonData[0];
+        let levelId = parseInt(levelJson.id);
+        let levelName = levelJson.name;
+        let rows = parseInt(levelJson.rows);
+        let cols = parseInt(levelJson.cols);
+        let pAmount = parseInt(levelJson.playerBasePowerAmount);
 
-        println("Loading level...");
+        let playerX;
+        let playerY;
+
+        if(levelJson.player != null){
+            playerX = MapContext.getNormX(levelJson.player.col);
+            playerY = MapContext.getNormY(levelJson.player.row);
+        }
         
-        // retrieve the number of the player energies
-        let pAmount = xml.responseText.split("##powerAmount")[1].split(/\n/)[1];
-
-        // retrieve the level name
-        let levelName = xml.responseText.split("##levelName")[1].split(/\n/)[1];
-
-        // retrieve the map size
-        let numTiles = xml.responseText.split("##numberOfTiles")[1].split(/\n/);
-        let mapRows = numTiles[1];
-        let mapCols = numTiles[2];
-
-        // retrieve the map information
-        let levelDataText = filterTextBy(xml.responseText.split("##levelData")[1], /#.*/g).replace(/\n/g, " ").trim();
-        let levelData = levelDataText.split(" ");
-
+        let tileId = 0;
         var map = new Map(ctx, canvas, world);
         var tiles = [];
-        let id = 0;
-        let row = 0;
-        let col = 0;
-        let px = 0;
-        let py = 0;
         var walls = [];
         var enemies = [];
         var powers = [];
@@ -64,140 +69,119 @@ var LevelLoadingContext = {
         var destructiblesWalls = [];
         let basePowerValue = 10;
         var texture = TextureContext.getGrayTileTexture();
-        let portalX = 0;
-        let portalY = 0;
+        
+        let portalId;
+        let portalX;
+        let portalY;
 
-        for(let i = 0; i < levelData.length; ++i){
-            let fileValue = castToInt(levelData[i]);
-            let x = MapContext.getNormX(col);
-            let y = MapContext.getNormY(row);
-
-            switch(fileValue){
-                case 0:
-                    // player position
-                    py = y;
-                    px = x;
-                    // stil has to tile under player
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 1:
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 2:
-                    var wall = new Wall(ctx, canvas, world, x, y);
-                    walls.push(wall);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 3:
-                    var enemy = new Zombie(ctx, canvas, world, x, y, AnimationContext.getRightDirValue());
-                    enemies.push(enemy);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 4:
-                    var enemy = new Zombie(ctx, canvas, world, x, y, AnimationContext.getLeftDirValue());
-                    enemies.push(enemy);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 5:
-                    var enemy = new Zombie(ctx, canvas, world, x, y, AnimationContext.getUpDirValue());
-                    enemies.push(enemy);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 6:
-                    var enemy = new Zombie(ctx, canvas, world, x, y, AnimationContext.getDownDirValue());
-                    enemies.push(enemy);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break; 
-                case 8: 		
-                    portalX = x;
-                    portalY = y;
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 9:
-                    var destructibleWall = new DestructibleWall(ctx, canvas, world, x, y);
-                    destructiblesWalls.push(destructibleWall);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 40:
-                case 41:
-                case 42:
-                case 43:
-                case 44:
-                case 45:
-                case 46:
-                case 47:
-                case 48:
-                case 49:
-                    var door = new Door(ctx, canvas, world, x, y, fileValue);
-                    doors.push(door);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 50:
-                case 51:
-                case 52:
-                case 53:
-                case 54:
-                case 55:
-                case 56:
-                case 57:
-                case 58:
-                case 59:
-                    var key = new Key(ctx, canvas, world, x, y, fileValue);
-                    keys.push(key);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                case 71:
-                case 72:
-                case 73:
-                case 74:
-                case 75:
-                case 76:
-                case 77:
-                case 78:
-                case 79:
-                case 80:
-                case 81:
-                case 82:
-                case 83:
-                case 84:
-                case 85:
-                case 86:
-                case 87:
-                case 88:
-                case 89:
-                case 90:
-                    var power = new Power(ctx, canvas, world, x, y, fileValue - 70);
-                    powers.push(power);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;  
-                case 95:
-                case 96:
-                case 97:
-                case 98:
-                case 99:
-                    world.generatePortalsFinalLevel(-fileValue % 10, x, y);
-                    LevelLoadingContext.loadTile(map, tiles, id++, mapCols, row, col, texture);
-                    break;
-                default:
-                    throw "Unknown token found while loading level.\n";
-            }
-            
-            ++col;
-            if(col >= mapCols){
-                col = 0;
-                ++row;
-            }
+        if(levelJson.portal != null){
+            portalId = levelJson.portal.id;
+            portalX = MapContext.getNormX(levelJson.portal.col);
+            portalY = MapContext.getNormY(levelJson.portal.row);
         }
 
-        map.rows = mapRows;
-        map.cols = mapCols;
+        let arr_energies = levelJson.energies;
+
+        if(arr_energies != null){
+            arr_energies.forEach((energy) => {
+                powers.push(new Power(ctx, canvas, world, MapContext.getNormX(energy.col),
+                    MapContext.getNormY(energy.row), energy.value));
+                LevelLoadingContext.loadTile(map, tiles, tileId++, cols, energy.row, energy.col, texture);
+            });
+        }
+
+        let arr_doors = levelJson.doors;
+
+        if(arr_doors != null){
+            arr_doors.forEach((door) => {
+                doors.push(new Door(ctx, canvas, world, MapContext.getNormX(door.col),
+                    MapContext.getNormY(door.row), door.id));
+                LevelLoadingContext.loadTile(map, tiles, tileId++, cols, door.row, door.col, texture);
+            });
+        }
+        
+        let arr_keys = levelJson.keys;
+        if(arr_keys != null){
+            arr_keys.forEach((key) => {
+                keys.push(new Key(ctx, canvas, world, MapContext.getNormX(key.col),
+                    MapContext.getNormY(key.row), key.id));
+                LevelLoadingContext.loadTile(map, tiles, tileId++, cols, key.row, key.col, texture);
+            });
+        }
+
+        let arr_walls = levelJson.walls;
+        if(arr_walls != null){
+            arr_walls.forEach((wall) => {
+                walls.push(new Wall(ctx, canvas, world, MapContext.getNormX(wall.col),
+                    MapContext.getNormY(wall.row)));
+                LevelLoadingContext.loadTile(map, tiles, tileId++, cols, wall.row, wall.col, texture);
+            });
+        }
+
+        let arr_destructibleWalls = levelJson.destructibleWalls;
+        if(arr_destructibleWalls != null){
+            arr_destructibleWalls.forEach((dwall) => {
+                destructiblesWalls.push(new DestructibleWall(ctx, canvas, world, MapContext.getNormX(dwall.col),
+                    MapContext.getNormY(dwall.row)));
+                LevelLoadingContext.loadTile(map, tiles, tileId++, cols, dwall.row, dwall.col, texture);
+            });
+        }
+
+        let arr_zombies = levelJson.zombies;
+        if(arr_zombies != null){
+            arr_zombies.forEach((zombie) => {
+                let direction;
+
+                if(zombie.direction == "LEFT"){
+                    direction = AnimationContext.getLeftDirValue();
+                } else if(zombie.direction == "RIGHT"){
+                    direction = AnimationContext.getRightDirValue();
+                } else if(zombie.direction == "DOWN"){
+                    direction = AnimationContext.getDownDirValue();
+                } else if(zombie.direction == "UP"){
+                    direction = AnimationContext.getUpDirValue();
+                } else {
+                    console.log("Zombie direction is wrong. Level loading failed.");
+                    return;
+                }
+
+                enemies.push(new Zombie(ctx, canvas, world, MapContext.getNormX(zombie.col),
+                    MapContext.getNormY(zombie.row), direction));
+                LevelLoadingContext.loadTile(map, tiles, tileId++, cols, zombie.row, zombie.col, texture);
+            });
+        }
+
+        let arr_emptyTiles = levelJson.emptyTiles;
+        if(arr_emptyTiles != null){
+            arr_emptyTiles.forEach((tile) => {
+                LevelLoadingContext.loadTile(map, tiles, tileId++, cols, tile.row, tile.col, texture);
+            });
+        }
+
+        // remaining tiles
+        LevelLoadingContext.loadTile(map, tiles, tileId++, cols,
+            MapContext.getTileRow(playerY), MapContext.getTileCol(playerX), texture);
+        LevelLoadingContext.loadTile(map, tiles, tileId++, cols,
+            MapContext.getTileRow(portalY), MapContext.getTileCol(portalX), texture);
+
+        map.rows = rows;
+        map.cols = cols;
         map.tiles = tiles;
 
-        var loadedLevel = new Level(lid, levelName, filePath, ctx, canvas, world, map, walls, enemies, powers, 10, px, py, pAmount, doors, keys, destructiblesWalls);
+        var loadedLevel = new Level(levelId, levelName, null, ctx, canvas, world, map, walls, enemies, powers, basePowerValue, playerX, playerY, pAmount, doors, keys, destructiblesWalls);
         world.generatePortal(loadedLevel.getId(), portalX, portalY);
+        console.log("Level \"" + levelName + "\" loaded.");
 
-        println("Level \"" + levelName + "\" loaded.");
-        
+        let arr_fakePortals = levelJson.fakePortals;
+        if(arr_fakePortals != null){
+            console.log("Fake portals detected !");
+
+            arr_fakePortals.forEach((fportal) => {
+                world.generatePortalsFinalLevel(fportal.id, MapContext.getNormX(fportal.col), MapContext.getNormY(fportal.row));
+                LevelLoadingContext.loadTile(map, tiles, tileId++, cols, fportal.row, fportal.col, texture);
+            });
+        }
+
         return loadedLevel;
     },
 

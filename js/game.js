@@ -36,10 +36,12 @@ function main() {
   initListeners(canvas);
   // sound engine
   SoundContext.init();
+
   // init the world
   initWorld(ctx, canvas);
   // build the main menu
   buildMenu();
+
   requestAnimationFrame(run);
 }
 

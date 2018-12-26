@@ -8,5 +8,5 @@
 	font-style: normal;
 	font-weight: 400;
 	src: local('ARCADECLASSIC'),
-		 url(res/fonts/arcadeclassic/ARCADECLASSIC.ttf) format('truetype');
+		 url(../res/fonts/arcadeclassic/ARCADECLASSIC.ttf) format('truetype');
 }

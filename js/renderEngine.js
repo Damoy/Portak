@@ -7,7 +7,7 @@ var RenderingContext = {
     setMainCanvas(canvas);
     setMainContext(canvas.getContext("2d"));
     hideCursor(canvas);
-    changeFavicon("res/textures/icons/normalPlayerIcon3.png");
+    changeFavicon("res/textures/icons/normalPlayerIcon.png");
     changeFont("ARCADECLASSIC");
   },
 

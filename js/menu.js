@@ -28,7 +28,7 @@ class Menu{
         this.ctx = ctx;
         this.canvas = canvas;
         this.world = world;
-        this.backgroundLevel = LevelLoadingContext.loadLevelFromFileGivenId(-1, ctx, canvas, world, LevelLoadingContext.getMenuFilePath());
+        this.backgroundLevel = LevelLoadingContext.loadJsonLevelGivenId(level_menu, ctx, canvas, world);
         this.world.currentLevel = this.backgroundLevel;
         this.selection = 0;
         this.maxSelection = 3;
